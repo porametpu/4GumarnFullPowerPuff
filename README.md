@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# 4GumarnFullPowerPuff
-Painumnae Softend Project
-=======
 # Pai Nam Nae - A Safe Ride Sharing App
 
 <!-- A safe ride-sharing application with a **Nuxt.js** frontend and **Express.js** backend, powered by **Prisma** ORM and **PostgreSQL**. -->
@@ -10,14 +6,13 @@ Painumnae Softend Project
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Map API Used](#map-api-used)
+- [Google Maps APIs Used](#google-maps-apis-used)
 - [Prerequisites](#prerequisites)
 - [Security & Rate Limiting](#security--rate-limiting)
 - [Installation](#installation)
 - [Environment Variables](#environment-variables)
 - [Database Setup](#database-setup)
 - [Running the Application](#running-the-application)
-- [Admin Account](#admin-account)
 - [API Endpoints](#api-endpoints)
 - [License](#license)
 - [Contact](#contact)
@@ -49,14 +44,20 @@ Painumnae Softend Project
 - **Image Storage:** Cloudinary
 - **Validation:** Zod
 - **API Docs:** Swagger (Swagger UI Express, Swagger JSDoc)
-- **Map:** Longdo Map API
 
-## Map API Used
+## Google Maps APIs Used
 
-- **Longdo Map API**
-  - Geocode / Reverse Geocode
-  - Search / Suggest
-  - Directions
+- **Backend**
+  - Geocoding API
+  - Directions API
+  - Distance Matrix API
+
+- **Frontend**
+  - Maps JavaScript API
+  - Places API
+  - Places API (New)
+  - Geocoding API
+  - Distance Matrix API
 
 ## Prerequisites
 
@@ -64,7 +65,7 @@ Painumnae Softend Project
 - npm or yarn
 - PostgreSQL instance
 - Cloudinary Account (for API Key, Secret, and Cloud Name)
-- Longdo Map API Key
+- Google Maps API Keys (for both frontend and backend)
 
 <!-- ## Security & Rate Limiting
 
@@ -85,6 +86,7 @@ Painumnae Softend Project
     ```bash
     cd backend
     npm install
+    npm install node-cron
     ```
 
 3.  **Install frontend dependencies**
@@ -96,7 +98,7 @@ Painumnae Softend Project
 
 ## Environment Variables
 
-Create a `.env` file in the `backend` directory with the following (สามารถดูตัวอย่างจาก `backend/.env.example`):
+Create a `.env` file in the `backend` directory with the following:
 
 ```ini
 # Server
@@ -113,21 +115,13 @@ CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 
-# Longdo Map API Key (Backend)
-LONGDO_MAP_API_KEY=your_longdo_map_api_key
+# Google Maps API Key (Backend)
+GOOGLE_MAPS_API_KEY=your_google_maps_api_key_for_backend
+NUXT_PUBLIC_LONGDO_MAP_API_KEY=your_google_maps_api_key_for_backend
+LONGDO_MAP_API_KEY=your_google_maps_api_key_for_backend
 
-# Admin (auto-create on backend start)
-ADMIN_EMAIL=admin@example.com
-ADMIN_USERNAME=admin123
-ADMIN_PASSWORD=123456789
-ADMIN_FIRST_NAME=System
-ADMIN_LAST_NAME=Administrator
-```
-
-Create a `.env` file in the `frontend` directory with the following (ดูตัวอย่างจาก `frontend/.env.example`):
-
-```ini
-NUXT_PUBLIC_LONGDO_MAP_API_KEY=your_longdo_map_api_key
+# Google Maps API Key (Frontend)
+NUXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_for_frontend
 ```
 
 ## Database Setup
@@ -157,17 +151,6 @@ NUXT_PUBLIC_LONGDO_MAP_API_KEY=your_longdo_map_api_key
     cd frontend
     npm run dev # starts Nuxt.js on http://localhost:3001
     ```
-
-## Admin Account
-
-ระบบจะสร้าง Admin อัตโนมัติเมื่อเริ่ม backend ถ้ามีการตั้งค่าใน `backend/.env` ครบ:
-- `ADMIN_EMAIL`
-- `ADMIN_USERNAME`
-- `ADMIN_PASSWORD`
-- `ADMIN_FIRST_NAME` (optional)
-- `ADMIN_LAST_NAME` (optional)
-
-ถ้ามีผู้ใช้เดิมที่ email/username ตรงกัน ระบบจะยกระดับเป็น ADMIN ให้โดยอัตโนมัติ
 
 ## API Endpoints
 
@@ -284,4 +267,3 @@ For questions or feedback, reach out to:
 **Email:**
 - [jonathandoillon2002@gmail.com](mailto:jonathandoillon2002@gmail.com)
 - [seth.s@kkumail.com](mailto:seth.s@kkumail.com)
->>>>>>> b863e9d (update)

@@ -3,7 +3,7 @@
 ## [2025-03-11] การปรับปรุงฟีเจอร์
 
 ### [ระบบรายงานกิจกรรมของผู้ใช้]
-*Product Backlog Item No.16: As an admin, I want a report of user's activities in the system, so that I can plan better.*
+*Product Backlog Item No.16: As a user, I want my account and information to be removed from the system when I am no longer want to be apart of this community.*
 
 #### การพัฒนาฟังก์ชันลบบัญชีผู้ใช้
 - เพิ่ม Controller สำหรับจัดการคำขอลบบัญชีผู้ใช้

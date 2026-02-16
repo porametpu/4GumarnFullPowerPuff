@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [2025-03-11] การปรับปรุงฟีเจอร์
+## [2026-02-16] การปรับปรุงฟีเจอร์
 
 ### [ระบบรายงานกิจกรรมของผู้ใช้]
 *Product Backlog Item No.16: As a user, I want my account and information to be removed from the system when I am no longer want to be apart of this community.*

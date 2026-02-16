@@ -69,3 +69,15 @@ TC2 - Delete Account With Correct Email
     Submit Delete Account Email    ${LOGIN_EMAIL}
     Step    Verify success message
     Wait Until Page Contains    คำขอการลบบัญชีสำเร็จ
+
+TC3 - Test After Deletion
+    [Documentation]    ต้องใช้ account ที่ถูกส่งคำขอลบบัญชีแล้ว
+    Open Browser    ${BASE_URL}/login    ${BROWSER}
+    Maximize Browser Window
+    Wait Until Element Is Visible    id=identifier
+    Input Text    id=identifier    ${LOGIN_EMAIL}
+    Input Password    id=password    ${LOGIN_PASSWORD}
+    Click Element    xpath=//button[@type='submit']
+    Wait Until Page Contains    เข้าสู่ระบบไม่สำเร็จ    10s
+    Location Should Contain    /login
+

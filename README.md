@@ -77,7 +77,7 @@
 1.  **Clone the repository**
 
     ```bash
-    git clone https://github.com/Pai-Nam-Nae-A-Safe-Ride-Sharing/PaiNamNaeWebApp.git
+    git clone https://github.com/porametpu/4GumarnFullPowerPuff.git
     cd PaiNamNaeWebApp
     ```
 

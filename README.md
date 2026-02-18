@@ -1,3 +1,13 @@
+## สมาชิก
+| ลำดับ | ชื่อ–นามสกุล | รหัสนักศึกษา | GitHub Username |
+|------|--------------|--------------|-----------------|
+| 1 | นายพงศ์สุพัฒน์ เดิมพันธ์ | 663380392-0 | @pongsupatrev |
+| 2 | นายจักรพรรดิ ภวิจิตร | 663380377-6 | @6633803776 |
+| 3 | นางสาวอมลธิรา เขาวงษ์ | 663380412-0 | @Amonthira |
+| 4 | นางสาวตติยา  บุตรเฟื้อย | 663380594-8 | @TatiyaButfuay |
+| 5 | นายปรเมศวร์ พุทธทองศรี | 663380606-7 | @porametpu |
+| 6 | นางสาวภัทราวดี ส่องศรีโรจน์ | 663380610-6 | @Fahnueaeiei |
+
 # Pai Nam Nae - A Safe Ride Sharing App
 
 <!-- A safe ride-sharing application with a **Nuxt.js** frontend and **Express.js** backend, powered by **Prisma** ORM and **PostgreSQL**. -->

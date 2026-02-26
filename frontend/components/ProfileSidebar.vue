@@ -44,12 +44,6 @@
                     </li>
                 </ul>
             </div>
-            <div>
-                <NuxtLink to="/profile/delete-account" class="block px-4 py-2 rounded-md text-sm font-semibold text-red-600 hover:bg-red-100" 
-                :class="isActive('/profile/delete-account') ? 'bg-red-100 font-bold' : ''">
-                ลบบัญชี
-            </NuxtLink>
-            </div>
         </nav>
     </aside>
 </template>

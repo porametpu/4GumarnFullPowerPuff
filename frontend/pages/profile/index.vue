@@ -123,10 +123,20 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="pt-6 border-t border-gray-200">
+                                <h3 class="mb-4 text-lg font-semibold text-gray-800">ลบบัญชี</h3>
+                                <div>
+                                    <p class="text-sm text-gray-600">การลบบัญชีจะเป็นการลบข้อมูลทั้งหมดของคุณอย่างถาวร</p>
+                                    <div class="flex justify-start gap-4 pt-6">
+                                <NuxtLink to="/profile/delete-account" class="px-6 py-3 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50 ">
+                                    ลบบัญชี
+                                </NuxtLink>
+                            </div>
+                            </div>
+                            </div>
                             <div class="flex justify-end gap-4 pt-6">
                                 <button type="button" @click="resetForm" :disabled="isLoading"
-                                    class="px-6 py-3 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50">
+                                    class="px-6 py-3 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50 ">
                                     ยกเลิก
                                 </button>
                                 <button type="submit" :disabled="isLoading"

@@ -175,6 +175,8 @@ model Route {
   availableSeats  Int
   pricePerSeat    Float
   conditions      String?
+  allowExtraLuggage   Boolean   @default(false)
+  maxExtraLuggageType   ExtraLuggageType?
   status          RouteStatus @default(AVAILABLE)
   cancelledAt     DateTime?
   cancelledBy     String?     // 'DRIVER' | 'ADMIN'
@@ -212,5 +214,14 @@ model Booking {
   cancelReason    CancelReason?
   pickupLocation  Json          @db.Json
   dropoffLocation Json          @db.Json
+  extraLuggageSelected Boolean   @default(false)
+  extraLuggageType   ExtraLuggageType?
+  extraLuggageFee   Float @default(0)
   createdAt       DateTime      @default(now())
+}
+
+enum ExtraLuggageType{
+  MEDIUM 
+  LARGE
+  EXTRA_LARGE
 }

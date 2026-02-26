@@ -77,6 +77,15 @@ const createRoute = asyncHandler(async (req, res) => {
     departureTime: new Date(routeFields.departureTime),
   };
 
+  if(payload.allowExtraLuggage === true && !payload.maxExtraLuggageType){
+    throw new ApiError(400, "กรุณาเลือกระดับสัมภาระสูงสุดที่รองรับ");
+  }
+
+  if(payload.allowExtraLuggage !== true){
+    payload.allowExtraLuggage = false;
+    payload.maxExtraLuggageType = null;
+  }
+
   // ===== Enrich จาก Google Directions =====
   const directions = await getDirections({
     origin: payload.startLocation,

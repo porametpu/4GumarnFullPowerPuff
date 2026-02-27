@@ -18,7 +18,7 @@ const EXTRA_LUGGAGE_ORDER = {
 }
 
 function resolveExtraLuggage(route,input = {}) {
-  const selector = Boolean(input.extraLuggageSelected);
+  const selected = Boolean(input.extraLuggageSelected);
   const type = input.extraLuggageType || null;
 
   if(!selected){
@@ -40,7 +40,7 @@ function resolveExtraLuggage(route,input = {}) {
   if(
     route.maxExtraLuggageType && EXTRA_LUGGAGE_ORDER[type] > EXTRA_LUGGAGE_ORDER[route.maxExtraLuggageType]
   ){
-    throw new ApiError(400, "ประเภทสำภาระเกินกว่าที่ผู้ขับกำหนด");
+    throw new ApiError(400, "ประเภทสัมภาระเกินกว่าที่ผู้ขับกำหนด");
   }
 
   return {

@@ -2,14 +2,16 @@ const { z } = require('zod');
 const { BookingStatus } = require('@prisma/client');
 const extraLuggageTypeEnum = z.enum(['MEDIUM', 'LARGE', 'EXTRA_LARGE']);
 
-const createBookingSchema = z.object({
+const createBookingBaseSchema = z.object({
   routeId: z.string().cuid({ message: 'Invalid route ID format' }),
   numberOfSeats: z.number().int().min(1, 'At least 1 seat must be booked'),
   pickupLocation: z.any(),
   dropoffLocation: z.any(),
   extraLuggageSelected: z.boolean().optional(),
   extraLuggageType: extraLuggageTypeEnum.nullable().optional(),
-}).superRefine((data, ctx) => {
+});
+
+const withExtraLuggageValidation = (schema) => schema.superRefine((data, ctx) => {
   if (data.extraLuggageSelected && !data.extraLuggageType) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
@@ -25,6 +27,8 @@ const createBookingSchema = z.object({
     });
   }
 });
+
+const createBookingSchema = withExtraLuggageValidation(createBookingBaseSchema);
 
 
 const idParamSchema = z.object({
@@ -58,9 +62,9 @@ const listBookingsQuerySchema = z.object({
 });
 
 // แอดมินสร้าง booking ต้องระบุ passengerId
-const createBookingByAdminSchema = createBookingSchema.extend({
+const createBookingByAdminSchema = withExtraLuggageValidation(createBookingBaseSchema.extend({
   passengerId: z.string().cuid({ message: 'Invalid passenger ID format' }),
-});
+}));
 
 // แอดมินอัปเดต booking: แก้จำนวนที่นั่ง/จุดรับส่ง/ย้าย route/แก้สถานะ
 const updateBookingByAdminSchema = z.object({

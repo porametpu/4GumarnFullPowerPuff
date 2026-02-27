@@ -337,8 +337,8 @@ const form = reactive({
 });
 
 const EXTRA_LUGGAGE_OPTIONS = [
-    { value: 'MEDIUM', label: 'ไม่เกิน 24 นิ้ว / ไม่เกิน 20 กก.', fee: 40 },
-  { value: 'LARGE', label: 'ไม่เกิน 28 นิ้ว / ไม่เกิน 30 กก.', fee: 80 },
+    { value: 'MEDIUM', label: 'ไม่เกิน 24 นิ้ว / ไม่เกิน 20 กก.', fee: 50 },
+  { value: 'LARGE', label: 'ไม่เกิน 28 นิ้ว / ไม่เกิน 30 กก.', fee: 100 },
   { value: 'EXTRA_LARGE', label: 'เกิน 28 นิ้ว หรือสัมภาระพิเศษ', fee: 120 },
 ]
 
@@ -724,7 +724,7 @@ const handleSubmit = async () => {
         })
         .filter(Boolean)
 
-        if(form.allowExtraLuggage){
+        if(form.allowExtraLuggage && !form.maxExtraLuggageType){
             toast.error('ข้อมูลสัมภาระไม่ครบถ้วน','กรุณาเลือกระดับสัมภาระเพิ่มเติม')
             isLoading.value = false
             return
@@ -732,7 +732,7 @@ const handleSubmit = async () => {
 
     const payload = {
         allowExtraLuggage: Boolean(form.allowExtraLuggage),
-        maxExtraLuggageType: form.allowExtraLuggage ? form.maxExtraLuggageType : null,
+        ...(form.allowExtraLuggage ? {maxExtraLuggageType: form.maxExtraLuggageType} : {}),
         vehicleId: form.vehicleId,
         startLocation: {
             lat: Number(startMeta.value.lat),

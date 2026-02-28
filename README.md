@@ -97,6 +97,7 @@
     cd backend
     npm install
     npm install node-cron
+    npm install socket.io socket.io-client
     ```
 
 3.  **Install frontend dependencies**
@@ -104,6 +105,7 @@
     ```bash
     cd ../frontend
     npm install
+    npm install socket.io-client
     ```
 
 ## Environment Variables
@@ -262,6 +264,14 @@ Visit [**http://localhost:3000/documentation**](http://localhost:3000/documentat
 - `GET /health` – Check application & database health.
 - `GET /metrics` – Expose Prometheus-compatible metrics.
 - `GET /documentation` - Access the Swagger UI API documentation page.
+
+### Chat
+- `GET /booking/:bookingId` - Get Chat Room.
+- `GET /history` - Get My Chat Rooms.
+- `GET /:roomId/messages` - Get Messages.
+- `POST /:roomId/messages` - Send Messages.
+- `POST /:roomId/messages/image` - Upload Images & Send Image Message.
+- `POST /:roomId/read` - markAsRead.
 
 ## License
 

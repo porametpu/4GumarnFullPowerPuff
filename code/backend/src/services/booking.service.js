@@ -323,7 +323,7 @@ const getBookingById = async (id) => {
 const updateBookingStatus = async (id, status, userId) => {
   const booking = await prisma.booking.findUnique({
     where: { id },
-    include: { route: true },
+    include: { route: true, passenger: true },
   });
   if (!booking) throw new ApiError(404, 'Booking not found');
   if (booking.route.driverId !== userId) {
@@ -372,6 +372,31 @@ const updateBookingStatus = async (id, status, userId) => {
           metadata: { kind: 'BOOKING_STATUS', bookingId: id, routeId: booking.route.id, status: 'CONFIRMED' }
         }
       });
+
+      // สร้างห้องแชท
+      const existingChat = await tx.chatRoom.findUnique({
+        where: { bookingId: id }
+      });
+
+      if (!existingChat) {
+        await tx.chatRoom.create({
+          data: {
+            bookingId: id,
+            participants: {
+              create: [
+                {
+                  userId: booking.route.driverId,
+                  displayName: "คนขับรถ",
+                },
+                {
+                  userId: booking.passengerId,
+                  displayName: `${booking.passenger.firstName || ''} ${booking.passenger.lastName ? booking.passenger.lastName.charAt(0) + '.' : ''}`.trim(),
+                }
+              ]
+            }
+          }
+        });
+      }
     }
     return updated;
   });

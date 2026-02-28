@@ -349,6 +349,7 @@
                                     </template>
 
                                     <button v-else-if="trip.status === 'confirmed'"
+                                        @click.stop="openChatPage(trip.id)"
                                         class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
                                         แชทกับผู้โดยสาร
                                     </button>
@@ -848,6 +849,14 @@ async function updateMap(trip) {
 const isModalVisible = ref(false)
 const tripToAction = ref(null)
 const modalContent = ref({ title: '', message: '', confirmText: '', action: null, variant: 'danger' })
+
+// --- Chat Widget Navigation ---
+import { useChatWidget } from '~/composables/useChatWidget'
+const { openChat } = useChatWidget()
+
+const openChatPage = (bookingId) => {
+    openChat(bookingId)
+}
 
 const openConfirmModal = (trip, action) => {
     tripToAction.value = trip

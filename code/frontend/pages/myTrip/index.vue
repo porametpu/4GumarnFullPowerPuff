@@ -154,7 +154,7 @@
                                             class="px-4 py-2 text-sm text-red-600 transition duration-200 border border-red-300 rounded-md hover:bg-red-50">
                                             ยกเลิกการจอง
                                         </button>
-                                        <button
+                                        <button @click.stop="openChatPage(trip.id)"
                                             class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
                                             แชทกับผู้ขับ
                                         </button>
@@ -634,6 +634,14 @@ async function updateMap(trip) {
     }
 
     fitMapToPoints(points)
+}
+
+// --- Chat Widget Navigation ---
+import { useChatWidget } from '~/composables/useChatWidget'
+const { openChat } = useChatWidget()
+
+const openChatPage = (bookingId) => {
+    openChat(bookingId)
 }
 
 // --- Modal Logic ---

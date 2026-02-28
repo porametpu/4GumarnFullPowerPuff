@@ -5,6 +5,28 @@ const ApiError = require("../utils/ApiError");
 const verifService = require("../services/driverVerification.service");
 const { getDirections } = require("../utils/googleMaps");
 
+function applyExtraLuggagePolicy(payload, existing = null) {
+  const hasAllow = Object.prototype.hasOwnProperty.call(payload, 'allowExtraLuggage');
+  const hasMax = Object.prototype.hasOwnProperty.call(payload, 'maxExtraLuggageType');
+
+  const nextAllow = hasAllow ? payload.allowExtraLuggage === true : existing?.allowExtraLuggage === true;
+  const nextMax = hasMax ? (payload.maxExtraLuggageType ?? null) : (existing?.maxExtraLuggageType ?? null);
+
+  if (!nextAllow) {
+    payload.allowExtraLuggage = false;
+    payload.maxExtraLuggageType = null;
+    return;
+  }
+
+  if (!nextMax) {
+    throw new ApiError(400, "กรุณาเลือกระดับสัมภาระสูงสุดที่รองรับ");
+  }
+
+  payload.allowExtraLuggage = true;
+  payload.maxExtraLuggageType = nextMax;
+}
+
+
 const getAllRoutes = asyncHandler(async (req, res) => {
   const routes = await routeService.getAllRoutes();
   res.status(200).json({
@@ -76,6 +98,8 @@ const createRoute = asyncHandler(async (req, res) => {
     vehicleId,
     departureTime: new Date(routeFields.departureTime),
   };
+
+  applyExtraLuggagePolicy(payload);
 
   // ===== Enrich จาก Google Directions =====
   const directions = await getDirections({
@@ -176,6 +200,9 @@ const updateRoute = asyncHandler(async (req, res) => {
       departureTime: new Date(routeFields.departureTime),
     }),
   };
+
+  applyExtraLuggagePolicy(payload, existing);
+
 
   // ===== รีเฟรชข้อมูล Directions เฉพาะเมื่อจุดสำคัญเปลี่ยน =====
   const startChanged = routeFields.startLocation !== undefined &&
@@ -295,6 +322,8 @@ const adminCreateRoute = asyncHandler(async (req, res) => {
     departureTime: new Date(routeFields.departureTime),
   };
 
+  applyExtraLuggagePolicy(payload);
+
   // Enrich แบบเดียวกับ createRoute (รองรับ waypoints/optimizeWaypoints)
   const directions = await getDirections({
     origin: payload.startLocation,
@@ -316,6 +345,7 @@ const adminCreateRoute = asyncHandler(async (req, res) => {
     payload.distanceMeters = sumMeters;
     payload.durationSeconds = sumSeconds;
     payload.routePolyline = primary.overview_polyline?.points || null;
+    const routePath = directions.routePath || null;
 
     // รวม steps ทุก leg
     payload.steps = legs.flatMap(leg =>
@@ -383,6 +413,8 @@ const adminUpdateRoute = asyncHandler(async (req, res) => {
     }),
   };
 
+  applyExtraLuggagePolicy(payload, existing);
+
   // ===== รีคอมพิวต์ Directions ถ้า origin/destination/เวลาออกเดินทาง เปลี่ยน =====
   const startChanged = routeFields.startLocation !== undefined &&
     JSON.stringify(routeFields.startLocation) !== JSON.stringify(existing.startLocation);
@@ -430,6 +462,7 @@ const adminUpdateRoute = asyncHandler(async (req, res) => {
       payload.distanceMeters = sumMeters;
       payload.durationSeconds = sumSeconds;
       payload.routePolyline = primary.overview_polyline?.points || null;
+      const routePath = directions.routePath || null;
 
       payload.steps = legs.flatMap(leg =>
         (leg.steps || []).map(s => ({

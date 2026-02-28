@@ -25,6 +25,8 @@ const createBooking = asyncHandler(async (req, res) => {
     numberOfSeats: req.body.numberOfSeats,
     pickupLocation: req.body.pickupLocation,
     dropoffLocation: req.body.dropoffLocation,
+    extraLuggageSelected: req.body.extraLuggageSelected,
+    extraLuggageType: req.body.extraLuggageType,
   };
 
   const booking = await bookingService.createBooking(payload, passengerId);

@@ -106,9 +106,9 @@
                                                 <li class="mt-1">
                                                     • จุดปลายทาง:
                                                     <span class="font-medium text-gray-900">{{ trip.destination
-                                                    }}</span>
+                                                        }}</span>
                                                     <span v-if="trip.destinationAddress"> — {{ trip.destinationAddress
-                                                    }}</span>
+                                                        }}</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -118,6 +118,23 @@
                                                 <li v-for="detail in trip.carDetails" :key="detail">• {{ detail }}</li>
                                             </ul>
                                         </div>
+
+                                        <div>
+                                            <div class="mt-4">
+                                                <h5 class="mb-2 font-medium text-gray-900">ข้อมูลสัมภาระเพิ่มเติม</h5>
+                                                <p v-if="trip.extraLuggageSelected"
+                                                    class="p-3 text-sm text-gray-700 border border-gray-300 rounded-md bg-gray-50">
+                                                    ประเภท: {{ luggageTypeLabel(trip.extraLuggageType) }}<br>
+                                                    ค่าบริการเพิ่ม: {{ trip.extraLuggageFee }} บาท
+                                                </p>
+                                                <p v-else
+                                                    class="p-3 text-sm text-gray-600 border border-gray-300 rounded-md bg-gray-50">
+                                                    ไม่มีการขอสัมภาระเพิ่มเติม
+                                                </p>
+                                            </div>
+
+                                        </div>
+
                                     </div>
 
                                     <div class="mt-4 space-y-4">
@@ -299,6 +316,16 @@ function cleanAddr(a) {
         .trim()
 }
 
+function luggageTypeLabel(type) {
+    const map = {
+        MEDIUM: 'ขนาดกลาง ( <= 24 นิ้ว)',
+        LARGE: 'ขนาดใหญ่ ( <= 28 นิ้ว)',
+        EXTRA_LARGE: 'ขนาดใหญ่พิเศษ (> 28 นิ้ว)'
+    }
+    return map[type] || type || '-'
+
+}
+
 const coerceLatLng = (item) => {
     if (!item) return null
     const num = (v) => (typeof v === 'string' ? Number(v) : v)
@@ -399,8 +426,11 @@ async function fetchMyTrips() {
                 pickupPoint: b.pickupLocation?.name || '-',
                 date: dayjs(b.route.departureTime).format('D MMMM BBBB'),
                 time: dayjs(b.route.departureTime).format('HH:mm น.'),
-                price: (b.route.pricePerSeat || 0) * (b.numberOfSeats || 1),
+                price: (b.route.pricePerSeat || 0) * (b.numberOfSeats || 1) + Number(b.extraLuggageFee || 0),
                 seats: b.numberOfSeats || 1,
+                extraLuggageSelected: !!b.extraLuggageSelected,
+                extraLuggageType: b.extraLuggageType || null,
+                extraLuggageFee: Number(b.extraLuggageFee || 0),
                 driver: driverData,
                 coords: [
                     [start.lat, start.lng],

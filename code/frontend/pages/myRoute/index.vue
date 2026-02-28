@@ -277,6 +277,9 @@
                                     <div class="text-right">
                                         <div class="text-lg font-bold text-blue-600">{{ trip.price }} บาท</div>
                                         <div class="text-sm text-gray-600">จำนวน {{ trip.seats }} ที่นั่ง</div>
+                                        <div v-if="trip.extraLuggageSelected" class="text-sm text-gray-600">
+                                            สัมภาระเพิ่ม +{{ trip.extraLuggageFee }} บาท
+                                        </div>
                                     </div>
                                 </div>
 
@@ -315,6 +318,18 @@
                                                 <li v-for="detail in trip.carDetails" :key="detail">• {{ detail }}</li>
                                             </ul>
                                         </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h5 class="mb-2 font-medium text-gray-900">ข้อมูลสัมภาระเพิ่มเติม</h5>
+                                        <p v-if="trip.extraLuggageSelected"
+                                            class="p-3 text-sm text-gray-700 border border-gray-300 rounded-md bg-gray-50">
+                                            ประเภท: {{ luggageTypeLabel(trip.extraLuggageType) }}<br>
+                                            ค่าบริการเพิ่ม: {{ trip.extraLuggageFee }} บาท
+                                        </p>
+                                        <p v-else
+                                            class="p-3 text-sm text-gray-600 border border-gray-300 rounded-md bg-gray-50">
+                                            ไม่มีการขอสัมภาระเพิ่มเติม
+                                        </p>
                                     </div>
                                     <div class="mt-4 space-y-4">
                                         <div v-if="trip.conditions">
@@ -502,6 +517,15 @@ const reasonLabelMap = {
 }
 function reasonLabel(v) { return reasonLabelMap[v] || v }
 
+function luggageTypeLabel(type) {
+    const map = {
+        MEDIUM: 'ขนาดกลาง ( <= 24 นิ้ว)',
+        LARGE: 'ขนาดใหญ่ ( <= 28 นิ้ว)',
+        EXTRA_LARGE: 'ขนาดใหญ่พิเศษ (> 28 นิ้ว)'
+    }
+    return map[type] || type || '-'
+}
+
 // --- Computed ---
 const filteredTrips = computed(() => {
     if (activeTab.value === 'all') return allTrips.value
@@ -583,8 +607,11 @@ async function fetchMyRoutes() {
                     pickupPoint: b.pickupLocation?.name || '-',
                     date: dayjs(r.departureTime).format('D MMMM BBBB'),
                     time: dayjs(r.departureTime).format('HH:mm น.'),
-                    price: (r.pricePerSeat || 0) * (b.numberOfSeats || 0),
+                    price: (r.pricePerSeat || 0) * (b.numberOfSeats || 0) + Number(b.extraLuggageFee || 0),
                     seats: b.numberOfSeats || 0,
+                    extraLuggageSelected: !!b.extraLuggageSelected,
+                    extraLuggageType: b.extraLuggageType || null,
+                    extraLuggageFee: Number(b.extraLuggageFee || 0),
                     passenger: {
                         name: `${b.passenger?.firstName || ''} ${b.passenger?.lastName || ''}`.trim() || 'ผู้โดยสาร',
                         image: b.passenger?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(b.passenger?.firstName || 'P')}&background=random&size=64`,

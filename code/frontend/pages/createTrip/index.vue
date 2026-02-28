@@ -212,6 +212,34 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-md resize-none focus:ring-blue-500"></textarea>
                     </div>
 
+                    <div>
+                        <h3 class="pb-2 mb-6 text-xl font-semibold text-gray-900 border-b border-gray-300">
+                            ค่าใช้จ่ายเพิ่มเติม
+                        </h3>
+                        <div class="space-y-4">
+                            <label class="flex items-center justify-between p-3 border border-gray-300 rounded-md">
+                            <span class="text-sm font-medium text-gray-800">เปิดรับสัมภาระเกินปกติ</span>
+                            <input v-model="form.allowExtraLuggage" type="checkbox" class="w-4 h-4">
+                        </label>
+
+                        <div v-if="form.allowExtraLuggage" class="p-4 border border-blue-200 rounded-md bg-blue-50">
+                            <p class="mb-3 text-sm text-gray-700">เลือกระดับสูงสุดของสัมภาระที่รับได้</p>
+                            <label
+                            v-for="opt in EXTRA_LUGGAGE_OPTIONS"
+                            :key="opt.value"
+                            class="flex items-start justify-between p-3 mb-2 bg-white border border-gray-200 rounded-md cursor-pointer"
+                            >
+                            <div>
+                                <div class="font-medium text-gray-900">{{ opt.label }}</div>
+                                <div class="text-xs text-gray-600">คิดเพิ่ม {{ opt.fee }} บาท / การจอง</div>
+                            </div>
+                            <input v-model="form.maxExtraLuggageType" type="radio" :value="opt.value" class="mt-1">
+                            </label>
+                        </div>
+                        </div>
+
+                    </div>
+
                     <div class="flex justify-end gap-4 pt-6">
                         <button type="button"
                             class="px-6 py-3 text-gray-700 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -304,7 +332,15 @@ const form = reactive({
     availableSeats: null,
     pricePerSeat: null,
     conditions: '',
+    allowExtraLuggage: false,
+    maxExtraLuggageType: 'MEDIUM',
 });
+
+const EXTRA_LUGGAGE_OPTIONS = [
+    { value: 'MEDIUM', label: 'ไม่เกิน 24 นิ้ว / ไม่เกิน 20 กก.', fee: 50 },
+  { value: 'LARGE', label: 'ไม่เกิน 28 นิ้ว / ไม่เกิน 30 กก.', fee: 100 },
+  { value: 'EXTRA_LARGE', label: 'เกิน 28 นิ้ว หรือสัมภาระพิเศษ', fee: 120 },
+]
 
 const startInputEl = ref(null)
 const endInputEl = ref(null)
@@ -688,7 +724,15 @@ const handleSubmit = async () => {
         })
         .filter(Boolean)
 
+        if(form.allowExtraLuggage && !form.maxExtraLuggageType){
+            toast.error('ข้อมูลสัมภาระไม่ครบถ้วน','กรุณาเลือกระดับสัมภาระเพิ่มเติม')
+            isLoading.value = false
+            return
+        }
+
     const payload = {
+        allowExtraLuggage: Boolean(form.allowExtraLuggage),
+        ...(form.allowExtraLuggage ? {maxExtraLuggageType: form.maxExtraLuggageType} : {}),
         vehicleId: form.vehicleId,
         startLocation: {
             lat: Number(startMeta.value.lat),

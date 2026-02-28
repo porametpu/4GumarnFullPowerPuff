@@ -177,28 +177,36 @@ model Route {
   availableSeats  Int
   pricePerSeat    Float
   conditions      String?
+  allowExtraLuggage   Boolean   @default(false)
+  maxExtraLuggageType   ExtraLuggageType?
   status          RouteStatus @default(AVAILABLE)
   cancelledAt     DateTime?
-  cancelledBy     String? // 'DRIVER' | 'ADMIN'
-  routePolyline   String?
-  distanceMeters  Int?
+  cancelledBy     String?     // 'DRIVER' | 'ADMIN'
+  routePolyline String?
+  distanceMeters Int?
   durationSeconds Int?
   routeSummary    String?
   distance        String?
   duration        String?
-  waypoints       Json?       @db.Json
+  waypoints       Json?        @db.Json
   landmarks       Json?       @db.Json
   steps           Json?       @db.Json
   createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  updatedAt     DateTime @updatedAt
 
-  bookings Booking[]
+  bookings        Booking[]
 
   @@index([driverId])
   @@index([vehicleId])
   @@index([status])
   @@index([createdAt])
   @@index([departureTime])
+}
+
+enum ExtraLuggageType{
+  MEDIUM 
+  LARGE
+  EXTRA_LARGE
 }
 
 model Booking {
@@ -214,6 +222,9 @@ model Booking {
   cancelReason    CancelReason?
   pickupLocation  Json          @db.Json
   dropoffLocation Json          @db.Json
+  extraLuggageSelected Boolean   @default(false)
+  extraLuggageType   ExtraLuggageType?
+  extraLuggageFee   Float @default(0)
   createdAt       DateTime      @default(now())
   chatRoom        ChatRoom?
 }

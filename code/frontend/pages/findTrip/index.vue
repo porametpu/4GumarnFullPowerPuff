@@ -9,9 +9,7 @@
                         <label class="block mb-2 text-sm font-medium text-gray-700">จุดเริ่มต้น</label>
                         <div class="relative">
                             <input ref="originInputEl" v-model="searchForm.origin" type="text"
-                                placeholder="เช่น กรุงเทพฯ"
-                                @input="onOriginInput"
-                                @focus="onOriginFocus"
+                                placeholder="เช่น กรุงเทพฯ" @input="onOriginInput" @focus="onOriginFocus"
                                 @blur="onOriginBlur"
                                 class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <!-- ไอคอนปักหมุด -->
@@ -37,9 +35,7 @@
                         <label class="block mb-2 text-sm font-medium text-gray-700">จุดปลายทาง</label>
                         <div class="relative">
                             <input ref="destinationInputEl" v-model="searchForm.destination" type="text"
-                                placeholder="เช่น เชียงใหม่"
-                                @input="onDestinationInput"
-                                @focus="onDestinationFocus"
+                                placeholder="เช่น เชียงใหม่" @input="onDestinationInput" @focus="onDestinationFocus"
                                 @blur="onDestinationBlur"
                                 class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <!-- ไอคอนปักหมุด -->
@@ -186,7 +182,7 @@
                                                 <li>
                                                     • จุดเริ่มต้น:
                                                     <span class="font-medium text-gray-900">{{ route.originName
-                                                        }}</span>
+                                                    }}</span>
                                                     <span v-if="route.originAddress"> — {{ route.originAddress }}</span>
                                                 </li>
 
@@ -200,9 +196,9 @@
                                                 <li class="mt-1">
                                                     • จุดปลายทาง:
                                                     <span class="font-medium text-gray-900">{{ route.destinationName
-                                                        }}</span>
+                                                    }}</span>
                                                     <span v-if="route.destinationAddress"> — {{ route.destinationAddress
-                                                        }}</span>
+                                                    }}</span>
                                                 </li>
                                             </ul>
                                             <!-- <ul class="space-y-1 text-sm text-gray-600">
@@ -383,9 +379,7 @@
                                 <label class="block mb-2 text-sm font-medium text-gray-700">เลือกจุดขึ้นรถ</label>
                                 <div class="relative">
                                     <input ref="pickupInputEl" v-model="pickupPoint" type="text"
-                                        placeholder="พิมพ์ชื่อสถานที่..."
-                                        @input="onPickupInput"
-                                        @focus="onPickupFocus"
+                                        placeholder="พิมพ์ชื่อสถานที่..." @input="onPickupInput" @focus="onPickupFocus"
                                         @blur="onPickupBlur"
                                         class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                                     <button type="button" @click="startBookingPicker('pickup')"
@@ -408,10 +402,8 @@
                                 <label class="block mb-2 text-sm font-medium text-gray-700">เลือกจุดลงรถ</label>
                                 <div class="relative">
                                     <input ref="dropoffInputEl" v-model="dropoffPoint" type="text"
-                                        placeholder="พิมพ์ชื่อสถานที่..."
-                                        @input="onDropoffInput"
-                                        @focus="onDropoffFocus"
-                                        @blur="onDropoffBlur"
+                                        placeholder="พิมพ์ชื่อสถานที่..." @input="onDropoffInput"
+                                        @focus="onDropoffFocus" @blur="onDropoffBlur"
                                         class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                                     <button type="button" @click="startBookingPicker('dropoff')"
                                         class="absolute inset-y-0 my-auto text-gray-500 right-2 hover:text-blue-600"
@@ -429,6 +421,32 @@
                                     </ul>
                                 </div>
                             </div>
+
+                            <div>
+                                <div v-if="bookingRoute.allowExtraLuggage"
+                                    class="p-3 border border-blue-200 rounded-md bg-blue-50">
+                                    <label class="flex items-center justify-between">
+                                        <span class="text-sm font-medium text-gray-800">มีสัมภาระเกินปกติ</span>
+                                        <input v-model="extraLuggageSelected" type="checkbox" class="w-4 h-4">
+                                    </label>
+
+                                    <div v-if="extraLuggageSelected" class="mt-3 space-y-2">
+                                        <label v-for="opt in allowedExtraLuggageOptions" :key="opt.value"
+                                            class="flex items-center justify-between p-2 bg-white border border-gray-200 rounded-md">
+                                            <span class="text-sm text-gray-800">{{ opt.label }}</span>
+                                            <div class="flex items-center gap-3">
+                                                <span class="text-xs text-blue-700">+{{ opt.fee }} บาท</span>
+                                                <input v-model="extraLuggageType" type="radio" :value="opt.value">
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
                         </div>
                         <div class="p-4 mb-6 rounded-lg bg-blue-50">
                             <div class="flex items-center justify-between mb-2">
@@ -444,6 +462,11 @@
                                     <span class="font-semibold text-gray-900">ยอดรวม</span>
                                     <span class="text-lg font-bold text-blue-600">{{ bookingTotalPrice }} บาท</span>
                                 </div>
+                                <div v-if="extraLuggageSelected" class="flex items-center justify-between mb-2">
+                                    <span class="text-gray-700">ค่าสัมภาระเพิ่มเติม</span>
+                                    <span class="font-medium text-gray-900">{{ extraLuggageFee }} บาท</span>
+                                </div>
+
                             </div>
                         </div>
                         <div class="flex space-x-4">
@@ -598,10 +621,33 @@ const bookingRoute = ref(null)
 const bookingSeats = ref(1)
 const pickupPoint = ref('')
 const dropoffPoint = ref('')
+const extraLuggageSelected = ref(false)
+const extraLuggageType = ref('MEDIUM')
+
+const EXTRA_LUGGAGE_OPTIONS = [
+    { value: 'MEDIUM', label: 'ไม่เกิน 24 นิ้ว / ไม่เกิน 20 กก.', fee: 50 },
+    { value: 'LARGE', label: 'ไม่เกิน 28 นิ้ว / ไม่เกิน 30 กก.', fee: 100 },
+    { value: 'EXTRA_LARGE', label: 'เกิน 28 นิ้ว หรือสัมภาระพิเศษ', fee: 120 },
+]
+
+const LUGGAGE_ORDER = { MEDIUM: 1, LARGE: 2, EXTRA_LARGE: 3 }
+
+const allowedExtraLuggageOptions = computed(() => {
+    if (!bookingRoute.value?.allowExtraLuggage) return []
+    const maxType = bookingRoute.value?.maxExtraLuggageType || 'MEDIUM'
+    return EXTRA_LUGGAGE_OPTIONS.filter((opt) => LUGGAGE_ORDER[opt.value] <= LUGGAGE_ORDER[maxType])
+})
+
+const extraLuggageFee = computed(() => {
+    if (!extraLuggageSelected.value) return 0
+    const found = EXTRA_LUGGAGE_OPTIONS.find((o) => o.value === extraLuggageType.value)
+    return found ? found.fee : 0
+})
 
 const bookingTotalPrice = computed(() => {
     if (!bookingRoute.value) return 0
-    return bookingSeats.value * bookingRoute.value.price
+    const base = bookingSeats.value * bookingRoute.value.price
+    return base + extraLuggageFee.value
 })
 
 function cleanAddr(a) {
@@ -1024,6 +1070,8 @@ async function handleSearch() {
                 destinationName: route.endLocation?.name || `(${route.endLocation.lat.toFixed(2)}, ${route.endLocation.lng.toFixed(2)})`,
                 originAddress: route.startLocation?.address ? cleanAddr(route.startLocation.address) : null,
                 destinationAddress: route.endLocation?.address ? cleanAddr(route.endLocation.address) : null,
+                allowExtraLuggage: !!route.allowExtraLuggage,
+                maxExtraLuggageType: route.maxExtraLuggageType || null,
                 driver: {
                     name: `${route.driver?.firstName || ''} ${route.driver?.lastName || ''}`.trim() || 'ไม่ระบุชื่อ',
                     image: route.driver?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(route.driver?.firstName || 'U')}&background=random&size=64`,
@@ -1247,6 +1295,13 @@ function openModal(route) {
         bookingPickingTarget.value = null
         showModal.value = true
     }
+
+    extraLuggageSelected.value = false
+    const firstAllowed = EXTRA_LUGGAGE_OPTIONS.find((opt) => {
+        if (!route.maxExtraLuggageType) return opt.value === 'MEDIUM'
+        return LUGGAGE_ORDER[opt.value] <= LUGGAGE_ORDER[route.maxExtraLuggageType]
+    })
+    extraLuggageType.value = firstAllowed?.value || 'MEDIUM'
 }
 
 function closeModal() {
@@ -1278,7 +1333,13 @@ async function confirmBooking() {
         routeId: bookingRoute.value.id,
         numberOfSeats: bookingSeats.value,
         pickupLocation: pickupData.value,
-        dropoffLocation: dropoffData.value
+        dropoffLocation: dropoffData.value,
+        extraLuggageSelected: Boolean(extraLuggageSelected.value && bookingRoute.value.allowExtraLuggage),
+        extraLuggageType:
+            extraLuggageSelected.value && bookingRoute.value.allowExtraLuggage
+                ? extraLuggageType.value
+                : null,
+
     };
 
     try {

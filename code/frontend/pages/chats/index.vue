@@ -103,7 +103,15 @@ const fetchHistory = async () => {
     try {
         isLoading.value = true
         const res = await $api('/chats/history')
-        rooms.value = res || []
+        let fetchedRooms = res || []
+
+        fetchedRooms.sort((a, b) => {
+            const timeA = a.lastMessage?.createdAt ? new Date(a.lastMessage.createdAt).getTime() : 0;
+            const timeB = b.lastMessage?.createdAt ? new Date(b.lastMessage.createdAt).getTime() : 0;
+            return timeB - timeA;
+        })
+        
+        rooms.value = fetchedRooms
     } catch (error) {
         console.error('Failed to fetch chat history:', error)
     } finally {

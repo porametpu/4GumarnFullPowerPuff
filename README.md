@@ -23,6 +23,7 @@
 - [Environment Variables](#environment-variables)
 - [Database Setup](#database-setup)
 - [Running the Application](#running-the-application)
+- [Robot Framework Testing](#robot-framework-testing)
 - [API Endpoints](#api-endpoints)
 - [License](#license)
 - [Contact](#contact)
@@ -163,6 +164,71 @@ NUXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_for_frontend
     cd frontend
     npm run dev # starts Nuxt.js on http://localhost:3001
     ```
+
+## Robot Framework Testing
+
+This project includes an end-to-end Robot Framework test file at `DeleteUser.robot`.
+
+### 1) Install Robot Framework
+
+```bash
+cd /path/to/project
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install --upgrade pip
+python3 -m pip install robotframework robotframework-seleniumlibrary
+```
+
+Note:
+- Make sure Google Chrome is installed.
+- Selenium 4 can manage browser drivers automatically on first run.
+
+### 2) Start backend and frontend
+
+Run both services before executing tests:
+
+```bash
+# terminal 1
+cd backend
+npm run dev
+```
+
+```bash
+# terminal 2
+cd frontend
+npm run dev
+```
+
+### 3) Run tests
+
+Set login credentials via environment variables:
+
+```bash
+cd /path/to/project
+TEST_EMAIL='your@email.com' TEST_PASSWORD='yourpassword' robot -d reports DeleteUser.robot
+```
+
+Run only the wrong-email scenario:
+
+```bash
+TEST_EMAIL='your@email.com' TEST_PASSWORD='yourpassword' robot -d reports -t "TC1 - Delete Account With Wrong Email" DeleteUser.robot
+```
+
+Run only the correct-email scenario:
+
+```bash
+TEST_EMAIL='your@email.com' TEST_PASSWORD='yourpassword' robot -d reports -t "TC2 - Delete Account With Correct Email" DeleteUser.robot
+```
+
+Warning:
+- `TC2 - Delete Account With Correct Email` will submit an actual delete-account request for that user. Use a test account only.
+
+### 4) Test report files
+
+After each run, reports are generated in:
+- `reports/report.html`
+- `reports/log.html`
+- `reports/output.xml`
 
 ## API Endpoints
 

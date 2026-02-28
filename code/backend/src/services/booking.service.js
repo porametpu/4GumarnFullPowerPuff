@@ -5,6 +5,51 @@ const { checkAndApplyPassengerSuspension } = require('./penalty.service');
 
 const ACTIVE_STATUSES = [BookingStatus.PENDING, BookingStatus.CONFIRMED];
 
+const EXTRA_LUGGAGE_FEE_BY_TYPE = {
+  MEDIUM: 50,
+  LARGE: 100,
+  EXTRA_LARGE: 120,
+}
+
+const EXTRA_LUGGAGE_ORDER = {
+  MEDIUM: 1,
+  LARGE: 2,
+  EXTRA_LARGE: 3,
+}
+
+function resolveExtraLuggage(route, input = {}) {
+  const selected = Boolean(input.extraLuggageSelected);
+  const type = input.extraLuggageType || null;
+
+  if (!selected) {
+    return {
+      extraLuggageSelected: false,
+      extraLuggageType: null,
+      extraLuggageFee: 0,
+    }
+  }
+
+  if (!route.allowExtraLuggage) {
+    throw new ApiError(400, 'เส้นทางนี้ไม่รองรับการเลือกสัมภาระเพิ่มเติม');
+  }
+
+  if (!type || !EXTRA_LUGGAGE_FEE_BY_TYPE[type]) {
+    throw new ApiError(400, 'กรุณาเลือกประเภทสัมภาระเพิ่มเติมที่ถูกต้อง');
+  }
+
+  if (
+    route.maxExtraLuggageType && EXTRA_LUGGAGE_ORDER[type] > EXTRA_LUGGAGE_ORDER[route.maxExtraLuggageType]
+  ) {
+    throw new ApiError(400, "ประเภทสัมภาระเกินกว่าที่ผู้ขับกำหนด");
+  }
+
+  return {
+    extraLuggageSelected: true,
+    extraLuggageType: type,
+    extraLuggageFee: EXTRA_LUGGAGE_FEE_BY_TYPE[type],
+  };
+}
+
 const searchBookingsAdmin = async (opts = {}) => {
   const {
     page = 1,
@@ -122,7 +167,7 @@ const adminCreateBooking = async (data) => {
     if (route.availableSeats < data.numberOfSeats) {
       throw new ApiError(400, 'Not enough seats available on this route.');
     }
-
+    const extraLuggage = resolveExtraLuggage(route, data);
     const booking = await tx.booking.create({
       data: {
         routeId: data.routeId,
@@ -130,6 +175,7 @@ const adminCreateBooking = async (data) => {
         numberOfSeats: data.numberOfSeats,
         pickupLocation: data.pickupLocation,
         dropoffLocation: data.dropoffLocation,
+        ...extraLuggage,
         // status: (default -> PENDING)
       },
     });
@@ -235,6 +281,7 @@ const createBooking = async (data, passengerId) => {
       throw new ApiError(400, 'Not enough seats available on this route.');
     }
 
+    const extraLuggage = resolveExtraLuggage(route, data);
     const booking = await tx.booking.create({
       data: {
         routeId: data.routeId,
@@ -242,6 +289,7 @@ const createBooking = async (data, passengerId) => {
         numberOfSeats: data.numberOfSeats,
         pickupLocation: data.pickupLocation,
         dropoffLocation: data.dropoffLocation,
+        ...extraLuggage,
       },
     });
 
@@ -272,7 +320,10 @@ const createBooking = async (data, passengerId) => {
           bookingId: booking.id,
           routeId: data.routeId,
           passengerId,
-          numberOfSeats: data.numberOfSeats
+          numberOfSeats: data.numberOfSeats,
+          extraLuggageSelected: extraLuggage.extraLuggageSelected,
+          extraLuggageType: extraLuggage.extraLuggageType,
+          extraLuggageFee: extraLuggage.extraLuggageFee,
         }
       }
     });
@@ -316,7 +367,30 @@ const getMyBookings = async (passengerId) => {
 const getBookingById = async (id) => {
   return prisma.booking.findUnique({
     where: { id },
-    include: { route: true, passenger: true },
+    include: {
+      route: {
+        include: {
+          driver: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              profilePicture: true,
+              email: true,
+              username: true
+            }
+          },
+          vehicle: {
+            select: {
+              vehicleModel: true,
+              vehicleType: true,
+              licensePlate: true
+            }
+          }
+        }
+      },
+      passenger: true
+    },
   });
 };
 

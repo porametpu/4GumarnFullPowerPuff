@@ -17,11 +17,11 @@ const EXTRA_LUGGAGE_ORDER = {
   EXTRA_LARGE: 3,
 }
 
-function resolveExtraLuggage(route, input = {}) {
+function resolveExtraLuggage(route,input = {}) {
   const selected = Boolean(input.extraLuggageSelected);
   const type = input.extraLuggageType || null;
 
-  if (!selected) {
+  if(!selected){
     return {
       extraLuggageSelected: false,
       extraLuggageType: null,
@@ -29,17 +29,17 @@ function resolveExtraLuggage(route, input = {}) {
     }
   }
 
-  if (!route.allowExtraLuggage) {
+  if(!route.allowExtraLuggage){
     throw new ApiError(400, 'เส้นทางนี้ไม่รองรับการเลือกสัมภาระเพิ่มเติม');
   }
 
-  if (!type || !EXTRA_LUGGAGE_FEE_BY_TYPE[type]) {
+  if(!type || !EXTRA_LUGGAGE_FEE_BY_TYPE[type]){
     throw new ApiError(400, 'กรุณาเลือกประเภทสัมภาระเพิ่มเติมที่ถูกต้อง');
   }
 
-  if (
+  if(
     route.maxExtraLuggageType && EXTRA_LUGGAGE_ORDER[type] > EXTRA_LUGGAGE_ORDER[route.maxExtraLuggageType]
-  ) {
+  ){
     throw new ApiError(400, "ประเภทสัมภาระเกินกว่าที่ผู้ขับกำหนด");
   }
 
@@ -167,7 +167,7 @@ const adminCreateBooking = async (data) => {
     if (route.availableSeats < data.numberOfSeats) {
       throw new ApiError(400, 'Not enough seats available on this route.');
     }
-    const extraLuggage = resolveExtraLuggage(route, data);
+    const extraLuggage = resolveExtraLuggage(route,data);
     const booking = await tx.booking.create({
       data: {
         routeId: data.routeId,
@@ -281,7 +281,7 @@ const createBooking = async (data, passengerId) => {
       throw new ApiError(400, 'Not enough seats available on this route.');
     }
 
-    const extraLuggage = resolveExtraLuggage(route, data);
+    const extraLuggage = resolveExtraLuggage(route,data);
     const booking = await tx.booking.create({
       data: {
         routeId: data.routeId,
@@ -367,37 +367,14 @@ const getMyBookings = async (passengerId) => {
 const getBookingById = async (id) => {
   return prisma.booking.findUnique({
     where: { id },
-    include: {
-      route: {
-        include: {
-          driver: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              profilePicture: true,
-              email: true,
-              username: true
-            }
-          },
-          vehicle: {
-            select: {
-              vehicleModel: true,
-              vehicleType: true,
-              licensePlate: true
-            }
-          }
-        }
-      },
-      passenger: true
-    },
+    include: { route: true, passenger: true },
   });
 };
 
 const updateBookingStatus = async (id, status, userId) => {
   const booking = await prisma.booking.findUnique({
     where: { id },
-    include: { route: true, passenger: true },
+    include: { route: true },
   });
   if (!booking) throw new ApiError(404, 'Booking not found');
   if (booking.route.driverId !== userId) {
@@ -446,31 +423,6 @@ const updateBookingStatus = async (id, status, userId) => {
           metadata: { kind: 'BOOKING_STATUS', bookingId: id, routeId: booking.route.id, status: 'CONFIRMED' }
         }
       });
-
-      // สร้างห้องแชท
-      const existingChat = await tx.chatRoom.findUnique({
-        where: { bookingId: id }
-      });
-
-      if (!existingChat) {
-        await tx.chatRoom.create({
-          data: {
-            bookingId: id,
-            participants: {
-              create: [
-                {
-                  userId: booking.route.driverId,
-                  displayName: "คนขับรถ",
-                },
-                {
-                  userId: booking.passengerId,
-                  displayName: `${booking.passenger.firstName || ''} ${booking.passenger.lastName ? booking.passenger.lastName.charAt(0) + '.' : ''}`.trim(),
-                }
-              ]
-            }
-          }
-        });
-      }
     }
     return updated;
   });
@@ -594,11 +546,13 @@ module.exports = {
   adminCreateBooking,
   createBooking,
   adminUpdateBooking,
-  adminCreateBooking,
   getMyBookings,
   getBookingById,
   updateBookingStatus,
   cancelBooking,
   deleteBooking,
-  adminDeleteBooking
+  adminDeleteBooking,
+  __testables: {
+    resolveExtraLuggage,
+  },
 };

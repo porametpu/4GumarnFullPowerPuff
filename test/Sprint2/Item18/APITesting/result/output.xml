@@ -1,0 +1,928 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.1 (Python 3.14.2 on darwin)" generated="2026-03-05T02:20:20.958989" rpa="false" schemaversion="5">
+<suite id="s1" name="Investigation" source="/Users/fahnuea/Documents/4GumarnFullPowerPuff/test/Sprint2/Item18/APITesting/investigation.robot">
+<kw name="Login Admin" type="SETUP">
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.032335" level="INFO">Creating Session using : alias=api, url=http://localhost:3000/api, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2026-03-05T02:20:21.032245" elapsed="0.000188"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.032759" level="INFO">${body} = {'email': 'admin@example.com', 'password': '123456789'}</msg>
+<var>${body}</var>
+<arg>email=${ADMIN_EMAIL}</arg>
+<arg>password=${ADMIN_PASSWORD}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.032502" elapsed="0.000270"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.141762" level="INFO">POST Request : url=http://localhost:3000/api/auth/login 
+ path_url=/api/auth/login 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '55', 'Content-Type': 'application/json'} 
+ body=b'{"email": "admin@example.com", "password": "123456789"}' 
+ </msg>
+<msg time="2026-03-05T02:20:21.141839" level="INFO">POST Response : url=http://localhost:3000/api/auth/login 
+ status=200, reason=OK 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '510', 'ETag': 'W/"1fe-sUN70lfFUTR3pIkUEg+21a1S9xo"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":true,"message":"Login successful","data":{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg","user":{"id":"cmmc2rpde00004ud5c7iceoyu","firstName":"System","lastName":"Administrator","profilePicture":null,"role":"ADMIN","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}}} 
+ </msg>
+<msg time="2026-03-05T02:20:21.141917" level="INFO">${res} = &lt;Response [200]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/auth/login</arg>
+<arg>json=${body}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.032818" elapsed="0.109112"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.142340" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${res.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.142012" elapsed="0.000356"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.142682" level="INFO">${json} = {'success': True, 'message': 'Login successful', 'data': {'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHA...</msg>
+<var>${json}</var>
+<arg>${res.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.142418" elapsed="0.000276"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.142948" level="INFO">${token} = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg</msg>
+<var>${token}</var>
+<arg>${json["data"]["token"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.142735" elapsed="0.000224"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.143126" level="INFO">${TOKEN} = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg</msg>
+<arg>${TOKEN}</arg>
+<arg>${token}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.143004" elapsed="0.000138"/>
+</kw>
+<status status="PASS" start="2026-03-05T02:20:21.031972" elapsed="0.111200"/>
+</kw>
+<test id="s1-t1" name="TC-01 Login Success" line="67">
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.143543" level="INFO">Length is 193.</msg>
+<arg>${TOKEN}</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.143367" elapsed="0.000193"/>
+</kw>
+<status status="PASS" start="2026-03-05T02:20:21.143206" elapsed="0.000423"/>
+</test>
+<test id="s1-t2" name="TC-02 Create Investigation Success" line="71">
+<kw name="Get Admin Header">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.144144" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.144011" elapsed="0.000144"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-03-05T02:20:21.144177" elapsed="0.000023"/>
+</return>
+<msg time="2026-03-05T02:20:21.144252" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<status status="PASS" start="2026-03-05T02:20:21.143915" elapsed="0.000347"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.144468" level="INFO">${body} = {'authorityName': 'kk police', 'bookingId': 'testBooking', 'startDate': '2026-03-01', 'endDate': '2026-03-05'}</msg>
+<var>${body}</var>
+<arg>authorityName=kk police</arg>
+<arg>bookingId=testBooking</arg>
+<arg>startDate=${START_DATE}</arg>
+<arg>endDate=${END_DATE}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.144321" elapsed="0.000157"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.148537" level="INFO">POST Request : url=http://localhost:3000/api/admin/investigations 
+ path_url=/api/admin/investigations 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg', 'Content-Length': '110', 'Content-Type': 'application/json'} 
+ body=b'{"authorityName": "kk police", "bookingId": "testBooking", "startDate": "2026-03-01", "endDate": "2026-03-05"}' 
+ </msg>
+<msg time="2026-03-05T02:20:21.148594" level="INFO">POST Response : url=http://localhost:3000/api/admin/investigations 
+ status=400, reason=Bad Request 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '135', 'ETag': 'W/"87-xBeKBOELgl9HpIPjcoCJxXCH1No"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":false,"message":"ข้อมูลส่งมาไม่ครบหรือไม่ถูกต้อง","data":null} 
+ </msg>
+<msg time="2026-03-05T02:20:21.148652" level="INFO">${res} = &lt;Response [400]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations</arg>
+<arg>headers=${headers}</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.144539" elapsed="0.004125"/>
+</kw>
+<kw name="Should Not Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.149088" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${res.status_code}</arg>
+<arg>500</arg>
+<doc>Fails if objects are equal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.148764" elapsed="0.000354"/>
+</kw>
+<status status="PASS" start="2026-03-05T02:20:21.143734" elapsed="0.005452"/>
+</test>
+<test id="s1-t3" name="TC-03 Missing Required Field" line="90">
+<kw name="Get Admin Header">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.149662" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.149516" elapsed="0.000158"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-03-05T02:20:21.149696" elapsed="0.000019"/>
+</return>
+<msg time="2026-03-05T02:20:21.149765" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<status status="PASS" start="2026-03-05T02:20:21.149418" elapsed="0.000356"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.149936" level="INFO">${body} = {'authorityName': 'kk police'}</msg>
+<var>${body}</var>
+<arg>authorityName=kk police</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.149830" elapsed="0.000116"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.152220" level="INFO">POST Request : url=http://localhost:3000/api/admin/investigations 
+ path_url=/api/admin/investigations 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg', 'Content-Length': '30', 'Content-Type': 'application/json'} 
+ body=b'{"authorityName": "kk police"}' 
+ </msg>
+<msg time="2026-03-05T02:20:21.152265" level="INFO">POST Response : url=http://localhost:3000/api/admin/investigations 
+ status=400, reason=Bad Request 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '135', 'ETag': 'W/"87-xBeKBOELgl9HpIPjcoCJxXCH1No"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":false,"message":"ข้อมูลส่งมาไม่ครบหรือไม่ถูกต้อง","data":null} 
+ </msg>
+<msg time="2026-03-05T02:20:21.152329" level="INFO">${res} = &lt;Response [400]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations</arg>
+<arg>headers=${headers}</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.149995" elapsed="0.002350"/>
+</kw>
+<kw name="Should Not Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.152739" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${res.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are equal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.152440" elapsed="0.000325"/>
+</kw>
+<status status="PASS" start="2026-03-05T02:20:21.149269" elapsed="0.003571"/>
+</test>
+<test id="s1-t4" name="TC-04 Invalid Date Range" line="106">
+<kw name="Get Admin Header">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.153850" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.153548" elapsed="0.000317"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-03-05T02:20:21.153891" elapsed="0.000021"/>
+</return>
+<msg time="2026-03-05T02:20:21.153971" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<status status="PASS" start="2026-03-05T02:20:21.153326" elapsed="0.000656"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.154735" level="INFO">${body} = {'authorityName': 'kk police', 'bookingId': 'testBooking', 'startDate': '2026-03-10', 'endDate': '2026-03-01'}</msg>
+<var>${body}</var>
+<arg>authorityName=kk police</arg>
+<arg>bookingId=testBooking</arg>
+<arg>startDate=${INVALID_START}</arg>
+<arg>endDate=${INVALID_END}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.154223" elapsed="0.000528"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.157013" level="INFO">POST Request : url=http://localhost:3000/api/admin/investigations 
+ path_url=/api/admin/investigations 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg', 'Content-Length': '110', 'Content-Type': 'application/json'} 
+ body=b'{"authorityName": "kk police", "bookingId": "testBooking", "startDate": "2026-03-10", "endDate": "2026-03-01"}' 
+ </msg>
+<msg time="2026-03-05T02:20:21.157056" level="INFO">POST Response : url=http://localhost:3000/api/admin/investigations 
+ status=400, reason=Bad Request 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '135', 'ETag': 'W/"87-xBeKBOELgl9HpIPjcoCJxXCH1No"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":false,"message":"ข้อมูลส่งมาไม่ครบหรือไม่ถูกต้อง","data":null} 
+ </msg>
+<msg time="2026-03-05T02:20:21.157110" level="INFO">${res} = &lt;Response [400]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations</arg>
+<arg>headers=${headers}</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.154898" elapsed="0.002222"/>
+</kw>
+<kw name="Should Not Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.157498" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${res.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are equal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.157195" elapsed="0.000326"/>
+</kw>
+<status status="PASS" start="2026-03-05T02:20:21.152918" elapsed="0.004659"/>
+</test>
+<test id="s1-t5" name="TC-05 Get Investigation List" line="125">
+<kw name="Get Admin Header">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.158034" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.157893" elapsed="0.000153"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-03-05T02:20:21.158066" elapsed="0.000015"/>
+</return>
+<msg time="2026-03-05T02:20:21.158132" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<status status="PASS" start="2026-03-05T02:20:21.157799" elapsed="0.000343"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.170218" level="INFO">GET Request : url=http://localhost:3000/api/admin/investigations 
+ path_url=/api/admin/investigations 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg'} 
+ body=None 
+ </msg>
+<msg time="2026-03-05T02:20:21.170271" level="INFO">GET Response : url=http://localhost:3000/api/admin/investigations 
+ status=200, reason=OK 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '3256', 'ETag': 'W/"cb8-bNvrN7R28kiYoz/BkyQR1wU3Nfk"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":true,"message":"Investigations retrieved successfully","data":[{"id":"cmmc97dcn0001s1pcpxhy2jwu","requestNumber":"INV-1772641876050","authorityName":"kk police","officerName":"kku","officerPosition":"kku","contactEmail":"phattharawade3@gmail.com","contactPhone":"9274839o2","requestDate":"2026-03-05T00:00:00.000Z","bookingId":"cmmc37uag0000jl8oiwibggqv","fromDate":"2026-03-05T00:00:00.000Z","toDate":"2026-03-05T00:00:00.000Z","reason":"","officialDocumentUrl":null,"officialDocumentName":null,"exportedFileUrl":null,"exportedAt":null,"createdById":"cmmc2rpde00004ud5c7iceoyu","createdAt":"2026-03-04T16:31:16.053Z","booking":{"id":"cmmc37uag0000jl8oiwibggqv","routeId":"cmmc34wje000f4ud5g4wpx1f5","passengerId":"cmmc2ui7a00014ud53inbyh3k","numberOfSeats":1,"status":"PENDING","cancelledAt":null,"cancelledBy":null,"cancelReason":null,"pickupLocation":{},"dropoffLocation":{},"extraLuggageSelected":false,"extraLuggageType":null,"extraLuggageFee":0,"createdAt":"2026-03-04T13:43:40.312Z"},"createdBy":{"id":"cmmc2rpde00004ud5c7iceoyu","username":"admin123","email":"admin@example.com","password":"$2b$10$l1rkYBX2KNFT7yOyrrIqoe0dTnIYVI.so1MleErqNJsvbIWePHJSi","firstName":"System","lastName":"Administrator","gender":null,"phoneNumber":null,"profilePicture":null,"nationalIdNumber":null,"nationalIdPhotoUrl":null,"nationalIdExpiryDate":null,"selfiePhotoUrl":null,"role":"ADMIN","isVerified":false,"isActive":true,"otpCode":null,"lastLogin":null,"createdAt":"2026-03-04T13:31:07.442Z","updatedAt":"2026-03-04T13:31:07.442Z","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}},{"id":"cmmc3eg92000l4ud54oyt60rr","requestNumber":"INV-1772632128699","authorityName":"kk police","officerName":"somcaho","officerPosition":"kku","contactEmail":"phattharawadee@gmail.com","contactPhone":"0987286372","requestDate":"2026-03-04T00:00:00.000Z","bookingId":"cmmc37uag0000jl8oiwibggqv","fromDate":"2026-03-05T00:00:00.000Z","toDate":"2026-03-06T00:00:00.000Z","reason":"","officialDocumentUrl":null,"officialDocumentName":null,"exportedFileUrl":null,"exportedAt":null,"createdById":"cmmc2rpde00004ud5c7iceoyu","createdAt":"2026-03-04T13:48:48.702Z","booking":{"id":"cmmc37uag0000jl8oiwibggqv","routeId":"cmmc34wje000f4ud5g4wpx1f5","passengerId":"cmmc2ui7a00014ud53inbyh3k","numberOfSeats":1,"status":"PENDING","cancelledAt":null,"cancelledBy":null,"cancelReason":null,"pickupLocation":{},"dropoffLocation":{},"extraLuggageSelected":false,"extraLuggageType":null,"extraLuggageFee":0,"createdAt":"2026-03-04T13:43:40.312Z"},"createdBy":{"id":"cmmc2rpde00004ud5c7iceoyu","username":"admin123","email":"admin@example.com","password":"$2b$10$l1rkYBX2KNFT7yOyrrIqoe0dTnIYVI.so1MleErqNJsvbIWePHJSi","firstName":"System","lastName":"Administrator","gender":null,"phoneNumber":null,"profilePicture":null,"nationalIdNumber":null,"nationalIdPhotoUrl":null,"nationalIdExpiryDate":null,"selfiePhotoUrl":null,"role":"ADMIN","isVerified":false,"isActive":true,"otpCode":null,"lastLogin":null,"createdAt":"2026-03-04T13:31:07.442Z","updatedAt":"2026-03-04T13:31:07.442Z","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}}]} 
+ </msg>
+<msg time="2026-03-05T02:20:21.170353" level="INFO">${res} = &lt;Response [200]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.158196" elapsed="0.012169"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.170781" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${res.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.170459" elapsed="0.000345"/>
+</kw>
+<status status="PASS" start="2026-03-05T02:20:21.157652" elapsed="0.013218"/>
+</test>
+<test id="s1-t6" name="TC-06 Get Investigation Detail" line="136">
+<kw name="Get Admin Header">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.171344" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.171192" elapsed="0.000164"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-03-05T02:20:21.171377" elapsed="0.000017"/>
+</return>
+<msg time="2026-03-05T02:20:21.171456" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<status status="PASS" start="2026-03-05T02:20:21.171096" elapsed="0.000370"/>
+</kw>
+<kw name="Get Investigation Id">
+<kw name="Get Admin Header">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.171821" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.171696" elapsed="0.000136"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-03-05T02:20:21.171848" elapsed="0.000010"/>
+</return>
+<msg time="2026-03-05T02:20:21.171900" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<status status="PASS" start="2026-03-05T02:20:21.171622" elapsed="0.000287"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.173946" level="INFO">GET Request : url=http://localhost:3000/api/admin/investigations 
+ path_url=/api/admin/investigations 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg'} 
+ body=None 
+ </msg>
+<msg time="2026-03-05T02:20:21.173988" level="INFO">GET Response : url=http://localhost:3000/api/admin/investigations 
+ status=200, reason=OK 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '3256', 'ETag': 'W/"cb8-bNvrN7R28kiYoz/BkyQR1wU3Nfk"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":true,"message":"Investigations retrieved successfully","data":[{"id":"cmmc97dcn0001s1pcpxhy2jwu","requestNumber":"INV-1772641876050","authorityName":"kk police","officerName":"kku","officerPosition":"kku","contactEmail":"phattharawade3@gmail.com","contactPhone":"9274839o2","requestDate":"2026-03-05T00:00:00.000Z","bookingId":"cmmc37uag0000jl8oiwibggqv","fromDate":"2026-03-05T00:00:00.000Z","toDate":"2026-03-05T00:00:00.000Z","reason":"","officialDocumentUrl":null,"officialDocumentName":null,"exportedFileUrl":null,"exportedAt":null,"createdById":"cmmc2rpde00004ud5c7iceoyu","createdAt":"2026-03-04T16:31:16.053Z","booking":{"id":"cmmc37uag0000jl8oiwibggqv","routeId":"cmmc34wje000f4ud5g4wpx1f5","passengerId":"cmmc2ui7a00014ud53inbyh3k","numberOfSeats":1,"status":"PENDING","cancelledAt":null,"cancelledBy":null,"cancelReason":null,"pickupLocation":{},"dropoffLocation":{},"extraLuggageSelected":false,"extraLuggageType":null,"extraLuggageFee":0,"createdAt":"2026-03-04T13:43:40.312Z"},"createdBy":{"id":"cmmc2rpde00004ud5c7iceoyu","username":"admin123","email":"admin@example.com","password":"$2b$10$l1rkYBX2KNFT7yOyrrIqoe0dTnIYVI.so1MleErqNJsvbIWePHJSi","firstName":"System","lastName":"Administrator","gender":null,"phoneNumber":null,"profilePicture":null,"nationalIdNumber":null,"nationalIdPhotoUrl":null,"nationalIdExpiryDate":null,"selfiePhotoUrl":null,"role":"ADMIN","isVerified":false,"isActive":true,"otpCode":null,"lastLogin":null,"createdAt":"2026-03-04T13:31:07.442Z","updatedAt":"2026-03-04T13:31:07.442Z","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}},{"id":"cmmc3eg92000l4ud54oyt60rr","requestNumber":"INV-1772632128699","authorityName":"kk police","officerName":"somcaho","officerPosition":"kku","contactEmail":"phattharawadee@gmail.com","contactPhone":"0987286372","requestDate":"2026-03-04T00:00:00.000Z","bookingId":"cmmc37uag0000jl8oiwibggqv","fromDate":"2026-03-05T00:00:00.000Z","toDate":"2026-03-06T00:00:00.000Z","reason":"","officialDocumentUrl":null,"officialDocumentName":null,"exportedFileUrl":null,"exportedAt":null,"createdById":"cmmc2rpde00004ud5c7iceoyu","createdAt":"2026-03-04T13:48:48.702Z","booking":{"id":"cmmc37uag0000jl8oiwibggqv","routeId":"cmmc34wje000f4ud5g4wpx1f5","passengerId":"cmmc2ui7a00014ud53inbyh3k","numberOfSeats":1,"status":"PENDING","cancelledAt":null,"cancelledBy":null,"cancelReason":null,"pickupLocation":{},"dropoffLocation":{},"extraLuggageSelected":false,"extraLuggageType":null,"extraLuggageFee":0,"createdAt":"2026-03-04T13:43:40.312Z"},"createdBy":{"id":"cmmc2rpde00004ud5c7iceoyu","username":"admin123","email":"admin@example.com","password":"$2b$10$l1rkYBX2KNFT7yOyrrIqoe0dTnIYVI.so1MleErqNJsvbIWePHJSi","firstName":"System","lastName":"Administrator","gender":null,"phoneNumber":null,"profilePicture":null,"nationalIdNumber":null,"nationalIdPhotoUrl":null,"nationalIdExpiryDate":null,"selfiePhotoUrl":null,"role":"ADMIN","isVerified":false,"isActive":true,"otpCode":null,"lastLogin":null,"createdAt":"2026-03-04T13:31:07.442Z","updatedAt":"2026-03-04T13:31:07.442Z","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}}]} 
+ </msg>
+<msg time="2026-03-05T02:20:21.174049" level="INFO">${res} = &lt;Response [200]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.171940" elapsed="0.002120"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.174480" level="INFO">${json} = {'success': True, 'message': 'Investigations retrieved successfully', 'data': [{'id': 'cmmc97dcn0001s1pcpxhy2jwu', 'requestNumber': 'INV-1772641876050', 'authorityName': 'kk police', 'officerName': 'k...</msg>
+<var>${json}</var>
+<arg>${res.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.174116" elapsed="0.000376"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.174781" level="INFO">${id} = cmmc97dcn0001s1pcpxhy2jwu</msg>
+<var>${id}</var>
+<arg>${json["data"][0]["id"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.174532" elapsed="0.000259"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-03-05T02:20:21.174810" elapsed="0.000013"/>
+</return>
+<msg time="2026-03-05T02:20:21.174868" level="INFO">${id} = cmmc97dcn0001s1pcpxhy2jwu</msg>
+<var>${id}</var>
+<status status="PASS" start="2026-03-05T02:20:21.171535" elapsed="0.003342"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.179409" level="INFO">GET Request : url=http://localhost:3000/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu 
+ path_url=/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg'} 
+ body=None 
+ </msg>
+<msg time="2026-03-05T02:20:21.179453" level="INFO">GET Response : url=http://localhost:3000/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu 
+ status=200, reason=OK 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '2746', 'ETag': 'W/"aba-TVD80SQIvxp3tnU689XpJVaqu/o"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":true,"data":{"id":"cmmc97dcn0001s1pcpxhy2jwu","requestNumber":"INV-1772641876050","authorityName":"kk police","officerName":"kku","officerPosition":"kku","contactEmail":"phattharawade3@gmail.com","contactPhone":"9274839o2","requestDate":"2026-03-05T00:00:00.000Z","bookingId":"cmmc37uag0000jl8oiwibggqv","fromDate":"2026-03-05T00:00:00.000Z","toDate":"2026-03-05T00:00:00.000Z","reason":"","officialDocumentUrl":null,"officialDocumentName":null,"exportedFileUrl":null,"exportedAt":null,"createdById":"cmmc2rpde00004ud5c7iceoyu","createdAt":"2026-03-04T16:31:16.053Z","booking":{"id":"cmmc37uag0000jl8oiwibggqv","routeId":"cmmc34wje000f4ud5g4wpx1f5","passengerId":"cmmc2ui7a00014ud53inbyh3k","numberOfSeats":1,"status":"PENDING","cancelledAt":null,"cancelledBy":null,"cancelReason":null,"pickupLocation":{},"dropoffLocation":{},"extraLuggageSelected":false,"extraLuggageType":null,"extraLuggageFee":0,"createdAt":"2026-03-04T13:43:40.312Z","chatRoom":{"id":"cmmc39ujk0001jl8o0nvy7e7x","bookingId":"cmmc37uag0000jl8oiwibggqv","createdAt":"2026-03-04T13:45:13.953Z","updatedAt":"2026-03-04T13:44:54.581Z","messages":[{"id":"cmmc3b3820004jl8o8774r6xl","chatRoomId":"cmmc39ujk0001jl8o0nvy7e7x","senderId":"cmmc2w0j100044ud59fjjw2vv","content":"hello","type":"TEXT","createdAt":"2026-03-04T13:46:11.858Z","isRead":true,"sender":{"id":"cmmc2w0j100044ud59fjjw2vv","username":"test.dri","firstName":"dri","lastName":"er"}},{"id":"cmmc3btua000h4ud5mhe8x4id","chatRoomId":"cmmc39ujk0001jl8o0nvy7e7x","senderId":"cmmc2w0j100044ud59fjjw2vv","content":"ใกล้ถึงแล้ว","type":"TEXT","createdAt":"2026-03-04T13:46:46.354Z","isRead":false,"sender":{"id":"cmmc2w0j100044ud59fjjw2vv","username":"test.dri","firstName":"dri","lastName":"er"}},{"id":"cmmc3bvcc000j4ud5x43f8lee","chatRoomId":"cmmc39ujk0001jl8o0nvy7e7x","senderId":"cmmc2w0j100044ud59fjjw2vv","content":"รอสักครู่นะ","type":"TEXT","createdAt":"2026-03-04T13:46:48.300Z","isRead":false,"sender":{"id":"cmmc2w0j100044ud59fjjw2vv","username":"test.dri","firstName":"dri","lastName":"er"}}]}},"createdBy":{"id":"cmmc2rpde00004ud5c7iceoyu","username":"admin123","email":"admin@example.com","password":"$2b$10$l1rkYBX2KNFT7yOyrrIqoe0dTnIYVI.so1MleErqNJsvbIWePHJSi","firstName":"System","lastName":"Administrator","gender":null,"phoneNumber":null,"profilePicture":null,"nationalIdNumber":null,"nationalIdPhotoUrl":null,"nationalIdExpiryDate":null,"selfiePhotoUrl":null,"role":"ADMIN","isVerified":false,"isActive":true,"otpCode":null,"lastLogin":null,"createdAt":"2026-03-04T13:31:07.442Z","updatedAt":"2026-03-04T13:31:07.442Z","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}}} 
+ </msg>
+<msg time="2026-03-05T02:20:21.179514" level="INFO">${res} = &lt;Response [200]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations/${id}</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.174927" elapsed="0.004598"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.179877" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${res.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.179596" elapsed="0.000302"/>
+</kw>
+<status status="PASS" start="2026-03-05T02:20:21.170945" elapsed="0.009016"/>
+</test>
+<test id="s1-t7" name="TC-07 Export Chat Log Success" line="148">
+<kw name="Get Admin Header">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.180398" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.180263" elapsed="0.000149"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-03-05T02:20:21.180430" elapsed="0.000013"/>
+</return>
+<msg time="2026-03-05T02:20:21.180487" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<status status="PASS" start="2026-03-05T02:20:21.180175" elapsed="0.000321"/>
+</kw>
+<kw name="Get Investigation Id">
+<kw name="Get Admin Header">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.180859" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.180731" elapsed="0.000143"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-03-05T02:20:21.180891" elapsed="0.000009"/>
+</return>
+<msg time="2026-03-05T02:20:21.180941" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<status status="PASS" start="2026-03-05T02:20:21.180659" elapsed="0.000291"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.183059" level="INFO">GET Request : url=http://localhost:3000/api/admin/investigations 
+ path_url=/api/admin/investigations 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg'} 
+ body=None 
+ </msg>
+<msg time="2026-03-05T02:20:21.183101" level="INFO">GET Response : url=http://localhost:3000/api/admin/investigations 
+ status=200, reason=OK 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '3256', 'ETag': 'W/"cb8-bNvrN7R28kiYoz/BkyQR1wU3Nfk"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":true,"message":"Investigations retrieved successfully","data":[{"id":"cmmc97dcn0001s1pcpxhy2jwu","requestNumber":"INV-1772641876050","authorityName":"kk police","officerName":"kku","officerPosition":"kku","contactEmail":"phattharawade3@gmail.com","contactPhone":"9274839o2","requestDate":"2026-03-05T00:00:00.000Z","bookingId":"cmmc37uag0000jl8oiwibggqv","fromDate":"2026-03-05T00:00:00.000Z","toDate":"2026-03-05T00:00:00.000Z","reason":"","officialDocumentUrl":null,"officialDocumentName":null,"exportedFileUrl":null,"exportedAt":null,"createdById":"cmmc2rpde00004ud5c7iceoyu","createdAt":"2026-03-04T16:31:16.053Z","booking":{"id":"cmmc37uag0000jl8oiwibggqv","routeId":"cmmc34wje000f4ud5g4wpx1f5","passengerId":"cmmc2ui7a00014ud53inbyh3k","numberOfSeats":1,"status":"PENDING","cancelledAt":null,"cancelledBy":null,"cancelReason":null,"pickupLocation":{},"dropoffLocation":{},"extraLuggageSelected":false,"extraLuggageType":null,"extraLuggageFee":0,"createdAt":"2026-03-04T13:43:40.312Z"},"createdBy":{"id":"cmmc2rpde00004ud5c7iceoyu","username":"admin123","email":"admin@example.com","password":"$2b$10$l1rkYBX2KNFT7yOyrrIqoe0dTnIYVI.so1MleErqNJsvbIWePHJSi","firstName":"System","lastName":"Administrator","gender":null,"phoneNumber":null,"profilePicture":null,"nationalIdNumber":null,"nationalIdPhotoUrl":null,"nationalIdExpiryDate":null,"selfiePhotoUrl":null,"role":"ADMIN","isVerified":false,"isActive":true,"otpCode":null,"lastLogin":null,"createdAt":"2026-03-04T13:31:07.442Z","updatedAt":"2026-03-04T13:31:07.442Z","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}},{"id":"cmmc3eg92000l4ud54oyt60rr","requestNumber":"INV-1772632128699","authorityName":"kk police","officerName":"somcaho","officerPosition":"kku","contactEmail":"phattharawadee@gmail.com","contactPhone":"0987286372","requestDate":"2026-03-04T00:00:00.000Z","bookingId":"cmmc37uag0000jl8oiwibggqv","fromDate":"2026-03-05T00:00:00.000Z","toDate":"2026-03-06T00:00:00.000Z","reason":"","officialDocumentUrl":null,"officialDocumentName":null,"exportedFileUrl":null,"exportedAt":null,"createdById":"cmmc2rpde00004ud5c7iceoyu","createdAt":"2026-03-04T13:48:48.702Z","booking":{"id":"cmmc37uag0000jl8oiwibggqv","routeId":"cmmc34wje000f4ud5g4wpx1f5","passengerId":"cmmc2ui7a00014ud53inbyh3k","numberOfSeats":1,"status":"PENDING","cancelledAt":null,"cancelledBy":null,"cancelReason":null,"pickupLocation":{},"dropoffLocation":{},"extraLuggageSelected":false,"extraLuggageType":null,"extraLuggageFee":0,"createdAt":"2026-03-04T13:43:40.312Z"},"createdBy":{"id":"cmmc2rpde00004ud5c7iceoyu","username":"admin123","email":"admin@example.com","password":"$2b$10$l1rkYBX2KNFT7yOyrrIqoe0dTnIYVI.so1MleErqNJsvbIWePHJSi","firstName":"System","lastName":"Administrator","gender":null,"phoneNumber":null,"profilePicture":null,"nationalIdNumber":null,"nationalIdPhotoUrl":null,"nationalIdExpiryDate":null,"selfiePhotoUrl":null,"role":"ADMIN","isVerified":false,"isActive":true,"otpCode":null,"lastLogin":null,"createdAt":"2026-03-04T13:31:07.442Z","updatedAt":"2026-03-04T13:31:07.442Z","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}}]} 
+ </msg>
+<msg time="2026-03-05T02:20:21.183160" level="INFO">${res} = &lt;Response [200]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.180981" elapsed="0.002191"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.183578" level="INFO">${json} = {'success': True, 'message': 'Investigations retrieved successfully', 'data': [{'id': 'cmmc97dcn0001s1pcpxhy2jwu', 'requestNumber': 'INV-1772641876050', 'authorityName': 'kk police', 'officerName': 'k...</msg>
+<var>${json}</var>
+<arg>${res.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.183226" elapsed="0.000365"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.183871" level="INFO">${id} = cmmc97dcn0001s1pcpxhy2jwu</msg>
+<var>${id}</var>
+<arg>${json["data"][0]["id"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.183633" elapsed="0.000248"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-03-05T02:20:21.183901" elapsed="0.000012"/>
+</return>
+<msg time="2026-03-05T02:20:21.183959" level="INFO">${id} = cmmc97dcn0001s1pcpxhy2jwu</msg>
+<var>${id}</var>
+<status status="PASS" start="2026-03-05T02:20:21.180574" elapsed="0.003394"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.226298" level="INFO">GET Request : url=http://localhost:3000/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu/export 
+ path_url=/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu/export 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg'} 
+ body=None 
+ </msg>
+<msg time="2026-03-05T02:20:21.298168" level="INFO">GET Response : url=http://localhost:3000/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu/export 
+ status=200, reason=OK 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Disposition': 'attachment; filename=chatlog-cmmc97dcn0001s1pcpxhy2jwu.pdf', 'Content-Type': 'application/pdf', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5', 'Transfer-Encoding': 'chunked'} 
+ body=%PDF-1.3
+%����
+7 0 obj
+&lt;&lt;
+/Type /Page
+/Parent 1 0 R
+/MediaBox [0 0 612 792]
+/Contents 5 0 R
+/Resources 6 0 R
+&gt;&gt;
+endobj
+6 0 obj
+&lt;&lt;
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font &lt;&lt;
+/F2 8 0 R
+/F3 9 0 R
+&gt;&gt;
+/ColorSpace &lt;&lt;
+&gt;&gt;
+&gt;&gt;
+endobj
+5 0 obj
+&lt;&lt;
+/Length 1234
+/Filter /FlateDecode
+&gt;&gt;
+stream
+x��X�n�6��+�a8��E��Hd� �﮷������j9t�
+��A[�G��y/??��J������g���CXJp%y�$�.���q��7\�/���/���2H�� #�H���{9��ك̮�`���S(͠E���M�d\d\�������˸�E���`{�Z�~��2�&gt;�}� ��گ��%�z&gt;��=��Ę]��3Z�&gt;{]�//{ύ�O� 潍:3Lp������4P���x�[ݾw�{�G7����m����r��W����9��Ӄw�D��;}::���Qq7��C�N�C0tx�w����2p&lt;��\Nq�N�%��ج�Q~S����c���;�`0���V}V�S��Z�l��� ����S���s��	�C��֨�;a�9!9�l�O������G?"cg�4��D���I�c�5�]��x�����2K΀����65�U\�}!�y?�ΉS�7@�G�I�3C=�v��iQ�)hB�A#071W�*�o�`1���`׻��9ˉ.[|�-&gt;�Ȃ�,����oO��ݩ���O(]���%D��R����z}m	%i�����K&gt;N|��k�gS��Y���4����AVH��L_�J�&gt;�
+%t���Y!!?z��!9&lt;D���M��R3����'E��qđ��t����3������`����L+^j"xb��&lt;��kGBt&amp;a�QA��}q��kJG��8�&amp;P8�2	5Ejd���Z��O��tD&lt;i�~�dE�%#Q0���Z���$�,$})�e���,T}�Q����S�|tm��=�!�~Z�m�Re�]��:�Dk�Z�`��}r^�d�h��sj�4W�T�ì�&lt;�G���)a�]ȺOz#�)�O�$���X��^���B�S�/�h6;��m�&amp;t}���.�.�Q*V���d{��Q�R˄�2g��v����2�kRr'��Sq�m��+��?��R�j`�ch����M�ޱd́V��zZ�{6m#��
+O���a��-kֵSRp��l+�"���W�d\0ƒ8�@�r��Q�ЏZ&lt;��U5���DЕ���Q[�&lt;�D�/R�e���!�pȲ?�씢��n�)0�S��ֈ�YI���Y�+��Gܺ�&gt;k�G�����hw�H¼�K�N�5󿵍��FO���&lt;�!�ț�sho��Z\�D���}F��B�� �{Üi�+.W�������N��ƕ�!!��C~���R확V)?f��1*�"
+endstream
+endobj
+12 0 obj
+&lt;&lt;
+/Type /Page
+/Parent 1 0 R
+/MediaBox [0 0 612 792]
+/Contents 10 0 R
+/Resources 11 0 R
+&gt;&gt;
+endobj
+11 0 obj
+&lt;&lt;
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font &lt;&lt;
+/F3 9 0 R
+&gt;&gt;
+/ColorSpace &lt;&lt;
+&gt;&gt;
+&gt;&gt;
+endobj
+10 0 obj
+&lt;&lt;
+/Length 225
+/Filter /FlateDecode
+&gt;&gt;
+stream
+x����j�0�w=Ž@��#��d��V:$��2����9)ؾ�XB�O��gD��|�Cc�n���&gt;��H Y��"�
+�vGb���GLm�����K4ɼ%%�b �w`Y�g�F 3��� ��Wv�Zc���;0����˫�6(�y^��
+��Lz
+�%]7�#�f�i,��\~��c�Y�-�	c��Ը�V'�u$�`1���N��	D�����`:,+�ܑ{�
+endstream
+endobj
+14 0 obj
+(PDFKit)
+endobj
+15 0 obj
+(PDFKit)
+endobj
+16 0 obj
+(D:20260304192021Z)
+endobj
+13 0 obj
+&lt;&lt;
+/Producer 14 0 R
+/Creator 15 0 R
+/CreationDate 16 0 R
+&gt;&gt;
+endobj
+17 0 obj
+&lt;&lt;
+/Length 3210
+/Filter /FlateDecode
+&gt;&gt;
+stream
+x��Wyp�y�,(���.$q/��}-�����(J�H��h˒)��d�i���Ա�tL:��I&amp;m&amp;Swz�Nf&lt;����ZiR��$�L�6�L'�?�Xc���E�����Qr�r���w�~��핕��H�J���Ņs��	+w4�o��?~����G�N.-&lt;���R�x�W��Sp�?���#��q���_��dco��˷W������S�ޏ�F�K�����2�����ww=jI�m;���l]BڀZDH�K��m�w�r����b�����e�dj��A���&lt;�߀߿ßh͂泚W4���6��h��k���P�Օu��^ӽ����G���5���ޥ���յ��{ȌF��!�D�M՞�+�`�&lt;��	���2^&amp;�e�����(Y�.�����9�ݡn�41{��299�	,gs9)c�|4��l�s,MS�g-a��P�+����g;���8�b��iﴯ��ͼ��sm�X)���-�Vk�Y��X)�H���pY+���l���n��X�y�m2�L������I�9XV��7���q���$&amp;+�=���`�tI���2���HKS����]Q��K�n3��et�:�6��F���Xv�ۣ�R,���-��?P��,b���w�\&gt;���&lt;��~��3����1�O4�t)9O�ذ	�bi=M�W�i����R|��v��vy�!��ub��i��1�`ͪ^�p�)U�����&gt;�
+�#��5��EnQ�Q}��;��ܽ�b��6$燨9�]%S���ݟ	���
+8r���2')Gq1X!��&amp;^־�u�����&gt;�;���}O�~�ߖ��S���"��@�$"�p�,��Gr�(8��mTx0�l.{��0"M����s����7)���vk�:����M��KW{կ�L�6o��.�K��׷@��?�˨Kc'�l��&amp;Z$���o0,a��/;�vFd�zm4-Ԁ���^�����	Mxb1W�$��ݿW=t�oGN%�x�����!�V�LO��s��ר�LFt��8�&amp;�a��~\An�Ge�A�!��:��v���d��z8'�z�Z��(�ZxO�M�}C���{np�4�����f��k����h����L�iJQ�t(�~��h����d��NҺ8st��C�HIp�
+�c߂ y=��0��rb���;8x`�zV������$3������UjX}KV�S�Y]�w� �E�@�:�x�x�3v�ma���Dw�Q!݁�G�J�İ�j0��W��B��z!zB�U����)�^��kX��F�����!����`����f����P�%CM�&amp;uF�EQH��{ �14�鋯gܔe��K��X{��b�������,�!`�}FܬC
+��C�����\t0�&amp;��)y�p��Plz�*_L�CU|��?�?t1�Z�[-'�~���3�.����!�#��P'X�E�K| �#���K���s,���%��6�09&amp;rlD�I���D&amp;��nG�܎#'��3D�(��d�r��Y�R!�T����N-��O��b��С`:vq��yR8~���g�	����j���,���qJ�9�8�6_���#���-�)F��8�Ie;�}4���NEO���ɠ�l0y&amp;F(}f�ʲ���M�͂;Vȝ��N��;B����E����E����e�xx���t{=��^\�)F�ғScO���3�P��k�LY�.��_:�50�u"G6�\�_�k1�(h�!	r�j˰u�D��DU�?�;��j�Dy-3�ж=շ1�}6����.h(�c&lt;����E!�gg��h��X(4��/��e���V�o���{~g=�_����|��S�6�B}qi����yId9/������!�ŷ6���vc؀!ƇL����&lt;�L�J�&gt;���OGi)z����O}�
+���h��ݟ��x��*y�0@�T�����zS)�/�ľݟaߏܑ�����r�7y�Gh�~�d�����i`����+�boԤӴl�8ic�������|�p������&gt;�_�����͓G�''�M]~�_�i�z"j��E/A:�䡥^��x�_&gt;��z�R�2-�~�'p���d����VYk������oօ�25F�w�S��	JBJ={��v$1��^a[,���z�A͹`�o�J䀵0�ŀ�wg�{3}_��bՕޡ���awL�s�َ�l Y��z6�=�k3�-��ܨ�a�n��.�vQ@CA�zPH�BɅ���,���&lt;��ĆT�z7��=�_�x��ޗn��@���� ����F� �b&amp;w7W�.
+����n��v&lt;�M&amp;�du۬VYĖ�%�ڻ������d�h������=0��ĳ�촄�V��h�F��3���ɢ�:u&lt;�vNVB���A�4ĳ��\�ٽ�G��[���a,-��5ep��_�����s�������Ҡ�,K��4+�lEW~``�;»�c'��n繥vvzz��x�h�~����̃��Q�������L��a��w��?(C���m1�&amp;�NǺ�������t���XӮQoH�|��Ƭu�c8�,��b�#;���ݟ��'0YM����Y{�xC2~4�Wn��K`��&amp;XLzc�M,g�8��&amp;%2�^;Hk=N��Z��B:����-M���\�ѽy��"J�����ink��l�x��]|9�5�-F3�dZ#a[�����/��Ls�	S������uF��`D�1��j���ݜ��&amp;`�����b3�9�h���rGL��U��l_i?w:�-X-&amp;��7�:�~w��C��5��W�.6pz��`C?�'����xh���*��'4��&lt;ˆݾdGW��*8[�P`aM�W�׮��)cH��*�=�v�m��b}����d^��@�����j���p���G6�}nm;�W����^��Rë���;Ԩ��'�PbǲO���	`[	x`k|
+z�΄{�ύ�XZ�+;�!�	Or�������~F�՛��$�	��־	82�&lt;e��9�6�A�7�;�!���Wtѷyw���gŖݏW��14�i��B,��܃t�y4�x�|�Կ܋�x�?���,)-��0
+�-ԍ����I��D&lt;��,���xV
+�p.�*��,rz�e��JQ�h������4,0��p��Ru{�'�]5�����A�a}
+endstream
+endobj
+18 0 obj
+&lt;&lt;
+/Type /FontDescriptor
+/FontName /CZZZZZ+NotoSansThai-Bold
+/Flags 4
+/FontBBox [-736 -448 967 1037]
+/ItalicAngle 0
+/Ascent 1061
+/Descent -450
+/CapHeight 714
+/XHeight 556
+/StemV 0
+/FontFile2 17 0 R
+&gt;&gt;
+endobj
+19 0 obj
+&lt;&lt;
+/Type /Font
+/Subtype /CIDFontType2
+/BaseFont /CZZZZZ+NotoSansThai-Bold
+/CIDSystemInfo &lt;&lt;
+/Registry (Adobe)
+/Ordering (Identity)
+/Supplement 0
+&gt;&gt;
+/FontDescriptor 18 0 R
+/W [0 [600 518 435 622 571 646 622 599 0 624 572 634 644 602 260 339 637 657 604 434 565 619 633 560 569 305 633 591 657 514 339 0 634 341 514 682 0 0 0 592 593 646 646 0 635]]
+/CIDToGIDMap /Identity
+&gt;&gt;
+endobj
+20 0 obj
+&lt;&lt;
+/Length 332
+/Filter /FlateDecode
+&gt;&gt;
+stream
+x�]R�n�0��{L��H�J/�PӞ��^"�b,C�}���U-�hwg��G|�*�M��A�y��3��8\�bj�ҙHHҝ�V+�U_�(���&lt;N�W��("��Շ��ʹ��C�w���iv�����t����/��L�DeI�[�Ou���&gt;�M�֫~o�e��x�4��V�js�H�)�֟2b���WQ��e��J���,���H����S��"jt��M녇Y�(�a�A��3��-`���#���H-�����l-s�H�f���-а �(3E4���럮.m_V�6Ruu�O3�Q�2���m��`U��f�i
+endstream
+endobj
+8 0 obj
+&lt;&lt;
+/Type /Font
+/Subtype /Type0
+/BaseFont /CZZZZZ+NotoSansThai-Bold
+/Encoding /Identity-H
+/DescendantFonts [19 0 R]
+/ToUnicode 20 0 R
+&gt;&gt;
+endobj
+21 0 obj
+&lt;&lt;
+/Length 5256
+/Filter /FlateDecode
+&gt;&gt;
+stream
+x��Y	tcWy~�&gt;틭���]����Z,=-^dɒlY���x���g&lt;�Lf2�L�6@ K !4i�CJ8��P�RN 0i9N�&amp;a��-��N���������3�.�����{������[Ͽe��S������wن�����&gt;�ٺ�
+ׇ�����-:/���o�������7��(뇶��z{�ޞ�g)
+�Soc&gt;�����s��h�U��|�H�_����qq�~�������(J��E��;�g����s�o.���R���Qȁ��;��5l�|7��_��t�&gt;E�C?'A�dP���oH�&gt;���ҏK�H�'��,#�K��e�\&gt;)� ����?Rh!EZ��xR�M%�,)'��P~C��J��Sm��U}R�]�]T���P���u�i��)��4_�\�Nԥ���t�0%�Av�B����3�{@�5��?�x(��[7�s3�5���0J�_�Wv3&gt;l��q�R�?���($3Y�L�����f0*J�U�c!��b�d��E��?��1�Q��#L��{d�t&amp;#$��c�:��f9�L�]�=�7�\96��	�*�����{�?&gt;�#0vmEg�Y�y��j�w��UM�YR�G��dW4,���r����S�5ǐs2�tC��h�2r0�L���%C��vc�t�֠O|Q��a�Τ=��Q-/�'{9�������u��L���/�d�	t�x��9��@s�m���1|�g���&gt;}ۅ�Ze�&lt;Dz����	�m��l����2��Eˈ'�9Ea��xs�k��RS&amp;�*��Gv6�ɦr��G����d.�4[,f�ł7㝑X,���Y��d`�DB���������0?����aTH
+�{1��R�C=�M�A�����zD�N,ԏ�b$"{��nHc4��2�k}[�����%*,D��]sfFȹ�YK�k*ZS�tU�^���v�!Z���&gt;�}L�S��F�]��(����K{GW)P����7x�86 p��a{�N�)�D{0�`U_��"�v�^�(�N��Cs����@'#^ \�A�Ш�F�%����#C���p�=������+�m3�V��g���sqS�P�{�fG�bjN7�f��w/.�Uj�%�g�\`}Z`I����V�����4��i+i-
+#�kON�yw��1[�^1dһ�3�zX&amp;q�=����_u���7��B+Xx��9��z-V��j��3&gt;���u��7�N� o��E�!�&lt;DP��fy�0MCe9�Kd�l�t�:d��왊�3(D�v[Q�{��杽�fD��-��bz�D[;��`�&lt;�(Q&lt;�)�E�X
+&amp;�n����ǖ����s�?��-k�L"��ϰR�*��n�O�Za`i^�6��{�����cl���$:%�~��%�0���6�HM�8˷A�u‧	Q��
+&amp;&lt;z~ڐf�]��rƌe��b�U�9&gt;$,�|���JW%��{�#�wf�R�L�&lt;�k�����ӽ���;&lt;;4ȹ\Ō�؁��L���n݋|�����wL��R�'��&lt;�m�*�I�¦�����b��~�X8�ɐ�$��
+���RmxxX����{�5j�������gY]��9��q��l�p�헺3���х�|m��_�h�}�8pl�e�f��	X�[��i�F�Y��֞偩�B|{n�TJ��Q�d�N'yu����'��[?���[���8�G�.�&amp;����&amp;�O�d�d����@V@��#��p(���� ��L���W��Ӡe��� ��G�Lۏ�&amp;���S����r��3��S���K�9��3��X����@����t�N���2�ݑ�Q���x���a`�=`��=���T�a���5m"�s������f94�ɰd����[��D�ro��1�=��k��
+F�cR�˴b�n4t���V�2����@op`�Ё��SV�Y&gt; �_�ܱ��p�s��=��M�G�+W�߈?�z�z&lt;����/��&amp;��O�XƤ&lt;Ņ�Fnб��-lPg�����FxD
+�k���tH)Yf։IvgY��I�@�ڭ*�M"�Y�ά��FRf�V��tD]j;6�_�%�F�tu�~$9��,1u:��.���9�pĝ��W�}4��97V���gF����d(n/OF�����C���3��鮾~����7������g�Px��=�Y�
+D��Q�؄�=�F����ź��4::F�ɥ���;�'�~������ ��B�[HTc4d5-�y�a�&lt;j�0��&gt;-�(X��J�|�؃ˣ�65��
+�Z���"o��g�v���C'P��\j�����t?p��Y�7ԡ���)�`�߉����LB�r�� ���i ����V�d���H��?7����W��^&amp;4?���'��yd"��!מ�:kmr�V���#!���7:3ֲ8����ST:㠖=sbk��m�]3|�����?�/QaZM�L��+�G��o��&amp;�|Kt�.�d�s��Z+aZv��4�MܖkV��Rd�B5k뛋��{+�Q�T_S�f��&amp;�r��C����@���ӁVF¥�7��l^'a�rs�Z�/^�`�B4�����|d,.^����4�]AxM����+����Y|)��;3CO��~ܝ*����'�x��q2;H%n`�uB�&amp;��ʑo �cz������Ikl���N��.���f�蕸���;�&gt;�{��w�:�b��&gt;Y�G�-�tN�&gt;�i���gN���&lt;�Y'��zL=��c��(ÇR������\1$�\�W[�L:��������؉�:�#nr[`ӂ�͹�bGN�\��q{O�ӓ��U{�������er�&lt;��c`g��P�2�������iE�e��wYT��9�T�����y�.�KT��E��7JS��|z_�?D�{����ދ����v��\|�0T�Ur�|���|�]��R�Z��0��F�X)���y����v�&gt;����B��B3�&lt;]'��/m�:���aS+c�QN�*tn�t��ih%m�	�̯���*�b�w�014*�A���@�$@�d��m����ӽ���M�Nr�$#q�9��s|ڝF#R���h7nω�DS���@mG�Y}Q�?��zE�_�v�yi�N�ܙ��~a�AT(Ƨ���!� ��ֶ����ȡq&gt;���"Y�Qw�?iP�������f���fq����m�f���=��L��ǵ)a2��zK�o�R�#�ރ=�3#��uV?�g�j�wV�����\g��ER�/�.����M��{��52����v^��v�utG,�U����cMO�k���G�	�mZR�h
+��l�mJ=�m.'�xl~�^��[S�)(��u��-k@6f��]�����՞�Rɗ�y|�lA�qW2���3�=&lt;���U��z�\�T,^�V��U����p:6�%R/s
+2�7��P�\���I���Y̼�C`�z�i��1��ڠа|}��N;�v��^yH���̙��E|Gkԁ�(*�
+���h)�ϚMr����D7e�*�ۅ�t_���B�GM�ݡ�h`�,ޏ��=B ӕH�ص�S�ޝM��|��8��ۗ�BG�ݒ���Y�����
+_�`T��WW�H��w����Q����S�zU����8P����=@���VJ':#B,B�&amp;��... (set the log level to DEBUG or TRACE to see the full content) 
+ </msg>
+<msg time="2026-03-05T02:20:21.298542" level="INFO">${res} = &lt;Response [200]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations/${id}/export</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.184025" elapsed="0.114534"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.299041" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${res.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.298678" elapsed="0.000391"/>
+</kw>
+<status status="PASS" start="2026-03-05T02:20:21.180031" elapsed="0.119109"/>
+</test>
+<test id="s1-t8" name="TC-08 Export Without Token" line="160">
+<kw name="Get Investigation Id">
+<kw name="Get Admin Header">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.299759" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.299599" elapsed="0.000172"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-03-05T02:20:21.299795" elapsed="0.000019"/>
+</return>
+<msg time="2026-03-05T02:20:21.299866" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<status status="PASS" start="2026-03-05T02:20:21.299516" elapsed="0.000360"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.303062" level="INFO">GET Request : url=http://localhost:3000/api/admin/investigations 
+ path_url=/api/admin/investigations 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg'} 
+ body=None 
+ </msg>
+<msg time="2026-03-05T02:20:21.303111" level="INFO">GET Response : url=http://localhost:3000/api/admin/investigations 
+ status=200, reason=OK 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '3256', 'ETag': 'W/"cb8-bNvrN7R28kiYoz/BkyQR1wU3Nfk"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":true,"message":"Investigations retrieved successfully","data":[{"id":"cmmc97dcn0001s1pcpxhy2jwu","requestNumber":"INV-1772641876050","authorityName":"kk police","officerName":"kku","officerPosition":"kku","contactEmail":"phattharawade3@gmail.com","contactPhone":"9274839o2","requestDate":"2026-03-05T00:00:00.000Z","bookingId":"cmmc37uag0000jl8oiwibggqv","fromDate":"2026-03-05T00:00:00.000Z","toDate":"2026-03-05T00:00:00.000Z","reason":"","officialDocumentUrl":null,"officialDocumentName":null,"exportedFileUrl":null,"exportedAt":null,"createdById":"cmmc2rpde00004ud5c7iceoyu","createdAt":"2026-03-04T16:31:16.053Z","booking":{"id":"cmmc37uag0000jl8oiwibggqv","routeId":"cmmc34wje000f4ud5g4wpx1f5","passengerId":"cmmc2ui7a00014ud53inbyh3k","numberOfSeats":1,"status":"PENDING","cancelledAt":null,"cancelledBy":null,"cancelReason":null,"pickupLocation":{},"dropoffLocation":{},"extraLuggageSelected":false,"extraLuggageType":null,"extraLuggageFee":0,"createdAt":"2026-03-04T13:43:40.312Z"},"createdBy":{"id":"cmmc2rpde00004ud5c7iceoyu","username":"admin123","email":"admin@example.com","password":"$2b$10$l1rkYBX2KNFT7yOyrrIqoe0dTnIYVI.so1MleErqNJsvbIWePHJSi","firstName":"System","lastName":"Administrator","gender":null,"phoneNumber":null,"profilePicture":null,"nationalIdNumber":null,"nationalIdPhotoUrl":null,"nationalIdExpiryDate":null,"selfiePhotoUrl":null,"role":"ADMIN","isVerified":false,"isActive":true,"otpCode":null,"lastLogin":null,"createdAt":"2026-03-04T13:31:07.442Z","updatedAt":"2026-03-04T13:31:07.442Z","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}},{"id":"cmmc3eg92000l4ud54oyt60rr","requestNumber":"INV-1772632128699","authorityName":"kk police","officerName":"somcaho","officerPosition":"kku","contactEmail":"phattharawadee@gmail.com","contactPhone":"0987286372","requestDate":"2026-03-04T00:00:00.000Z","bookingId":"cmmc37uag0000jl8oiwibggqv","fromDate":"2026-03-05T00:00:00.000Z","toDate":"2026-03-06T00:00:00.000Z","reason":"","officialDocumentUrl":null,"officialDocumentName":null,"exportedFileUrl":null,"exportedAt":null,"createdById":"cmmc2rpde00004ud5c7iceoyu","createdAt":"2026-03-04T13:48:48.702Z","booking":{"id":"cmmc37uag0000jl8oiwibggqv","routeId":"cmmc34wje000f4ud5g4wpx1f5","passengerId":"cmmc2ui7a00014ud53inbyh3k","numberOfSeats":1,"status":"PENDING","cancelledAt":null,"cancelledBy":null,"cancelReason":null,"pickupLocation":{},"dropoffLocation":{},"extraLuggageSelected":false,"extraLuggageType":null,"extraLuggageFee":0,"createdAt":"2026-03-04T13:43:40.312Z"},"createdBy":{"id":"cmmc2rpde00004ud5c7iceoyu","username":"admin123","email":"admin@example.com","password":"$2b$10$l1rkYBX2KNFT7yOyrrIqoe0dTnIYVI.so1MleErqNJsvbIWePHJSi","firstName":"System","lastName":"Administrator","gender":null,"phoneNumber":null,"profilePicture":null,"nationalIdNumber":null,"nationalIdPhotoUrl":null,"nationalIdExpiryDate":null,"selfiePhotoUrl":null,"role":"ADMIN","isVerified":false,"isActive":true,"otpCode":null,"lastLogin":null,"createdAt":"2026-03-04T13:31:07.442Z","updatedAt":"2026-03-04T13:31:07.442Z","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}}]} 
+ </msg>
+<msg time="2026-03-05T02:20:21.303171" level="INFO">${res} = &lt;Response [200]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.299914" elapsed="0.003268"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.303589" level="INFO">${json} = {'success': True, 'message': 'Investigations retrieved successfully', 'data': [{'id': 'cmmc97dcn0001s1pcpxhy2jwu', 'requestNumber': 'INV-1772641876050', 'authorityName': 'kk police', 'officerName': 'k...</msg>
+<var>${json}</var>
+<arg>${res.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.303236" elapsed="0.000365"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.303873" level="INFO">${id} = cmmc97dcn0001s1pcpxhy2jwu</msg>
+<var>${id}</var>
+<arg>${json["data"][0]["id"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.303642" elapsed="0.000241"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-03-05T02:20:21.303908" elapsed="0.000014"/>
+</return>
+<msg time="2026-03-05T02:20:21.303968" level="INFO">${id} = cmmc97dcn0001s1pcpxhy2jwu</msg>
+<var>${id}</var>
+<status status="PASS" start="2026-03-05T02:20:21.299404" elapsed="0.004573"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.305285" level="INFO">GET Request : url=http://localhost:3000/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu/export 
+ path_url=/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu/export 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2026-03-05T02:20:21.305322" level="INFO">GET Response : url=http://localhost:3000/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu/export 
+ status=401, reason=Unauthorized 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '66', 'ETag': 'W/"42-VIvuqXCkSos5B2HjVRGsrV8/u7s"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":false,"message":"Not authorized, no token","data":null} 
+ </msg>
+<msg time="2026-03-05T02:20:21.305365" level="INFO">${res} = &lt;Response [401]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations/${id}/export</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.304042" elapsed="0.001334"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.305701" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${res.status_code}</arg>
+<arg>401</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.305437" elapsed="0.000286"/>
+</kw>
+<status status="PASS" start="2026-03-05T02:20:21.299222" elapsed="0.006555"/>
+</test>
+<test id="s1-t9" name="TC-09 Export Invalid Token" line="171">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.306074" level="INFO">${headers} = {'Authorization': 'Bearer invalidtoken'}</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer invalidtoken</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.305962" elapsed="0.000122"/>
+</kw>
+<kw name="Get Investigation Id">
+<kw name="Get Admin Header">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.306445" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.306322" elapsed="0.000134"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-03-05T02:20:21.306474" elapsed="0.000012"/>
+</return>
+<msg time="2026-03-05T02:20:21.306530" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<status status="PASS" start="2026-03-05T02:20:21.306252" elapsed="0.000287"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.308488" level="INFO">GET Request : url=http://localhost:3000/api/admin/investigations 
+ path_url=/api/admin/investigations 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg'} 
+ body=None 
+ </msg>
+<msg time="2026-03-05T02:20:21.308528" level="INFO">GET Response : url=http://localhost:3000/api/admin/investigations 
+ status=200, reason=OK 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '3256', 'ETag': 'W/"cb8-bNvrN7R28kiYoz/BkyQR1wU3Nfk"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":true,"message":"Investigations retrieved successfully","data":[{"id":"cmmc97dcn0001s1pcpxhy2jwu","requestNumber":"INV-1772641876050","authorityName":"kk police","officerName":"kku","officerPosition":"kku","contactEmail":"phattharawade3@gmail.com","contactPhone":"9274839o2","requestDate":"2026-03-05T00:00:00.000Z","bookingId":"cmmc37uag0000jl8oiwibggqv","fromDate":"2026-03-05T00:00:00.000Z","toDate":"2026-03-05T00:00:00.000Z","reason":"","officialDocumentUrl":null,"officialDocumentName":null,"exportedFileUrl":null,"exportedAt":null,"createdById":"cmmc2rpde00004ud5c7iceoyu","createdAt":"2026-03-04T16:31:16.053Z","booking":{"id":"cmmc37uag0000jl8oiwibggqv","routeId":"cmmc34wje000f4ud5g4wpx1f5","passengerId":"cmmc2ui7a00014ud53inbyh3k","numberOfSeats":1,"status":"PENDING","cancelledAt":null,"cancelledBy":null,"cancelReason":null,"pickupLocation":{},"dropoffLocation":{},"extraLuggageSelected":false,"extraLuggageType":null,"extraLuggageFee":0,"createdAt":"2026-03-04T13:43:40.312Z"},"createdBy":{"id":"cmmc2rpde00004ud5c7iceoyu","username":"admin123","email":"admin@example.com","password":"$2b$10$l1rkYBX2KNFT7yOyrrIqoe0dTnIYVI.so1MleErqNJsvbIWePHJSi","firstName":"System","lastName":"Administrator","gender":null,"phoneNumber":null,"profilePicture":null,"nationalIdNumber":null,"nationalIdPhotoUrl":null,"nationalIdExpiryDate":null,"selfiePhotoUrl":null,"role":"ADMIN","isVerified":false,"isActive":true,"otpCode":null,"lastLogin":null,"createdAt":"2026-03-04T13:31:07.442Z","updatedAt":"2026-03-04T13:31:07.442Z","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}},{"id":"cmmc3eg92000l4ud54oyt60rr","requestNumber":"INV-1772632128699","authorityName":"kk police","officerName":"somcaho","officerPosition":"kku","contactEmail":"phattharawadee@gmail.com","contactPhone":"0987286372","requestDate":"2026-03-04T00:00:00.000Z","bookingId":"cmmc37uag0000jl8oiwibggqv","fromDate":"2026-03-05T00:00:00.000Z","toDate":"2026-03-06T00:00:00.000Z","reason":"","officialDocumentUrl":null,"officialDocumentName":null,"exportedFileUrl":null,"exportedAt":null,"createdById":"cmmc2rpde00004ud5c7iceoyu","createdAt":"2026-03-04T13:48:48.702Z","booking":{"id":"cmmc37uag0000jl8oiwibggqv","routeId":"cmmc34wje000f4ud5g4wpx1f5","passengerId":"cmmc2ui7a00014ud53inbyh3k","numberOfSeats":1,"status":"PENDING","cancelledAt":null,"cancelledBy":null,"cancelReason":null,"pickupLocation":{},"dropoffLocation":{},"extraLuggageSelected":false,"extraLuggageType":null,"extraLuggageFee":0,"createdAt":"2026-03-04T13:43:40.312Z"},"createdBy":{"id":"cmmc2rpde00004ud5c7iceoyu","username":"admin123","email":"admin@example.com","password":"$2b$10$l1rkYBX2KNFT7yOyrrIqoe0dTnIYVI.so1MleErqNJsvbIWePHJSi","firstName":"System","lastName":"Administrator","gender":null,"phoneNumber":null,"profilePicture":null,"nationalIdNumber":null,"nationalIdPhotoUrl":null,"nationalIdExpiryDate":null,"selfiePhotoUrl":null,"role":"ADMIN","isVerified":false,"isActive":true,"otpCode":null,"lastLogin":null,"createdAt":"2026-03-04T13:31:07.442Z","updatedAt":"2026-03-04T13:31:07.442Z","deletedAt":null,"deleteRequestAt":null,"deleteScheduledFor":null,"passengerSuspendedUntil":null,"driverSuspendedUntil":null}}]} 
+ </msg>
+<msg time="2026-03-05T02:20:21.308591" level="INFO">${res} = &lt;Response [200]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.306571" elapsed="0.002030"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.309057" level="INFO">${json} = {'success': True, 'message': 'Investigations retrieved successfully', 'data': [{'id': 'cmmc97dcn0001s1pcpxhy2jwu', 'requestNumber': 'INV-1772641876050', 'authorityName': 'kk police', 'officerName': 'k...</msg>
+<var>${json}</var>
+<arg>${res.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.308654" elapsed="0.000502"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.309556" level="INFO">${id} = cmmc97dcn0001s1pcpxhy2jwu</msg>
+<var>${id}</var>
+<arg>${json["data"][0]["id"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.309284" elapsed="0.000283"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-03-05T02:20:21.309589" elapsed="0.000014"/>
+</return>
+<msg time="2026-03-05T02:20:21.309653" level="INFO">${id} = cmmc97dcn0001s1pcpxhy2jwu</msg>
+<var>${id}</var>
+<status status="PASS" start="2026-03-05T02:20:21.306161" elapsed="0.003501"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.311181" level="INFO">GET Request : url=http://localhost:3000/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu/export 
+ path_url=/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu/export 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer invalidtoken'} 
+ body=None 
+ </msg>
+<msg time="2026-03-05T02:20:21.311231" level="INFO">GET Response : url=http://localhost:3000/api/admin/investigations/cmmc97dcn0001s1pcpxhy2jwu/export 
+ status=401, reason=Unauthorized 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '70', 'ETag': 'W/"46-w2Z3gATrNC7hMBgk4VM6pVfFyx8"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":false,"message":"Not authorized, token failed","data":null} 
+ </msg>
+<msg time="2026-03-05T02:20:21.311285" level="INFO">${res} = &lt;Response [401]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations/${id}/export</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.309721" elapsed="0.001575"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.311661" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${res.status_code}</arg>
+<arg>401</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.311368" elapsed="0.000316"/>
+</kw>
+<status status="PASS" start="2026-03-05T02:20:21.305846" elapsed="0.005896"/>
+</test>
+<test id="s1-t10" name="TC-10 Export Invalid Investigation ID" line="186">
+<kw name="Get Admin Header">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.312199" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.312058" elapsed="0.000153"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-03-05T02:20:21.312231" elapsed="0.000013"/>
+</return>
+<msg time="2026-03-05T02:20:21.312293" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjL...</msg>
+<var>${headers}</var>
+<status status="PASS" start="2026-03-05T02:20:21.311965" elapsed="0.000338"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2026-03-05T02:20:21.314196" level="INFO">GET Request : url=http://localhost:3000/api/admin/investigations/invalid123/export 
+ path_url=/api/admin/investigations/invalid123/export 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW1jMnJwZGUwMDAwNHVkNWM3aWNlb3l1Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNjUyMDIxLCJleHAiOjE3NzI2NTU2MjF9.SsF6xra1yqeWi6VePFhm2RjLbvHaxfxfhEgl6s2vRqg'} 
+ body=None 
+ </msg>
+<msg time="2026-03-05T02:20:21.314234" level="INFO">GET Response : url=http://localhost:3000/api/admin/investigations/invalid123/export 
+ status=500, reason=Internal Server Error 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '169', 'ETag': 'W/"a9-pKId7w7/F1/ie7r9NbzpA8LaA5w"', 'Date': 'Wed, 04 Mar 2026 19:20:21 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"success":false,"message":"เกิดข้อผิดพลาดภายในระบบ กรุณาลองใหม่ภายหลัง","data":null} 
+ </msg>
+<msg time="2026-03-05T02:20:21.314281" level="INFO">${res} = &lt;Response [500]&gt;</msg>
+<var>${res}</var>
+<arg>api</arg>
+<arg>/admin/investigations/${INVALID_ID}/export</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.312349" elapsed="0.001942"/>
+</kw>
+<kw name="Should Not Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-05T02:20:21.314634" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${res.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are equal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-05T02:20:21.314361" elapsed="0.000296"/>
+</kw>
+<status status="PASS" start="2026-03-05T02:20:21.311815" elapsed="0.002903"/>
+</test>
+<status status="PASS" start="2026-03-05T02:20:20.959914" elapsed="0.354978"/>
+</suite>
+<statistics>
+<total>
+<stat pass="10" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Investigation" id="s1" pass="10" fail="0" skip="0">Investigation</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

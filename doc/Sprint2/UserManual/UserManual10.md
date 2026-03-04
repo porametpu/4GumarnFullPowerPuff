@@ -16,12 +16,12 @@
 1. เข้าสู่หน้าคำขอจองที่ได้รับการยืนยัน
     หลังจากคำขอจองถูกยืนยันแล้ว ในหน้ารายการ คำขอจองเส้นทางของฉัน ระบบจะแสดงปุ่ม แชทกับผู้โดยสาร และไอคอน ประวัติการแชท อยู่ภายในหน้าเดียวกัน เพื่อให้ Driver สามารถติดต่อกับ Passenger ได้ทันที
 
-    ![Chatwithdriver](img/1Chatwithdriver.png)  
+    ![Chatwithdriver](../../../img/1Chatwithdriver.png)  
 
 2. เปิดหน้าการสนทนา
     เมื่อ Driver กดปุ่ม แชทกับผู้โดยสาร ระบบจะแสดงหน้าห้องแชท ซึ่งในกรณีที่ยังไม่มีการสนทนา ข้อความในห้องแชทจะยังว่างอยู่
 
-   ![Chatthathasnotyetstarted](img/2Chatthathasnotyetstarted.png)   
+   ![Chatthathasnotyetstarted](../../../img/2Chatthathasnotyetstarted.png)   
 
 
 3. ใช้ข้อความอัตโนมัติ
@@ -33,7 +33,7 @@
 - รถติดนิดหน่อย
     Driver สามารถกดเลือกข้อความที่ต้องการ แล้วส่งไปยัง Passenger ได้ทันที
 
- ![Thedriversentamessagetothepassenger](img/3Thedriversentamessagetothepassenger.png)   
+ ![Thedriversentamessagetothepassenger](../../../img/3Thedriversentamessagetothepassenger.png)   
 
 
 4. กดปุ่ม "Chat" เพื่อเข้าสู่ห้องแชท
@@ -43,35 +43,35 @@
 - ส่งรูปภาพเกี่ยวกับการเดินทาง
     เพื่อให้ Passenger ทราบสถานการณ์หรือจุดที่ Driver อยู่ในปัจจุบัน
 
- ![Icondriver](img/6Icondriver.png)  
+ ![Icondriver](../../../img/6Icondriver.png)  
 
 5. การส่งตำแหน่งปัจจุบัน (Location)
     เมื่อ Driver กดปุ่ม ส่งโลเคชั่น
 
-![iconlocation](img/7iconlocation.png)  
+![iconlocation](../../../img/7iconlocation.png)  
 
     ระบบจะแสดงหน้าต่าง ยืนยันการแชร์ตำแหน่งครั้งที่ 1
 - หากกด ไม่อนุญาต หรือ ยกเลิก ระบบจะกลับไปยังหน้าก่อนหน้า
 
-![Firstconfirmation](img/8Firstconfirmation.png)  
+![Firstconfirmation](../../../img/8Firstconfirmation.png)  
 
 - หากกด อนุญาต ระบบจะแสดงหน้าต่าง ยืนยันการแชร์ตำแหน่งครั้งที่ 2
     เมื่อ Driver กด อนุญาต อีกครั้ง ตำแหน่งปัจจุบันของ Driver จะถูกส่งไปยัง Passenger
 
-![Confirmasecondtime](img/9Confirmasecondtime.png)  
+![Confirmasecondtime](../../../img/9Confirmasecondtime.png)  
 
 6. การส่งรูปภาพ
     Driver สามารถกดปุ่ม ส่งรูปภาพ เพื่อส่งภาพที่เกี่ยวข้องกับการเดินทาง 
 
-![iconimage](img/11iconimage.png)  
+![iconimage](../../../img/11iconimage.png)  
 
     เช่น
 - ตำแหน่งรถ
 - จุดรับผู้โดยสาร
 - สถานการณ์ระหว่างทาง
     หลังจากเลือกภาพแล้ว รูปภาพจะถูกส่งไปยัง Passenger ภายในห้องแชททันที
-    ![Driverdeliveringpictures](img/12Driverdeliveringpictures.png)
-) 
+    ![Driverdeliveringpictures](../../../img/12Driverdeliveringpictures.png)
+
 ---
 
 ## 3. ความปลอดภัยและความเป็นส่วนตัว

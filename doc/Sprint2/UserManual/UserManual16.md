@@ -7,25 +7,25 @@
 ## 1. ลบบัญชีผู้ใช้
 
 1. เข้าสู่ระบบและไปที่เมนู **โปรไฟล์และการตั้งค่า (Profile & Settings)** 
-![login](/img_pbi16/login1.png)  
-![login](/img_pbi16/login.png)
+![login](../../../img/img_pbi16/login1.png)  
+![login](../../../img/img_pbi16/login.png)
    
 2. เลือกหัวข้อ **ลบบัญชี** ทางแถบเมนูด้านซ้าย  
-![Account Step 1](/img_pbi16/s1.png)  
-![Account Step 2](/img_pbi16/s2.png)  
+![Account Step 1](../../../img/img_pbi16/s1.png)  
+![Account Step 2](../../../img/img_pbi16/s2.png)  
 
 
 3. ผู้ใช้ต้องกรอก **อีเมลของตนเอง** เพื่อยืนยันการลบบัญชี  
-![Email Step 1](/img_pbi16/s3.png)  
-![Email Step 2](/img_pbi16/s4.png)  
+![Email Step 1](../../../img/img_pbi16/s3.png)  
+![Email Step 2](../../../img/img_pbi16/s4.png)  
 
 4. กดปุ่ม **ลบบัญชี** เพื่อดำเนินการยืนยันการลบบัญชีผู้ใช้ 
-![Confirm](/img_pbi16/s5.png)  
+![Confirm](../../../img/img_pbi16/s5.png)  
 
 5. เมื่อดำเนินการสำเร็จ บัญชีผู้ใช้จะถูก **ปิดการใช้งานทันที**  
    และข้อมูลทั้งหมดจะถูกลบออกจากระบบอย่างถาวรภายในระยะเวลา **90 วัน**
-   ![Delete Step 1](/img_pbi16/s6.png)  
-   ![Delete Step 2](/img_pbi16/page.png)  
+   ![Delete Step 1](../../../img/img_pbi16/s6.png)  
+   ![Delete Step 2](../../../img/img_pbi16/page.png)  
 
 
 ### ข้อควรระวัง

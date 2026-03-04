@@ -103,8 +103,8 @@ const createRoute = asyncHandler(async (req, res) => {
 
   // ===== Enrich จาก Google Directions =====
   const directions = await getDirections({
-    origin: `${payload.startLocation.lat},${payload.startLocation.lng}`,
-    destination: `${payload.endLocation.lat},${payload.endLocation.lng}`,
+origin: origin,
+destination: destination,
     waypoints: routeFields.waypoints || [],
     optimizeWaypoints,
     alternatives: false,
@@ -231,8 +231,8 @@ const updateRoute = asyncHandler(async (req, res) => {
         : (existing.waypoints?.optimize ?? false);
 
     const directions = await getDirections({
-      origin: `${origin.lat},${origin.lng}`,
-      destination: `${destination.lat},${destination.lng}`,
+origin: origin,
+destination: destination,
       waypoints: currentWps,
       optimizeWaypoints: currentOptimize,
       alternatives: false,
@@ -325,8 +325,8 @@ const adminCreateRoute = asyncHandler(async (req, res) => {
 
   // Enrich แบบเดียวกับ createRoute (รองรับ waypoints/optimizeWaypoints)
   const directions = await getDirections({
-    origin: `${payload.startLocation.lat},${payload.startLocation.lng}`,
-    destination: `${payload.endLocation.lat},${payload.endLocation.lng}`,
+origin: origin,
+destination: destination,
     waypoints: routeFields.waypoints || [],
     optimizeWaypoints,
     alternatives: false,
@@ -442,8 +442,8 @@ const adminUpdateRoute = asyncHandler(async (req, res) => {
         : (existing.waypoints?.optimize ?? false);
 
     const directions = await getDirections({
-      origin: `${origin.lat},${origin.lng}`,
-      destination: `${destination.lat},${destination.lng}`,
+origin: origin,
+destination: destination,
       waypoints: currentWps,
       optimizeWaypoints: currentOptimize,
       alternatives: false,

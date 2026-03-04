@@ -1,8 +1,11 @@
 const { z } = require("zod");
 const { RouteStatus } = require("@prisma/client");
+const extraLuggageTypeEnum = z.enum(['MEDIUM', 'LARGE', 'EXTRA_LARGE']);
 
 const createRouteSchema = z.object({
   // driverId: z.string().cuid({ message: "driverId must be a CUID" }),
+  allowExtraLuggage: z.boolean().optional(),
+  maxExtraLuggageType: extraLuggageTypeEnum.optional(),
   vehicleId: z.string().cuid({ message: "vehicleId must be a CUID" }),
   startLocation: z.any(),
   endLocation: z.any(),

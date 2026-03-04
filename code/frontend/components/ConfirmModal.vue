@@ -70,8 +70,6 @@ const handleConfirm = () => {
 const handleCancel = () => {
     emit('cancel');
 };
-
-// Computed properties for dynamic styling based on variant
 const confirmButtonClass = computed(() => {
     return props.variant === 'danger'
         ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
@@ -105,7 +103,7 @@ const iconSvgClass = computed(() => {
     background-color: white;
     border-radius: 0.75rem;
     max-width: 448px;
-    /* 28rem */
+
     width: 95%;
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
     transform: scale(1);
@@ -115,7 +113,6 @@ const iconSvgClass = computed(() => {
 .btn-secondary {
     padding: 0.5rem 1rem;
     border-radius: 0.375rem;
-    /* rounded-md */
     font-weight: 500;
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -138,21 +135,17 @@ const iconSvgClass = computed(() => {
 
 .btn-secondary {
     color: #374151;
-    /* text-gray-700 */
     background-color: white;
     border-color: #d1d5db;
-    /* border-gray-300 */
 }
 
 .btn-secondary:hover {
     background-color: #f9fafb;
-    /* hover:bg-gray-50 */
 }
 
 .btn-secondary:focus {
     outline: none;
     border-color: #9ca3af;
-    /* focus:border-gray-400 */
     --tw-ring-color: rgb(209 213 219);
     --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
     --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);

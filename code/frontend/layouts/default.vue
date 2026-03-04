@@ -73,15 +73,15 @@
                         </div>
 
                         <!-- Bell (ผู้ใช้ทั่วไป + แอดมินใช้ตัวนี้บนเว็บหลัก) -->
-                        <div v-if="token" class="relative">
-                            <button ref="bellBtn" class="relative text-gray-600 hover:text-blue-600"
+                        <div v-if="token" class="relative flex items-center h-full">
+                            <button ref="bellBtn" class="relative flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors p-1"
                                 @click="onBellClick" aria-haspopup="true" :aria-expanded="openNotif ? 'true' : 'false'">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 17h5l-1.405-1.405C18.21 14.79 18 13.918 18 13V9a6 6 0 10-12 0v4c0 .918-.21 1.79-.595 2.595L4 17h5m6 0a3 3 0 11-6 0h6z" />
                                 </svg>
                                 <span v-if="unreadCount > 0"
-                                    class="absolute w-2 h-2 bg-red-500 rounded-full -top-1 -right-1"></span>
+                                    class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
                             </button>
 
                             <transition enter-active-class="transition duration-150 ease-out"
@@ -159,7 +159,7 @@
                                                                     stroke="currentColor">
                                                                     <path stroke-width="2" stroke-linecap="round"
                                                                         stroke-linejoin="round"
-                                                                        d="M19 7l-1 12a2 2 0 01-2 2H8a2 2 0 01-2-2L5 7m3-3h8m-9 3h10M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
+                                                                        d="M19 7l-1 12a2 2 0 01-2 2H8a2 2 0 01-2-2L5 7m3-3h8m-9 3h10M9 7V4a1 1 0 011-1h4a1 1 0 011-1v3" />
                                                                 </svg>
                                                                 ลบการแจ้งเตือนนี้
                                                             </button>
@@ -185,6 +185,15 @@
                             </transition>
                         </div>
 
+                        <NuxtLink v-if="token" to="/chats" class="relative flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            <span v-if="totalUnreadCount > 0"
+                                class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full border-2 border-white shadow-sm">
+                                {{ totalUnreadCount > 99 ? '99+' : totalUnreadCount }}
+                            </span>
+                        </NuxtLink>
                         <!-- โปรไฟล์ passenger , driver -->
                         <div v-if="user && (user.role === 'PASSENGER' || user.role === 'DRIVER')"
                             class="relative dropdown-trigger">
@@ -398,8 +407,50 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRuntimeConfig, useCookie } from '#app'
 import { useAuth } from '~/composables/useAuth'
+import 'dayjs/locale/th'
+import { useChatWidget } from '~/composables/useChatWidget'
+import { useSocket } from '~/composables/useSocket'
+
+const { totalUnreadCount } = useChatWidget()
 
 const { token, user, logout } = useAuth()
+const { socket, joinUser, disconnect } = useSocket()
+const { refreshUnreadCount } = useChatWidget()
+
+// Client Notification
+onMounted(() => {
+    window.addEventListener('resize', handleResize)
+    
+    if (process.client) {
+        if (token.value) {
+            refreshUnreadCount()
+            joinUser(user.value?.id)
+        }
+
+        watch(socket, (newSocket) => {
+            if (newSocket) {
+                newSocket.on('message-notification', () => {
+                    console.log('[Socket.io] Received notification, refreshing...')
+                    refreshUnreadCount()
+                })
+                
+                refreshUnreadCount()
+            }
+        }, { immediate: true })
+
+        watch(user, (newUser) => {
+            if (newUser?.id) {
+                joinUser(newUser.id)
+            } else if (!newUser) {
+                disconnect()
+            }
+        })
+    }
+})
+
+onUnmounted(() => {
+    window.removeEventListener('resize', handleResize)
+})
 
 /* ====== เมนูบนสุดเดิม ====== */
 const isMobileMenuOpen = ref(false)

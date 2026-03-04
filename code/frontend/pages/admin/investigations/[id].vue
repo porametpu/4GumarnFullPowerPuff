@@ -1,144 +1,170 @@
 <template>
-    <div>
-        <AdminHeader />
-        <AdminSidebar />
+  <div>
+    <AdminHeader />
+    <AdminSidebar />
 
-        <main class="main-content mt-16 ml-0 lg:ml-[280px] p-6">
-            <div class="max-w-5xl mx-auto">
+    <main class="main-content mt-16 ml-0 lg:ml-[280px] p-6">
+      <div class="max-w-5xl mx-auto">
 
-                <h1 class="text-2xl font-semibold mb-6">
-                    Investigation Detail
-                </h1>
+        <h1 class="text-2xl font-semibold mb-6">
+          Investigation Detail
+        </h1>
 
-                <div v-if="loading">Loading...</div>
+        <!-- Loading -->
+        <div v-if="loading" class="text-gray-500">
+          Loading...
+        </div>
 
-                <div v-else>
+        <!-- Error -->
+        <div v-else-if="error" class="text-red-600">
+          {{ error }}
+        </div>
 
-                    <!-- Case Info -->
-                    <div class="bg-white p-6 border rounded mb-6">
-                        <h2 class="font-semibold text-lg mb-4">Case Info</h2>
+        <!-- Case Info -->
+        <div v-else class="bg-white p-6 border rounded">
 
-                        <p><b>Request Number:</b> {{ investigation.requestNumber }}</p>
-                        <p><b>Authority:</b> {{ investigation.authorityName }}</p>
-                        <p><b>Officer:</b> {{ investigation.officerName }}</p>
-                        <p><b>Booking ID:</b> {{ investigation.bookingId }}</p>
-                        <p><b>Reason:</b> {{ investigation.reason }}</p>
-                    </div>
+          <h2 class="font-semibold text-lg mb-4">
+            Case Info
+          </h2>
 
-                    <!-- Chat Log -->
-                    <div class="bg-white p-6 border rounded mb-6">
-                        <h2 class="font-semibold text-lg mb-4">Chat Log</h2>
+          <p><b>Request Number:</b> {{ investigation?.requestNumber || '-' }}</p>
+          <p><b>Authority:</b> {{ investigation?.authorityName || '-' }}</p>
+          <p><b>Officer:</b> {{ investigation?.officerName || '-' }}</p>
+          <p><b>Officer Position:</b> {{ investigation?.officerPosition || '-' }}</p>
+          <p><b>Booking ID:</b> {{ investigation?.bookingId || '-' }}</p>
 
-                        <div v-if="messages.length === 0">
-                            No chat messages
-                        </div>
+          <p>
+            <b>Request Date:</b>
+            {{ formatDate(investigation?.requestDate) }}
+          </p>
 
-                        <div v-for="msg in messages" :key="msg.id" class="border-b py-2">
+          <p>
+            <b>Data Period:</b>
+            {{ formatDate(investigation?.fromDate) }}
+            -
+            {{ formatDate(investigation?.toDate) }}
+          </p>
 
-                            <p class="text-sm text-gray-500">
-                                {{ formatTime(msg.createdAt) }}
-                            </p>
+          <p>
+            <b>Reason:</b>
+            {{ investigation?.reason || '-' }}
+          </p>
 
-                            <div v-for="msg in messages" :key="msg.id" class="border-b py-2">
+        </div>
 
-                                <div class="text-xs text-gray-400">
-                                    {{ new Date(msg.createdAt).toLocaleString() }}
-                                </div>
+        <!-- Export -->
+        <div class="mt-6">
+          <button
+            class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+            @click="exportPDF"
+          >
+            Export PDF
+          </button>
+        </div>
 
-                                <div class="text-sm">
-                                    <span class="font-semibold">
-                                        {{ msg.sender?.username }}
-                                    </span>
-
-                                    : {{ msg.content }}
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Export -->
-                    <div class="flex gap-4">
-
-                        <button class="bg-green-600 text-white px-4 py-2 rounded" @click="exportCSV">
-                            Export CSV
-                        </button>
-
-                        <button class="bg-red-600 text-white px-4 py-2 rounded" @click="exportPDF">
-                            Export PDF
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-        </main>
-
-    </div>
+      </div>
+    </main>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRuntimeConfig } from '#app'
-useHead({
-    title: 'Investigation Management • Admin',
-    link: [
-        { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css' }
-    ]
-})
+import { ref, onMounted } from "vue"
+import { useRoute, useRuntimeConfig, useCookie } from "#app"
+
+import AdminHeader from "~/components/admin/AdminHeader.vue"
+import AdminSidebar from "~/components/admin/AdminSidebar.vue"
+
 const route = useRoute()
 const apiBase = useRuntimeConfig().public.apiBase
 
-const investigation = ref({})
-const messages = ref([])
+const investigation = ref(null)
 const loading = ref(true)
+const error = ref(null)
 
-function formatTime(date) {
-    return new Date(date).toLocaleString()
+function getToken() {
+  return useCookie('token')?.value ||
+    (process.client ? localStorage.getItem('token') : '')
 }
 
-async function loadData() {
+function formatDate(v){
+  if(!v) return "-"
+  return new Date(v).toLocaleDateString("th-TH")
+}
+
+async function loadData(){
+
+  try{
 
     const res = await fetch(
-        `${apiBase}admin/investigations/${route.params.id}`
+      `${apiBase}admin/investigations/${route.params.id}`,
+      {
+        headers:{
+          Accept:"application/json",
+          Authorization:`Bearer ${getToken()}`
+        }
+      }
     )
 
-    const data = await res.json()
+    const body = await res.json()
 
-    investigation.value = data
+    if(!res.ok){
+      throw new Error(body?.message)
+    }
 
-    messages.value =
-        data?.booking?.chatRoom?.messages || []
+    investigation.value = body.data || {}
+
+  }
+  catch(err){
+
+    console.error(err)
+    error.value = err.message
+
+  }
+  finally{
 
     loading.value = false
-}
 
-function exportCSV(){
-
-  let csv = "time,sender,message\n"
-
-  messages.value.forEach(m=>{
-    csv += `${m.createdAt},${m.sender?.username},"${m.content}"\n`
-  })
-
-  const blob = new Blob([csv], {type:'text/csv'})
-  const url = URL.createObjectURL(blob)
-
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `chatlog-${route.params.id}.csv`
-  a.click()
+  }
 
 }
 
-async function exportChatLog(id) {
-  await fetch(`${apiBase}admin/investigations/${id}/export`, {
-    method: "POST"
-  })
+async function exportPDF(){
+
+  try{
+
+    const res = await fetch(
+      `${apiBase}admin/investigations/${route.params.id}/export`,
+      {
+        headers:{
+          Authorization:`Bearer ${getToken()}`
+        }
+      }
+    )
+
+    if(!res.ok){
+      throw new Error("Export failed")
+    }
+
+    const blob = await res.blob()
+
+    const url = window.URL.createObjectURL(blob)
+
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `chatlog-${route.params.id}.pdf`
+
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+
+  }
+  catch(err){
+
+    alert(err.message)
+
+  }
+
 }
 
 onMounted(loadData)
-
 </script>

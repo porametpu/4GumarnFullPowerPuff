@@ -3,78 +3,90 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const getInvestigations = async () => {
-    return prisma.investigationRequest.findMany({
-        orderBy: { createdAt: "desc" },
-        include: {
-            booking: true,
-            createdBy: true,
-        },
-    });
+  return prisma.investigationRequest.findMany({
+    orderBy: { createdAt: "desc" },
+    include: {
+      booking: true,
+      createdBy: true,
+    },
+  });
 };
 
 const createInvestigation = async (data) => {
-    const requestNumber = `INV-${Date.now()}`;
 
-    return prisma.investigationRequest.create({
-        data: {
-            requestNumber,
+  const requestNumber = `INV-${Date.now()}`;
 
-            authorityName: data.authorityName,
-            officerName: data.officerName,
-            officerPosition: data.officerPosition,
+  return prisma.investigationRequest.create({
+    data: {
+      requestNumber,
 
-            contactEmail: data.contactEmail,
-            contactPhone: data.contactPhone,
+      authorityName: data.authorityName,
+      officerName: data.officerName,
+      officerPosition: data.officerPosition,
 
-            requestDate: new Date(data.requestDate),
+      contactEmail: data.contactEmail,
+      contactPhone: data.contactPhone,
 
-            bookingId: data.bookingId,
+      requestDate: new Date(data.requestDate),
 
-            fromDate: new Date(data.startDate),
-            toDate: new Date(data.endDate),
+      bookingId: data.bookingId,
 
-            reason: data.reason,
+      fromDate: new Date(data.startDate),
+      toDate: new Date(data.endDate),
 
-            officialDocumentUrl: data.officialDocumentUrl,
-            officialDocumentName: data.officialDocumentName,
+      reason: data.reason,
 
-            createdById: data.createdById,
-        },
-    });
+      officialDocumentUrl: data.officialDocumentUrl,
+      officialDocumentName: data.officialDocumentName,
+
+      createdById: data.createdById,
+    },
+  });
+
 };
 
 const exportInvestigation = async (investigationId) => {
+
   const investigation = await prisma.investigationRequest.findUnique({
     where: { id: investigationId },
+
     include: {
       booking: {
         include: {
-          passenger: true,
-          route: {
-            include: {
-              driver: true,
-            },
-          },
           chatRoom: {
             include: {
               messages: {
                 include: {
-                  sender: true,
+                  sender: {
+                    select: {
+                      id: true,
+                      username: true,
+                      firstName: true,
+                      lastName: true
+                    }
+                  }
                 },
                 orderBy: {
-                  createdAt: "asc",
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  createdAt: "asc"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   });
 
-  if (!investigation) return null;
+  if (!investigation) {
+    throw new Error("Investigation not found");
+  }
 
-  return investigation.booking.chatRoom?.messages || [];
+  if (!investigation.booking?.chatRoom) {
+    return [];
+  }
+
+  return investigation.booking.chatRoom.messages;
+
 };
 
 const getInvestigationById = async (id) => {
@@ -89,7 +101,14 @@ const getInvestigationById = async (id) => {
             include: {
               messages: {
                 include: {
-                  sender: true
+                  sender: {
+                    select: {
+                      id: true,
+                      username: true,
+                      firstName: true,
+                      lastName: true
+                    }
+                  }
                 },
                 orderBy: {
                   createdAt: "asc"
@@ -99,14 +118,16 @@ const getInvestigationById = async (id) => {
           }
         }
       },
+
       createdBy: true
     }
-  })
-}
+  });
+
+};
 
 module.exports = {
   getInvestigations,
   createInvestigation,
   exportInvestigation,
   getInvestigationById
-}
+};

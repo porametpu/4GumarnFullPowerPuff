@@ -1,5 +1,4 @@
 <template>
-    <div>
         <div class="max-w-4xl px-4 py-8 mx-auto sm:px-6 lg:px-8">
             <div class="mb-8">
                 <h2 class="mb-2 text-3xl font-bold text-gray-900">
@@ -295,9 +294,6 @@
                 </div>
             </transition>
         </div>
-
-    </div>
-
 </template>
 
 <script setup>

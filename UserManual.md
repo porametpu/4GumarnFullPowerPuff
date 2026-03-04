@@ -53,7 +53,7 @@
     ระบบจะแสดงหน้าต่าง ยืนยันการแชร์ตำแหน่งครั้งที่ 1
 - หากกด ไม่อนุญาต หรือ ยกเลิก ระบบจะกลับไปยังหน้าก่อนหน้า
 
-![Firstconfirmation](img/8Firstconfirmation.png.png)  
+![Firstconfirmation](img/8Firstconfirmation.png)  
 
 - หากกด อนุญาต ระบบจะแสดงหน้าต่าง ยืนยันการแชร์ตำแหน่งครั้งที่ 2
     เมื่อ Driver กด อนุญาต อีกครั้ง ตำแหน่งปัจจุบันของ Driver จะถูกส่งไปยัง Passenger
@@ -63,7 +63,7 @@
 6. การส่งรูปภาพ
     Driver สามารถกดปุ่ม ส่งรูปภาพ เพื่อส่งภาพที่เกี่ยวข้องกับการเดินทาง 
 
-![iconimage](img/11iconimage.png.png)  
+![iconimage](img/11iconimage.png)  
 
     เช่น
 - ตำแหน่งรถ

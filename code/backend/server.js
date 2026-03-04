@@ -113,9 +113,9 @@ io.on('connection', (socket) => {
         console.error('Admin bootstrap failed:', e);
     }
 
-    server.listen(PORT, () => {
-        console.log(`🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-    });
+server.listen(PORT, "0.0.0.0", () => {
+    console.log(`🚀 Server running in ${process.env.NODE_ENV || "production"} mode on port ${PORT}`);
+});
 })();
 // Graceful Shutdown
 process.on('unhandledRejection', (err) => {

@@ -43,7 +43,35 @@
                     <span class="sidebar-text">Driver Verification Management</span>
                 </NuxtLink>
 
-                <NuxtLink to="/"
+                <NuxtLink to="/admin/investigations"
+                    class="sidebar-item flex items-center gap-3 px-3 py-2.5 text-gray-700 rounded-lg hover:bg-blue-50"
+                    active-class="font-semibold text-blue-600 bg-blue-50">
+                    <i class="fas fa-file-alt w-6 text-lg text-center text-gray-500"></i>
+                    <span class="sidebar-text">Investigations</span>
+                </NuxtLink>
+
+                <NuxtLink to="/admin/notifications"
+                    class="sidebar-item flex items-center gap-3 px-3 py-2.5 text-gray-700 rounded-lg hover:bg-blue-50"
+                    active-class="font-semibold text-blue-600 bg-blue-50">
+                    <i class="w-6 text-lg text-center text-gray-500 fas fa-bell"></i>
+                    <span class="sidebar-text">Notifications</span>
+                </NuxtLink>
+
+                <NuxtLink to="/admin/reports"
+                    class="sidebar-item flex items-center gap-3 px-3 py-2.5 text-gray-700 rounded-lg hover:bg-blue-50"
+                    active-class="font-semibold text-blue-600 bg-blue-50">
+                    <i class="w-6 text-lg text-center text-gray-500 fas fa-chart-bar"></i>
+                    <span class="sidebar-text">Reports</span>
+                </NuxtLink>
+
+                <NuxtLink to="/admin/settings"
+                    class="sidebar-item flex items-center gap-3 px-3 py-2.5 text-gray-700 rounded-lg hover:bg-blue-50"
+                    active-class="font-semibold text-blue-600 bg-blue-50">
+                    <i class="w-6 text-lg text-center text-gray-500 fas fa-cog"></i>
+                    <span class="sidebar-text">Settings</span>
+                </NuxtLink>
+
+                <NuxtLink to="/admin/home"
                     class="sidebar-item flex items-center gap-3 px-3 py-2.5 text-gray-700 rounded-lg hover:bg-blue-50">
                     <i class="w-6 text-lg text-center text-gray-500 fas fa-home"></i>
                     <span class="sidebar-text">Home</span>

@@ -53,8 +53,7 @@ module.exports = async function ensureAdmin() {
                 firstName: ADMIN_FIRST_NAME || 'Admin',
                 lastName: ADMIN_LAST_NAME || '',
                 role: 'ADMIN',
-                isVerified: true,
-                isActive: true,
+                isActive: true
             },
         });
         console.log(`🔐 Created initial ADMIN account (${ADMIN_EMAIL}).`);

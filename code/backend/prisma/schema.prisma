@@ -94,6 +94,8 @@ model User {
   ChatParticipant         ChatParticipant[]
   sendMessages            Message[]           @relation("SentMessages")
 
+  investigationCreated InvestigationRequest[]
+
   @@index([role])
   @@index([isActive])
   @@index([isVerified])
@@ -227,6 +229,9 @@ model Booking {
   extraLuggageFee   Float @default(0)
   createdAt       DateTime      @default(now())
   chatRoom        ChatRoom?
+
+  investigationRequests InvestigationRequest[]
+
 }
 
 enum MessageType {
@@ -272,4 +277,38 @@ model Message {
   isRead    Boolean     @default(false)
 
   @@index([chatRoomId, createdAt])
+}
+
+model InvestigationRequest {
+  id            String   @id @default(cuid())
+  requestNumber String   @unique
+
+  authorityName   String
+  officerName     String
+  officerPosition String?
+  contactEmail    String
+  contactPhone    String
+  requestDate     DateTime
+
+  bookingId String
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  fromDate DateTime
+  toDate   DateTime
+  reason   String?
+
+  officialDocumentUrl  String?
+  officialDocumentName String?
+
+  exportedFileUrl String?
+  exportedAt      DateTime?
+
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([requestNumber])
+  @@index([bookingId])
+  @@index([createdById])
 }

@@ -164,7 +164,8 @@
 
                                 <!-- ปุ่มขวาล่าง -->
                                 <div class="flex justify-end" :class="{ 'mt-4': selectedTripId !== route.id }">
-                                    <NuxtLink :to="`/myRoute/${route.id}/edit`"
+                                    <NuxtLink v-if="route.canEdit"
+                                        :to="`/myRoute/${route.id}/edit`"
                                         class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700"
                                         @click.stop>
                                         แก้ไขเส้นทาง
@@ -641,6 +642,7 @@ async function fetchMyRoutes() {
             )
             ownRoutes.push({
                 id: r.id,
+                canEdit: confirmedBookings.length === 0,
                 status: (r.status || '').toLowerCase(),
                 origin: start?.name || `(${Number(start.lat).toFixed(2)}, ${Number(start.lng).toFixed(2)})`,
                 destination: end?.name || `(${Number(end.lat).toFixed(2)}, ${Number(end.lng).toFixed(2)})`,

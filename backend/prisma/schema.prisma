@@ -193,6 +193,7 @@ model Route {
   updatedAt     DateTime @updatedAt
 
   bookings        Booking[]
+  nearAlerts      DriverNearAlert[]
 
   @@index([driverId])
   @@index([vehicleId])
@@ -218,10 +219,31 @@ model Booking {
   extraLuggageType   ExtraLuggageType?
   extraLuggageFee   Float @default(0)
   createdAt       DateTime      @default(now())
+  nearAlerts      DriverNearAlert[]
 }
 
 enum ExtraLuggageType{
   MEDIUM 
   LARGE
   EXTRA_LARGE
+}
+
+model DriverNearAlert {
+  id          String  @id @default(cuid())
+  routeId     String
+  bookingId   String
+  driverId    String
+  passengerId String
+  driverLat   Float
+  driverLng   Float
+  distanceKm  Float
+  createdAt   DateTime  @default(now())
+
+  route       Route     @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  booking     Booking    @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@unique([routeId, bookingId])
+  @@index([passengerId,createdAt])
+  @@index([driverId,createdAt])
+
 }

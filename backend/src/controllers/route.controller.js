@@ -111,6 +111,29 @@ const createRoute = asyncHandler(async (req, res) => {
     departureTime: payload.departureTime.toISOString()
   });
 
+
+  const notifyNearbyPassengers = asyncHandler(async (req, res) => {
+    const driverId =  req.user.sub;
+    const { id } = req.params;
+    const { driverLat, driverLng, radiusKm = 10 } = req.body;
+
+    const result = await routeService.notifyNearbyPassengers({
+      routeId: id,
+      driverId,
+      driverLat: Number(driverLat),
+      driverLng: Number(driverLng),
+      radiusKm: Number(radiusKm),
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Near-arrival notifications processed",
+      data: result,
+    });
+  });
+
+
+
   const primary = directions.routes?.[0];
   if (primary) {
     const legs = primary.legs || [];
@@ -537,4 +560,7 @@ module.exports = {
   adminDeleteRoute,
   adminGetRoutesByDriver,
   cancelRoute,
+  notifyNearbyPassengers,
+
+
 };

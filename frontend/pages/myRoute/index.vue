@@ -92,9 +92,9 @@
                                                 <li class="mt-1">
                                                     • จุดปลายทาง:
                                                     <span class="font-medium text-gray-900">{{ route.destination
-                                                    }}</span>
+                                                        }}</span>
                                                     <span v-if="route.destinationAddress"> — {{ route.destinationAddress
-                                                    }}</span>
+                                                        }}</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -164,8 +164,16 @@
 
                                 <!-- ปุ่มขวาล่าง -->
                                 <div class="flex justify-end" :class="{ 'mt-4': selectedTripId !== route.id }">
-                                    <NuxtLink v-if="route.canEdit"
-                                        :to="`/myRoute/${route.id}/edit`"
+
+                                    <button
+                                        v-if="canShowNearAlert(route)"
+                                        :disabled="nearAlertLoadingRouteId === route.id"
+                                        @click.stop="notifyPassengerNearby(route)"
+                                        class="px-4 py-2 text-sm text-white transition duration-200 bg-amber-500 rounded-md hover:bg-amber-600 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                                        {{ nearAlertLoadingRouteId === route.id ? 'กำลังแจ้งเตือน...' : 'แจ้งเตือนใกล้ถึงแล้ว' }}
+                                    </button>
+
+                                    <NuxtLink v-if="route.canEdit" :to="`/myRoute/${route.id}/edit`"
                                         class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700"
                                         @click.stop>
                                         แก้ไขเส้นทาง
@@ -307,9 +315,9 @@
                                                 <li class="mt-1">
                                                     • จุดปลายทาง:
                                                     <span class="font-medium text-gray-900">{{ trip.destination
-                                                    }}</span>
+                                                        }}</span>
                                                     <span v-if="trip.destinationAddress"> — {{ trip.destinationAddress
-                                                    }}</span>
+                                                        }}</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -402,7 +410,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import dayjs from 'dayjs'
 import 'dayjs/locale/th'
 import buddhistEra from 'dayjs/plugin/buddhistEra'
@@ -424,6 +432,8 @@ const isLoading = ref(false)
 const mapContainer = ref(null)
 const allTrips = ref([])
 const myRoutes = ref([])
+const nearAlertNow = ref(Date.now())
+let nearAlertClockTimer = null
 
 // ---------- Longdo Maps states ----------
 let gmap = null
@@ -503,6 +513,70 @@ const reverseGeocode = async (lat, lng) => {
         return null
     }
 }
+
+const nearAlertLoadingRouteId = ref(null);
+
+function isTravelDayNow(departureTime) {
+    if (!departureTime) return false
+    return dayjs(departureTime).isSame(dayjs(nearAlertNow.value), 'day')
+}
+
+function canShowNearAlert(route) {
+    return Number(route?.confirmedPassengerCount || 0) > 0 && isTravelDayNow(route?.departureTime)
+}
+
+function startNearAlertClock() {
+    if (nearAlertClockTimer) return
+    nearAlertClockTimer = setInterval(() => {
+        nearAlertNow.value = Date.now()
+    }, 60000)
+}
+
+function stopNearAlertClock() {
+    if (!nearAlertClockTimer) return
+    clearInterval(nearAlertClockTimer)
+    nearAlertClockTimer = null
+}
+
+function getCurrentPosition() {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('อุปกรณ์ไม่รองรับการระบุตำแหน่ง'));
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(
+            (pos) => resolve(pos),
+            (err) => reject(err),
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 5000 }
+        );
+    });
+}
+
+async function notifyPassengerNearby(route) {
+    try {
+        nearAlertLoadingRouteId.value = route.id;
+
+        const pos = await getCurrentPosition();
+        const driverLat = Number(pos.coords.latitude);
+        const driverLng = Number(pos.coords.longitude);
+
+        const result = await $api(`/routes/${route.id}/nearby-alert`, {
+            method: 'POST',
+            body: { driverLat, driverLng, radiusKm: 10 },
+        });
+
+        toast.info(
+            'ส่งแจ้งเตือนแล้ว',
+            `แจ้งเตือนสำเร็จ ${result.sentCount || 0} รายการ`
+        );
+    } catch (error) {
+        const msg = error?.data?.message || error?.message || 'ไม่สามารถแจ้งเตือนได้';
+        toast.error('แจ้งเตือนไม่สำเร็จ', msg);
+    } finally {
+        nearAlertLoadingRouteId.value = null;
+    }
+}
+
 
 const reasonLabelMap = {
     CHANGE_OF_PLAN: 'เปลี่ยนแผน/มีธุระกะทันหัน',
@@ -643,6 +717,8 @@ async function fetchMyRoutes() {
             ownRoutes.push({
                 id: r.id,
                 canEdit: confirmedBookings.length === 0,
+                departureTime: r.departureTime,
+                confirmedPassengerCount: confirmedBookings.length,
                 status: (r.status || '').toLowerCase(),
                 origin: start?.name || `(${Number(start.lat).toFixed(2)}, ${Number(start.lng).toFixed(2)})`,
                 destination: end?.name || `(${Number(end.lat).toFixed(2)}, ${Number(end.lng).toFixed(2)})`,
@@ -991,6 +1067,7 @@ useHead({
 })
 
 onMounted(async () => {
+    startNearAlertClock()
     try {
         await loadLongdoMap()
     } catch (e) {
@@ -1007,6 +1084,10 @@ onMounted(async () => {
             if (filteredTrips.value.length) updateMap(filteredTrips.value[0])
         }
     })
+})
+
+onUnmounted(() => {
+    stopNearAlertClock()
 })
 
 function initializeMap() {

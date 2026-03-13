@@ -86,6 +86,26 @@ const adminGetRoutesByDriver = asyncHandler(async (req, res) => {
   })
 })
 
+const notifyNearbyPassengers = asyncHandler(async (req, res) => {
+  const driverId = req.user.sub;
+  const { id } = req.params;
+  const { driverLat, driverLng, radiusKm = 10 } = req.body;
+
+  const result = await routeService.notifyNearbyPassengers({
+    routeId: id,
+    driverId,
+    driverLat: Number(driverLat),
+    driverLng: Number(driverLng),
+    radiusKm: Number(radiusKm),
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Near-arrival notifications processed",
+    data: result,
+  });
+});
+
 const createRoute = asyncHandler(async (req, res) => {
   const driverId = req.user.sub;
   const { vehicleId, optimizeWaypoints, ...routeFields } = req.body;
@@ -109,27 +129,6 @@ const createRoute = asyncHandler(async (req, res) => {
     optimizeWaypoints,
     alternatives: false,
     departureTime: payload.departureTime.toISOString()
-  });
-
-
-  const notifyNearbyPassengers = asyncHandler(async (req, res) => {
-    const driverId =  req.user.sub;
-    const { id } = req.params;
-    const { driverLat, driverLng, radiusKm = 10 } = req.body;
-
-    const result = await routeService.notifyNearbyPassengers({
-      routeId: id,
-      driverId,
-      driverLat: Number(driverLat),
-      driverLng: Number(driverLng),
-      radiusKm: Number(radiusKm),
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Near-arrival notifications processed",
-      data: result,
-    });
   });
 
 

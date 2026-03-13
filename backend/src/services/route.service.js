@@ -37,6 +37,9 @@ const isSameLocalDay = (a, b = new Date()) => {
   );
 };
 
+const DRIVER_NEAR_ALERT_COOLDOWN_MINUTES = 5;
+const DRIVER_NEAR_ALERT_COOLDOWN_MS = DRIVER_NEAR_ALERT_COOLDOWN_MINUTES * 60 * 1000;
+
 /* Main function to notify nearby passengers */
 const notifyNearbyPassengers = async ({ routeId, driverId, driverLat, driverLng, radiusKm = 10 }) => {
   const route = await prisma.route.findUnique({
@@ -80,27 +83,51 @@ const notifyNearbyPassengers = async ({ routeId, driverId, driverLat, driverLng,
         continue;
       }
 
-      const alreadySent = await tx.driverNearAlert.findUnique({
+      const roundedDistanceKm = Number(distanceKm.toFixed(2));
+      const now = new Date();
+
+      const previousAlert = await tx.driverNearAlert.findUnique({
         where: { routeId_bookingId: { routeId, bookingId: b.id } },
       });
 
-      if (alreadySent) {
-        skippedCount += 1;
-        details.push({ bookingId: b.id, result: 'SKIP', reason: 'already_sent' });
-        continue;
-      }
+      if (previousAlert) {
+        const elapsedMs = now.getTime() - new Date(previousAlert.createdAt).getTime();
+        if (elapsedMs < DRIVER_NEAR_ALERT_COOLDOWN_MS) {
+          skippedCount += 1;
+          details.push({
+            bookingId: b.id,
+            result: 'SKIP',
+            reason: 'cooldown_active',
+            retryAfterSeconds: Math.ceil((DRIVER_NEAR_ALERT_COOLDOWN_MS - elapsedMs) / 1000),
+          });
+          continue;
+        }
 
-      await tx.driverNearAlert.create({
-        data: {
-          routeId,
-          bookingId: b.id,
-          driverId,
-          passengerId: b.passengerId,
-          driverLat,
-          driverLng,
-          distanceKm: Number(distanceKm.toFixed(2)),
-        },
-      });
+        await tx.driverNearAlert.update({
+          where: { id: previousAlert.id },
+          data: {
+            driverId,
+            passengerId: b.passengerId,
+            driverLat,
+            driverLng,
+            distanceKm: roundedDistanceKm,
+            createdAt: now,
+          },
+        });
+      } else {
+        await tx.driverNearAlert.create({
+          data: {
+            routeId,
+            bookingId: b.id,
+            driverId,
+            passengerId: b.passengerId,
+            driverLat,
+            driverLng,
+            distanceKm: roundedDistanceKm,
+            createdAt: now,
+          },
+        });
+      }
 
       await tx.notification.create({
         data: {
@@ -112,7 +139,7 @@ const notifyNearbyPassengers = async ({ routeId, driverId, driverLat, driverLng,
             kind: 'DRIVER_NEARBY',
             routeId,
             bookingId: b.id,
-            distanceKm: Number(distanceKm.toFixed(2)),
+            distanceKm: roundedDistanceKm,
             driverLat,
             driverLng,
             radiusKm,
@@ -121,13 +148,14 @@ const notifyNearbyPassengers = async ({ routeId, driverId, driverLat, driverLng,
       });
 
       sentCount += 1;
-      details.push({ bookingId: b.id, result: 'SENT', distanceKm: Number(distanceKm.toFixed(2)) });
+      details.push({ bookingId: b.id, result: 'SENT', distanceKm: roundedDistanceKm });
     }
   });
 
   return {
     routeId,
     radiusKm,
+    cooldownMinutes: DRIVER_NEAR_ALERT_COOLDOWN_MINUTES,
     sentCount,
     skippedCount,
     totalConfirmed: route.bookings.length,

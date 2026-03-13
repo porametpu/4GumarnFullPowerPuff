@@ -117,7 +117,7 @@
 
                                                     <div class="flex-1 min-w-0">
                                                         <p class="text-sm font-medium text-gray-900 truncate">{{ n.title
-                                                        }}</p>
+                                                            }}</p>
                                                         <p class="text-sm text-gray-600 line-clamp-2">{{ n.body }}</p>
                                                         <p class="mt-1 text-xs text-gray-400">{{ timeAgo(n.createdAt) }}
                                                         </p>
@@ -395,11 +395,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { useRuntimeConfig, useCookie } from '#app'
 import { useAuth } from '~/composables/useAuth'
+import { useToast } from '~/composables/useToast'
 
 const { token, user, logout } = useAuth()
+
+/* แจ้งเตือนเวลารถใกล้ถึงเป็น popup */
+const { toast } = useToast()
+
+let notifPollingTimer = null
+const shownNearAlertIds = new Set()
+const notifBootstrapped = ref(false)
+
+
+
 
 /* ====== เมนูบนสุดเดิม ====== */
 const isMobileMenuOpen = ref(false)
@@ -447,6 +458,20 @@ async function onBellClick() {
     }
 }
 
+function startNotifPolling() {
+    if (notifPollingTimer || !token.value) return
+    notifPollingTimer = setInterval(() => {
+        fetchUserNotifications()
+    }, 15000)
+}
+
+function stopNotifPolling() {
+    if (!notifPollingTimer) return
+    clearInterval(notifPollingTimer)
+    notifPollingTimer = null
+}
+
+
 /** GET /notifications (ผู้ใช้ทั่วไป: แสดงทั้งหมด ไม่กรอง initiatedBy) */
 async function fetchUserNotifications() {
     try {
@@ -467,9 +492,11 @@ async function fetchUserNotifications() {
             id: it.id,
             title: it.title || '-',
             body: it.body || '',
+            metadata: it.metadata || null,
             createdAt: it.createdAt || Date.now(),
             readAt: it.readAt || null
         }))
+        emitDriverNearbyPopups()
     } catch (e) {
         console.error(e)
         notifications.value = []
@@ -477,6 +504,34 @@ async function fetchUserNotifications() {
         loading.value = false
     }
 }
+
+/** ยิง popup แจ้งเตือนเวลารถใกล้ถึง */
+function emitDriverNearbyPopups() {
+    const nearUnread = notifications.value.filter(
+        n => !n.readAt && n.metadata?.kind === 'DRIVER_NEARBY'
+    )
+
+    if (!notifBootstrapped.value) {
+        nearUnread.forEach(n => shownNearAlertIds.add(n.id))
+        notifBootstrapped.value = true
+        return
+    }
+
+    nearUnread.forEach(n => {
+        if (shownNearAlertIds.has(n.id)) return
+        shownNearAlertIds.add(n.id)
+
+        const km = Number(n.metadata?.distanceKm)
+        const text = Number.isFinite(km)
+            ? `คนขับใกล้ถึงแล้ว ห่างจากคุณประมาณ ${km.toFixed(1)} กม.`
+            : (n.body || 'คนขับใกล้ถึงแล้ว')
+
+        // duration = 0 => ค้างไว้จนผู้ใช้กดปิดเอง
+        toast.info('คนขับใกล้ถึงแล้ว', text, 0)
+    })
+}
+
+
 
 /** เมนูย่อยของแต่ละรายการ */
 function toggleItemMenu(id) {
@@ -548,14 +603,31 @@ onMounted(() => {
     window.addEventListener('resize', handleResize)
     document.addEventListener('click', onClickOutside)
     document.addEventListener('keydown', onKey)
-    if (token.value) fetchUserNotifications()
+    if (token.value) {
+        fetchUserNotifications()
+        startNotifPolling()
+    }
 })
 
 onUnmounted(() => {
     window.removeEventListener('resize', handleResize)
     document.removeEventListener('click', onClickOutside)
     document.removeEventListener('keydown', onKey)
+    stopNotifPolling()
 })
+
+watch(() => token.value, (v) => {
+    if (v) {
+        fetchUserNotifications()
+        startNotifPolling()
+    } else {
+        stopNotifPolling()
+        notifications.value = []
+        shownNearAlertIds.clear()
+        notifBootstrapped.value = false
+    }
+})
+
 
 /* ใส่ฟอนต์ Kanit แบบเดิม */
 useHead({

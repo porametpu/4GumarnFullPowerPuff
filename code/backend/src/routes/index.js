@@ -2,12 +2,13 @@ const express = require('express');
 const authRoutes = require('./auth.routes');
 const userRoutes = require('./user.routes');
 const vehicleRoutes = require('./vehicle.routes');
-const routeRoutes = require('./route.routes');
+const routeRoutes   = require('./route.routes');
 const driverVerifRoutes = require('./driverVerification.routes');
 const bookingRoutes = require('./booking.routes');
 const notificationRoutes = require('./notification.routes')
-const mapRoutes = require('./maps.routes');
+const mapRoutes = require('./maps.routes')
 const chatRoutes = require('./chat.routes');
+const investigationRoutes = require('./investigation.routes');
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use('/bookings', bookingRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/maps', mapRoutes);
 router.use('/chats', chatRoutes);
+router.use('/investigations', investigationRoutes);
 
 module.exports = router;

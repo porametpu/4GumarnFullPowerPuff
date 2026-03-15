@@ -73,15 +73,15 @@
                         </div>
 
                         <!-- Bell (ผู้ใช้ทั่วไป + แอดมินใช้ตัวนี้บนเว็บหลัก) -->
-                        <div v-if="token" class="relative flex items-center h-full">
-                            <button ref="bellBtn" class="relative flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors p-1"
+                        <div v-if="token" class="relative flex item-center h-full">
+                            <button ref="bellBtn" class="relative text-gray-600 hover:text-blue-600"
                                 @click="onBellClick" aria-haspopup="true" :aria-expanded="openNotif ? 'true' : 'false'">
-                                <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 17h5l-1.405-1.405C18.21 14.79 18 13.918 18 13V9a6 6 0 10-12 0v4c0 .918-.21 1.79-.595 2.595L4 17h5m6 0a3 3 0 11-6 0h6z" />
                                 </svg>
                                 <span v-if="unreadCount > 0"
-                                    class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                                    class="absolute w-2 h-2 bg-red-500 rounded-full -top-1 -right-1"></span>
                             </button>
 
                             <transition enter-active-class="transition duration-150 ease-out"
@@ -117,7 +117,7 @@
 
                                                     <div class="flex-1 min-w-0">
                                                         <p class="text-sm font-medium text-gray-900 truncate">{{ n.title
-                                                        }}</p>
+                                                            }}</p>
                                                         <p class="text-sm text-gray-600 line-clamp-2">{{ n.body }}</p>
                                                         <p class="mt-1 text-xs text-gray-400">{{ timeAgo(n.createdAt) }}
                                                         </p>
@@ -159,7 +159,7 @@
                                                                     stroke="currentColor">
                                                                     <path stroke-width="2" stroke-linecap="round"
                                                                         stroke-linejoin="round"
-                                                                        d="M19 7l-1 12a2 2 0 01-2 2H8a2 2 0 01-2-2L5 7m3-3h8m-9 3h10M9 7V4a1 1 0 011-1h4a1 1 0 011-1v3" />
+                                                                        d="M19 7l-1 12a2 2 0 01-2 2H8a2 2 0 01-2-2L5 7m3-3h8m-9 3h10M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
                                                                 </svg>
                                                                 ลบการแจ้งเตือนนี้
                                                             </button>
@@ -194,6 +194,7 @@
                                 {{ totalUnreadCount > 99 ? '99+' : totalUnreadCount }}
                             </span>
                         </NuxtLink>
+
                         <!-- โปรไฟล์ passenger , driver -->
                         <div v-if="user && (user.role === 'PASSENGER' || user.role === 'DRIVER')"
                             class="relative dropdown-trigger">
@@ -404,18 +405,19 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { useRuntimeConfig, useCookie } from '#app'
 import { useAuth } from '~/composables/useAuth'
+import { useToast } from '~/composables/useToast'
 import 'dayjs/locale/th'
 import { useChatWidget } from '~/composables/useChatWidget'
 import { useSocket } from '~/composables/useSocket'
-
-const { totalUnreadCount } = useChatWidget()
+import { useNearAlert } from '~/composables/useNearAlert'
 
 const { token, user, logout } = useAuth()
 const { socket, joinUser, disconnect } = useSocket()
-const { refreshUnreadCount } = useChatWidget()
+const { totalUnreadCount, refreshUnreadCount } = useChatWidget()
+const { showAlert } = useNearAlert()
 
 // Client Notification
 onMounted(() => {
@@ -451,6 +453,13 @@ onMounted(() => {
 onUnmounted(() => {
     window.removeEventListener('resize', handleResize)
 })
+
+/* แจ้งเตือนเวลารถใกล้ถึงเป็น popup */
+const { toast } = useToast()
+
+let notifPollingTimer = null
+const shownNearAlertIds = new Set()
+const notifBootstrapped = ref(false)
 
 /* ====== เมนูบนสุดเดิม ====== */
 const isMobileMenuOpen = ref(false)
@@ -498,6 +507,20 @@ async function onBellClick() {
     }
 }
 
+function startNotifPolling() {
+    if (notifPollingTimer || !token.value) return
+    notifPollingTimer = setInterval(() => {
+        fetchUserNotifications()
+    }, 15000)
+}
+
+function stopNotifPolling() {
+    if (!notifPollingTimer) return
+    clearInterval(notifPollingTimer)
+    notifPollingTimer = null
+}
+
+
 /** GET /notifications (ผู้ใช้ทั่วไป: แสดงทั้งหมด ไม่กรอง initiatedBy) */
 async function fetchUserNotifications() {
     try {
@@ -518,9 +541,11 @@ async function fetchUserNotifications() {
             id: it.id,
             title: it.title || '-',
             body: it.body || '',
+            metadata: it.metadata || null,
             createdAt: it.createdAt || Date.now(),
             readAt: it.readAt || null
         }))
+        emitDriverNearbyPopups()
     } catch (e) {
         console.error(e)
         notifications.value = []
@@ -528,6 +553,37 @@ async function fetchUserNotifications() {
         loading.value = false
     }
 }
+
+/** ยิง popup แจ้งเตือนเวลารถใกล้ถึง */
+function emitDriverNearbyPopups() {
+    const nearUnread = notifications.value.filter(
+        n => !n.readAt && n.metadata?.kind === 'DRIVER_NEARBY'
+    )
+
+    if (!notifBootstrapped.value) {
+        nearUnread.forEach(n => shownNearAlertIds.add(n.id))
+        notifBootstrapped.value = true
+        return
+    }
+
+    nearUnread.forEach(n => {
+        if (shownNearAlertIds.has(n.id)) return
+        shownNearAlertIds.add(n.id)
+
+        const km = Number(n.metadata?.distanceKm)
+        const text = Number.isFinite(km)
+            ? `คนขับใกล้ถึงแล้ว ห่างจากคุณประมาณ ${km.toFixed(1)} กม.`
+            : (n.body || 'คนขับใกล้ถึงแล้ว')
+
+        // แสดงผลกลางจอและส่ง Notification ไปยังเครื่อง
+        showAlert({
+            title: 'คนขับใกล้ถึงแล้ว',
+            message: text
+        })
+    })
+}
+
+
 
 /** เมนูย่อยของแต่ละรายการ */
 function toggleItemMenu(id) {
@@ -599,14 +655,31 @@ onMounted(() => {
     window.addEventListener('resize', handleResize)
     document.addEventListener('click', onClickOutside)
     document.addEventListener('keydown', onKey)
-    if (token.value) fetchUserNotifications()
+    if (token.value) {
+        fetchUserNotifications()
+        startNotifPolling()
+    }
 })
 
 onUnmounted(() => {
     window.removeEventListener('resize', handleResize)
     document.removeEventListener('click', onClickOutside)
     document.removeEventListener('keydown', onKey)
+    stopNotifPolling()
 })
+
+watch(() => token.value, (v) => {
+    if (v) {
+        fetchUserNotifications()
+        startNotifPolling()
+    } else {
+        stopNotifPolling()
+        notifications.value = []
+        shownNearAlertIds.clear()
+        notifBootstrapped.value = false
+    }
+})
+
 
 /* ใส่ฟอนต์ Kanit แบบเดิม */
 useHead({

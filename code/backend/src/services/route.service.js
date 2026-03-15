@@ -4,6 +4,194 @@ const ApiError = require('../utils/ApiError');
 const { RouteStatus, BookingStatus } = require('@prisma/client');
 const { checkAndApplyDriverSuspension } = require('./penalty.service');
 
+
+
+const toNum = (v) => (typeof v === 'string' ? Number(v) : v);
+
+const pickLatLng = (loc) => {
+  if (!loc || typeof loc !== 'object') return null;
+  const lat = toNum(loc.lat ?? loc.latitude);
+  const lng = toNum(loc.lng ?? loc.lon ?? loc.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  return { lat, lng };
+};
+
+const haversineKm = (lat1, lng1, lat2, lng2) => {
+  const R = 6371; // Earth radius in km
+  const toRad = (d) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+
+const isSameLocalDay = (a, b = new Date()) => {
+  const d1 = new Date(a);
+  const d2 = new Date(b);
+  return (
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate()
+  );
+};
+
+const DRIVER_NEAR_ALERT_COOLDOWN_MINUTES = 1.5;
+const DRIVER_NEAR_ALERT_COOLDOWN_MS = DRIVER_NEAR_ALERT_COOLDOWN_MINUTES * 60 * 1000;
+
+/* notify nearby passengers */
+const notifyNearbyPassengers = async ({ routeId, driverId, driverLat, driverLng, radiusKm = 5, bookingId }) => {
+  const route = await prisma.route.findUnique({
+    where: { id: routeId },
+    include: {
+      booking: {
+        where: {
+          status: BookingStatus.CONFIRMED,
+          ...(bookingId ? { id: bookingId } : {})
+        },
+        select: {
+          id: true,
+          passengerId: true,
+          pickupLocation: true,
+        },
+      },
+    },
+  });
+
+  if (!route) throw new ApiError(404, 'Route not found');
+  if (route.driverId !== driverId) throw new ApiError(403, 'Forbidden');
+  if (!isSameLocalDay(route.departureTime)) {
+    throw new ApiError(400, 'สามารถแจ้งใกล้ถึงได้เฉพาะวันเดินทางเท่านั้น');
+  }
+
+  let sentCount = 0;
+  let skippedCount = 0;
+  const details = [];
+
+  await prisma.$transaction(async (tx) => {
+    for (const b of route.booking) {
+      const pickup = pickLatLng(b.pickupLocation);
+      if (!pickup) {
+        skippedCount += 1;
+        details.push({ bookingId: b.id, result: 'SKIP', reason: 'pickupLocation invalid' });
+        continue;
+      }
+
+      const distanceKm = haversineKm(driverLat, driverLng, pickup.lat, pickup.lng);
+
+      if (distanceKm > radiusKm) {
+        skippedCount += 1;
+        details.push({ bookingId: b.id, result: 'SKIP', reason: 'out_of_radius', distanceKm: Number(distanceKm.toFixed(2)) });
+        continue;
+      }
+
+      const roundedDistanceKm = Number(distanceKm.toFixed(2));
+      const now = new Date();
+
+      const previousAlert = await tx.driverNearAlert.findUnique({
+        where: { routeId_bookingId: { routeId, bookingId: b.id } },
+      });
+
+      if (previousAlert) {
+        const elapsedMs = now.getTime() - new Date(previousAlert.createdAt).getTime();
+        if (elapsedMs < DRIVER_NEAR_ALERT_COOLDOWN_MS) {
+          skippedCount += 1;
+          details.push({
+            bookingId: b.id,
+            result: 'SKIP',
+            reason: 'cooldown_active',
+            retryAfterSeconds: Math.ceil((DRIVER_NEAR_ALERT_COOLDOWN_MS - elapsedMs) / 1000),
+          });
+          continue;
+        }
+
+        await tx.driverNearAlert.update({
+          where: { id: previousAlert.id },
+          data: {
+            driverId,
+            passengerId: b.passengerId,
+            driverLat,
+            driverLng,
+            distanceKm: roundedDistanceKm,
+            createdAt: now,
+          },
+        });
+      } else {
+        await tx.driverNearAlert.create({
+          data: {
+            routeId,
+            bookingId: b.id,
+            driverId,
+            passengerId: b.passengerId,
+            driverLat,
+            driverLng,
+            distanceKm: roundedDistanceKm,
+            createdAt: now,
+          },
+        });
+      }
+
+      await tx.notification.create({
+        data: {
+          userId: b.passengerId,
+          type: 'ROUTE',
+          title: 'คนขับใกล้ถึงแล้ว',
+          body: `คนขับใกล้ถึงจุดรับของคุณแล้ว ห่างประมาณ ${distanceKm.toFixed(1)} กม.`,
+          metadata: {
+            kind: 'DRIVER_NEARBY',
+            routeId,
+            bookingId: b.id,
+            distanceKm: roundedDistanceKm,
+            driverLat,
+            driverLng,
+            radiusKm,
+          },
+        },
+      });
+
+      // Send Chat Message
+      const chatRoom = await tx.chatRoom.findFirst({
+        where: { bookingId: b.id }
+      });
+
+      if (chatRoom) {
+        await tx.message.create({
+          data: {
+            chatRoomId: chatRoom.id,
+            senderId: driverId,
+            content: `🚨 คนขับใกล้ถึงจุดรับของคุณแล้ว (ห่างประมาณ ${distanceKm.toFixed(1)} กม.)`,
+            type: 'TEXT'
+          }
+        });
+      }
+
+      sentCount += 1;
+      details.push({
+        bookingId: b.id,
+        passengerId: b.passengerId,
+        result: 'SENT',
+        distanceKm: roundedDistanceKm
+      });
+    }
+  });
+
+  return {
+    routeId,
+    radiusKm,
+    cooldownMinutes: DRIVER_NEAR_ALERT_COOLDOWN_MINUTES,
+    sentCount,
+    skippedCount,
+    totalConfirmed: route.booking.length,
+    details,
+  };
+};
+
+
+
+
+
+
 const baseInclude = {
   driver: {
     select: {
@@ -242,7 +430,7 @@ const getRouteById = async (id) => {
   return prisma.route.findUnique({
     where: { id },
     include: {
-      bookings: {
+      booking: {
         include: {
           passenger: {
             select: {
@@ -266,7 +454,7 @@ const getMyRoutes = async (driverId) => {
     },
     include: {
 
-      bookings: {
+      booking: {
         include: {
           passenger: {
             select: {
@@ -312,7 +500,7 @@ const cancelRoute = async (routeId, driverId, opts = {}) => {
     where: { id: routeId },
     include: {
       driver: { select: { id: true } },
-      bookings: {
+      booking: {
         where: { status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED] } },
         include: { passenger: { select: { id: true } } }
       }
@@ -325,7 +513,7 @@ const cancelRoute = async (routeId, driverId, opts = {}) => {
   }
 
   const now = new Date();
-  const affected = route.bookings || [];
+  const affected = route.booking || [];
   const hasConfirmed = affected.some(b => b.status === BookingStatus.CONFIRMED);
 
   await prisma.$transaction(async (tx) => {
@@ -379,5 +567,6 @@ module.exports = {
   createRoute,
   updateRoute,
   deleteRoute,
-  cancelRoute
+  cancelRoute,
+  notifyNearbyPassengers,
 };

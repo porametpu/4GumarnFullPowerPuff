@@ -33,7 +33,7 @@ const sendMessage = asyncHandler(async (req, res) => {
 
         if (room) {
             room.participants.forEach(p => {
-                io.to(`user_${p.userId}`).emit('message-notification', {
+                io.to(`user-${p.userId}`).emit('message-notification', {
                     roomId: roomId,
                     message: message
                 });
@@ -66,7 +66,7 @@ const sendImageMessage = asyncHandler(async (req, res) => {
 
     if (room) {
         room.participants.forEach(p => {
-            io.to(`user_${p.userId}`).emit('message-notification', {
+            io.to(`user-${p.userId}`).emit('message-notification', {
                 roomId: roomId,
                 message: message
             });

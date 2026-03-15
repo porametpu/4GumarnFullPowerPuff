@@ -129,8 +129,39 @@ const fetchGuide = async ({ from, to, departureTime }) => {
         const t = Math.floor(new Date(departureTime).getTime() / 1000);
         if (!Number.isNaN(t)) params.time = t;
     }
-    const { data } = await axios.get('https://api.longdo.com/RouteService/json/route/guide', { params });
-    return data;
+
+    const url = 'https://api.longdo.com/RouteService/json/route/guide';
+
+    const tryRequest = async (p) => {
+        const { data } = await axios.get(url, { params: p });
+        return data;
+    };
+
+    try {
+        return await tryRequest(params);
+    } catch (err) {
+        const status = err?.response?.status;
+        const hasTime = Object.prototype.hasOwnProperty.call(params, 'time');
+
+        // Some Longdo responses return 500 when time-based routing is unsupported.
+        // Retry once without "time", then fallback to standard driving mode.
+        if (status >= 500 && hasTime) {
+            const retryParams = { ...params };
+            delete retryParams.time;
+
+            try {
+                return await tryRequest(retryParams);
+            } catch (retryErr) {
+                if ((retryErr?.response?.status || 0) >= 500) {
+                    const fallbackParams = { ...retryParams, mode: 'd' };
+                    return await tryRequest(fallbackParams);
+                }
+                throw retryErr;
+            }
+        }
+
+        throw err;
+    }
 };
 
 const fetchPath = async (id) => {

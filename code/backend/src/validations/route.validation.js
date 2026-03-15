@@ -33,6 +33,14 @@ const createRouteSchema = z.object({
   steps: z.any().optional(),
 });
 
+
+const driverNearbyAlertBodySchema = z.object({
+  driverLat: z.number().min(-90).max(90),
+  driverLng: z.number().min(-180).max(180),
+  radiusKm: z.number().min(0.1).max(50).optional().default(10),
+});
+
+
 const idParamSchema = z.object({
   id: z.string().cuid({ message: "Invalid route ID format" }),
 });
@@ -100,5 +108,6 @@ module.exports = {
   adminDriverIdParamSchema,
   listRoutesQuerySchema,
   cancelReasonEnum,
-  cancelRouteSchema
+  cancelRouteSchema,
+  driverNearbyAlertBodySchema,
 };

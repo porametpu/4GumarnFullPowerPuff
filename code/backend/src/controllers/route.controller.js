@@ -86,6 +86,41 @@ const adminGetRoutesByDriver = asyncHandler(async (req, res) => {
   })
 })
 
+const notifyNearbyPassengers = asyncHandler(async (req, res) => {
+  const driverId = req.user.sub;
+  const { id } = req.params;
+  const { driverLat, driverLng, radiusKm = 10, bookingId } = req.body;
+
+  const result = await routeService.notifyNearbyPassengers({
+    routeId: id,
+    driverId,
+    driverLat: Number(driverLat),
+    driverLng: Number(driverLng),
+    radiusKm: Number(radiusKm),
+    bookingId: bookingId || null
+  });
+
+  // Real-time Notification via Socket.io
+  const io = req.app.get('io');
+  if (io && result.details) {
+    result.details.forEach(detail => {
+      if (detail.result === 'SENT' && detail.passengerId) {
+        io.to(`user-${detail.passengerId}`).emit('message-notification', {
+          type: 'DRIVER_NEARBY',
+          routeId: id,
+          distanceKm: detail.distanceKm
+        });
+      }
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Near-arrival notifications processed",
+    data: result,
+  });
+});
+
 const createRoute = asyncHandler(async (req, res) => {
   const driverId = req.user.sub;
   const { vehicleId, optimizeWaypoints, ...routeFields } = req.body;
@@ -110,6 +145,8 @@ const createRoute = asyncHandler(async (req, res) => {
     alternatives: false,
     departureTime: payload.departureTime.toISOString()
   });
+
+
 
   const primary = directions.routes?.[0];
   if (primary) {
@@ -173,15 +210,15 @@ const updateRoute = asyncHandler(async (req, res) => {
     throw new ApiError(400, "ไม่สามารถแก้ไขเส้นทางที่ถูกยกเลิกได้");
   }
 
-  const hasBookings = Array.isArray(existing.bookings) && existing.bookings.length > 0;
+  const hasBookings = Array.isArray(existing.booking) && existing.booking.length > 0;
   if (hasBookings) {
-    const hasConfirmed = existing.bookings.some(b => b.status === 'CONFIRMED');
+    const hasConfirmed = existing.booking.some(b => b.status === 'CONFIRMED');
     if (hasConfirmed) {
       throw new ApiError(400, "ไม่สามารถแก้ไขเส้นทางได้ เนื่องจากมีคำจองที่ยืนยันแล้ว (CONFIRMED)");
     }
     // อนุญาตกรณีสถานะรวมอยู่ใน {PENDING, REJECTED, CANCELLED} เท่านั้น
     const allowed = new Set(['PENDING', 'REJECTED', 'CANCELLED']);
-    const allAllowed = existing.bookings.every(b => allowed.has(b.status));
+    const allAllowed = existing.booking.every(b => allowed.has(b.status));
     if (!allAllowed) {
       throw new ApiError(400, "ไม่สามารถแก้ไขเส้นทางได้ เนื่องจากมีคำจองที่อยู่ในสถานะที่ไม่อนุญาต");
     }
@@ -537,4 +574,7 @@ module.exports = {
   adminDeleteRoute,
   adminGetRoutesByDriver,
   cancelRoute,
+  notifyNearbyPassengers,
+
+
 };

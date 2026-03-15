@@ -108,6 +108,21 @@
           
           </div>
         </template>
+        
+        <!-- Sensitive Info Warning -->
+        <div v-if="showSecurityWarning" class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start space-x-3 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300 mt-4">
+          <div class="bg-amber-100 p-1.5 rounded-full text-amber-600 flex-shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <p class="text-[12px] text-amber-800 font-bold leading-tight">⚠️ โปรดระวังการส่งข้อมูลส่วนตัว</p>
+            <p class="text-[11px] text-amber-700 mt-1 leading-relaxed">
+              การแชร์ชื่อ-นามสกุล, ที่อยู่, เบอร์โทรศัพท์ หรือเลขบัญชีธนาคาร ขัดต่อแนวทางและนโยบายของเว็บไซต์ มีความเสี่ยงต่อความปลอดภัย โปรดตรวจสอบให้มั่นใจก่อนส่งข้อมูล
+            </p>
+          </div>
+        </div>
       </main>
 
       <!-- Attachment Menu (Overlay) -->
@@ -271,6 +286,27 @@ const quickReplies = computed(() => {
   }
 })
 
+const sensitiveKeywords = [
+  'เบอร์', 'โทร', '08', '06', '09', 'ที่อยู่', 'บ้านเลขที่', 'เลขบัตร', 'บัตรประชาชน',
+  'โอนเงิน', 'เลขบัญชี', 'ธนาคาร', 'กสิกร', 'ไทยพาณิชย์', 'ออมสิน', 'กรุงไทย', 
+  'ชื่อจริง', 'นามสกุล', 'ชื่อ-นามสกุล', 'ไลน์', 'line', 'add' , 'ซอย' , 'หมู่' , 'ตำบล' , 'อำเภอ' , 'จังหวัด' , 'รหัสไปรษณีย์' , 'เลขที่','ถนน','ชื่อ','นามสกุล'
+]
+
+const showSecurityWarning = computed(() => {
+  if (messages.value.length === 0) return false
+  const lastMsg = messages.value[messages.value.length - 1]
+  if (lastMsg.type !== 'TEXT') return false
+  
+  const content = lastMsg.content.toLowerCase()
+  return sensitiveKeywords.some(keyword => content.includes(keyword))
+})
+
+watch(showSecurityWarning, (newVal) => {
+  if (newVal) {
+    scrollToBottom()
+  }
+})
+
 watch(activeBookingId, (newId) => {
     if (newId) {
         resetState()
@@ -312,6 +348,12 @@ watch(socket, (newSocket) => {
                     messages.value.push(enrichedMsg)
                     scrollToBottom()
                     
+                    if (!enrichedMsg.isMine) {
+                        const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3')
+                        audio.volume = 0.3
+                        audio.play().catch(() => {})
+                    }
+
                     if (!isWidgetMinimized.value) {
                          markRoomAsRead(chatRoomId.value)
                     }
@@ -439,12 +481,9 @@ const sendMessage = async () => {
       body: { content, type: 'TEXT' }
     })
     const msg = res.data || res
-    if (!messages.value.some(m => m.id === msg.id)) {
-        messages.value.push({ ...msg, isMine: true })
-        scrollToBottom()
-    }
     newMessage.value = ''
     adjustTextareaHeight()
+    scrollToBottom()
   } catch (error) {
     console.error('Failed to send message:', error)
     toast.error('ส่งข้อความไม่สำเร็จ')
@@ -463,10 +502,7 @@ const sendQuickReply = async (text) => {
       body: { content: text, type: 'TEXT' }
     })
     const msg = res.data || res
-    if (!messages.value.some(m => m.id === msg.id)) {
-        messages.value.push({ ...msg, isMine: true })
-        scrollToBottom()
-    }
+    scrollToBottom()
   } catch (error) {
     console.error('Failed to send quick reply:', error)
     toast.error('ส่งข้อความไม่สำเร็จ')
@@ -497,15 +533,12 @@ const handleImageSelected = async (event) => {
         const formData = new FormData()
         formData.append('image', file)
 
-        const newMsg = await $api(`/chats/${chatRoomId.value}/messages/image`, {
+        await $api(`/chats/${chatRoomId.value}/messages/image`, {
             method: 'POST',
             body: formData,
         })
         
-        if (newMsg) {
-            messages.value.push(newMsg)
-            scrollToBottom()
-        }
+        scrollToBottom()
     } catch (error) {
         console.error('Failed to send image:', error)
         toast.error('อัปโหลดรูปภาพไม่สำเร็จ')
@@ -539,12 +572,11 @@ const executeSendLocation = async () => {
                 name: 'ตำแหน่งของฉัน'
             })
 
-            const newMsg = await $api(`/chats/${chatRoomId.value}/messages`, {
+            await $api(`/chats/${chatRoomId.value}/messages`, {
                 method: 'POST',
                 body: { content, type: 'LOCATION' }
             })
             
-            messages.value.push(newMsg)
             scrollToBottom()
             isSendingLocation.value = false
             toast.success('แชร์ตำแหน่งเรียบร้อยแล้ว')
@@ -573,7 +605,7 @@ onMounted(() => {
 <style scoped>
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: all 0.3sease;
+  transition: all 0.3s ease;
 }
 .slide-up-enter-from,
 .slide-up-leave-to {

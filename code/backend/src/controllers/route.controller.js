@@ -145,12 +145,6 @@ destination: destination,
     alternatives: false,
     departureTime: payload.departureTime.toISOString()
   });
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> porametpu
   const primary = directions.routes?.[0];
   if (primary) {
     const legs = primary.legs || [];

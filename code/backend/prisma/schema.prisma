@@ -148,30 +148,24 @@ model Route {
 }
 
 model Booking {
-  id              String        @id @default(cuid())
-  routeId         String
-  route           Route         @relation(fields: [routeId], references: [id], onDelete: Cascade)
-  passengerId     String
-  passenger       User          @relation("PassengerBookings", fields: [passengerId], references: [id], onDelete: Cascade)
-  numberOfSeats   Int
-  status          BookingStatus @default(PENDING)
-  cancelledAt     DateTime?
-  cancelledBy     String? // 'PASSENGER' | 'DRIVER' | 'ADMIN'
-  cancelReason    CancelReason?
-  pickupLocation  Json          @db.Json
-  dropoffLocation Json          @db.Json
-  extraLuggageSelected Boolean   @default(false)
-  extraLuggageType   ExtraLuggageType?
-  extraLuggageFee   Float @default(0)
-  createdAt       DateTime      @default(now())
-  chatRoom        ChatRoom?
-}
-
-enum MessageType {
-  TEXT
-  IMAGE
-  LOCATION
-  SYSTEM
+  id                   String            @id @default(cuid())
+  routeId              String
+  passengerId          String
+  numberOfSeats        Int
+  status               BookingStatus     @default(PENDING)
+  pickupLocation       Json              @db.Json
+  dropoffLocation      Json              @db.Json
+  createdAt            DateTime          @default(now())
+  cancelledAt          DateTime?
+  cancelledBy          String?
+  cancelReason         CancelReason?
+  extraLuggageFee      Float             @default(0)
+  extraLuggageSelected Boolean           @default(false)
+  extraLuggageType     ExtraLuggageType?
+  passenger            User              @relation("PassengerBookings", fields: [passengerId], references: [id], onDelete: Cascade)
+  route                Route             @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  chatRoom             ChatRoom?
+  nearAlerts           DriverNearAlert[]
 }
 
 model ChatRoom {
@@ -295,38 +289,4 @@ model DriverNearAlert {
   @@index([passengerId,createdAt])
   @@index([driverId,createdAt])
 
-}
-
-model InvestigationRequest {
-  id            String   @id @default(cuid())
-  requestNumber String   @unique
-
-  authorityName   String
-  officerName     String
-  officerPosition String?
-  contactEmail    String
-  contactPhone    String
-  requestDate     DateTime
-
-  bookingId String
-  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-
-  fromDate DateTime
-  toDate   DateTime
-  reason   String?
-
-  officialDocumentUrl  String?
-  officialDocumentName String?
-
-  exportedFileUrl String?
-  exportedAt      DateTime?
-
-  createdById String
-  createdBy   User   @relation(fields: [createdById], references: [id])
-
-  createdAt DateTime @default(now())
-
-  @@index([requestNumber])
-  @@index([bookingId])
-  @@index([createdById])
 }

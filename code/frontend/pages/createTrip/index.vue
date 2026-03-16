@@ -11,7 +11,7 @@
             </div>
 
             <div class="p-8 bg-white border border-gray-300 rounded-lg shadow-md">
-                <form @submit.prevent="handleSubmit" id="postRouteForm" novalidate class="space-y-8">
+                <form ref="postRouteFormEl" @submit.prevent="handleSubmit" id="postRouteForm" novalidate class="space-y-8">
                     <div>
                         <h3 class="pb-2 mb-6 text-xl font-semibold text-gray-900 border-b border-gray-300">
                             ข้อมูลเส้นทาง
@@ -131,14 +131,16 @@
                                 <label for="travelDate" class="block mb-2 text-sm font-medium text-gray-700">
                                     วันที่เดินทาง <span class="text-red-500">*</span>
                                 </label>
-                                <input v-model="form.date" id="travelDate" name="travelDate" type="date" required
+                                <input v-model="form.date" id="travelDate" name="travelDate" type="date"
+                                    @input="onDateChanged" @change="onDateChanged" required
                                     class="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-blue-500" />
                             </div>
                             <div>
                                 <label for="travelTime" class="block mb-2 text-sm font-medium text-gray-700">
                                     เวลาออกเดินทาง <span class="text-red-500">*</span>
                                 </label>
-                                <input v-model="form.time" id="travelTime" name="travelTime" type="time" required
+                                <input v-model="form.time" id="travelTime" name="travelTime" type="time"
+                                    @input="onTimeChanged" @change="onTimeChanged" required
                                     class="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-blue-500" />
                             </div>
                             <div>
@@ -322,6 +324,9 @@ const waypointMetas = ref([])
 const waypointInputs = ref([])
 const waypointSuggestions = ref([])
 const waypointFocused = ref([])
+const postRouteFormEl = ref(null)
+const lastDateInput = ref('')
+const lastTimeInput = ref('')
 
 const form = reactive({
     vehicleId: '',
@@ -372,7 +377,7 @@ const pickedPlace = ref({ name: '', lat: null, lng: null })
 const config = useRuntimeConfig()
 const { loadLongdoMap } = useLongdoMap()
 
-const fetchVehicles = async () => {
+const fetchVehicles = async (showErrorToast = true) => {
     try {
         const userVehicles = await $api('/vehicles');
         vehicles.value = userVehicles;
@@ -666,19 +671,145 @@ const ensureMetaFromText = async (metaRef, text) => {
     return metaRef.value;
 };
 
-const handleSubmit = async () => {
+const asCleanString = (value) => {
+    if (value == null) return ''
+    if (typeof value !== 'string') return ''
+    return value.trim()
+}
+
+const normalizeDateValue = (value) => {
+    const text = asCleanString(value)
+    if (!text) return ''
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
+        const [yyyyStr, mm, dd] = text.split('-')
+        const yyyy = Number(yyyyStr)
+        const normalizedYear = Number.isFinite(yyyy) && yyyy > 2400 ? yyyy - 543 : yyyy
+        return `${String(normalizedYear).padStart(4, '0')}-${mm}-${dd}`
+    }
+
+    // รองรับรูปแบบเช่น 16/03/2026 หรือ 16 - 03 - 2026
+    const m = text.match(/^(\d{1,2})\s*[\/\-]\s*(\d{1,2})\s*[\/\-]\s*(\d{4})$/)
+    if (!m) return text
+    const dd = String(Number(m[1])).padStart(2, '0')
+    const mm = String(Number(m[2])).padStart(2, '0')
+    const yearRaw = Number(m[3])
+    const yyyy = String(Number.isFinite(yearRaw) && yearRaw > 2400 ? yearRaw - 543 : yearRaw)
+    return `${yyyy}-${mm}-${dd}`
+}
+
+const normalizeTimeValue = (value) => {
+    const text = asCleanString(value)
+    if (!text) return ''
+    const m = text.match(/^(\d{1,2}):(\d{2})/)
+    if (!m) return text
+    const hh = String(Number(m[1])).padStart(2, '0')
+    const mm = String(Number(m[2])).padStart(2, '0')
+    return `${hh}:${mm}`
+}
+
+const readDateFallback = (el) => {
+    if (!el || typeof el.valueAsDate === 'undefined') return ''
+    const d = el.valueAsDate
+    if (!d || Number.isNaN(d.getTime())) return ''
+    return d.toISOString().slice(0, 10)
+}
+
+const readTimeFallback = (el) => {
+    if (!el || typeof el.valueAsNumber !== 'number' || !Number.isFinite(el.valueAsNumber)) return ''
+    const totalMinutes = Math.floor(el.valueAsNumber / 60000)
+    const hh = String(Math.floor(totalMinutes / 60)).padStart(2, '0')
+    const mm = String(totalMinutes % 60).padStart(2, '0')
+    return `${hh}:${mm}`
+}
+
+const onDateChanged = (evt) => {
+    const raw = asCleanString(evt?.target?.value)
+    const normalized = normalizeDateValue(raw)
+    if (normalized) {
+        form.date = normalized
+        lastDateInput.value = normalized
+        return
+    }
+    const inputEl = evt?.target
+    const fromDateObject = readDateFallback(inputEl)
+    if (fromDateObject) {
+        form.date = fromDateObject
+        lastDateInput.value = fromDateObject
+    }
+}
+
+const onTimeChanged = (evt) => {
+    const raw = asCleanString(evt?.target?.value)
+    const normalized = normalizeTimeValue(raw)
+    if (normalized) {
+        form.time = normalized
+        lastTimeInput.value = normalized
+        return
+    }
+    const inputEl = evt?.target
+    const fromTimeObject = readTimeFallback(inputEl)
+    if (fromTimeObject) {
+        form.time = fromTimeObject
+        lastTimeInput.value = fromTimeObject
+    }
+}
+
+const handleSubmit = async (evt) => {
     if (isLoading.value) return
 
-    // Basic validation (ตามเดิม)
-    if (!form.vehicleId || !form.date || !form.time || !form.availableSeats || !form.pricePerSeat) {
-        toast.error('ข้อมูลไม่ครบถ้วน', 'กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบถ้วน')
+    const isFormTarget = typeof HTMLFormElement !== 'undefined' && evt?.target instanceof HTMLFormElement
+    const submitForm = isFormTarget ? evt.target : postRouteFormEl.value
+    const formData = submitForm ? new FormData(submitForm) : null
+
+    const dateInputEl = typeof document !== 'undefined' ? document.getElementById('travelDate') : null
+    const timeInputEl = typeof document !== 'undefined' ? document.getElementById('travelTime') : null
+
+    // อ่านค่าจากหลายแหล่ง: state -> submitted form -> input DOM -> valueAsDate/valueAsNumber
+    const rawDate = normalizeDateValue(
+        asCleanString(form.date) ||
+        asCleanString(lastDateInput.value) ||
+        asCleanString(formData?.get('travelDate')) ||
+        asCleanString(dateInputEl?.value) ||
+        readDateFallback(dateInputEl)
+    )
+    const rawTime = normalizeTimeValue(
+        asCleanString(form.time) ||
+        asCleanString(lastTimeInput.value) ||
+        asCleanString(formData?.get('travelTime')) ||
+        asCleanString(timeInputEl?.value) ||
+        readTimeFallback(timeInputEl)
+    )
+    const seats = Number(form.availableSeats)
+    const price = Number(form.pricePerSeat)
+
+    const missingFields = []
+    if (!form.vehicleId) missingFields.push('รถยนต์')
+    if (!rawDate) missingFields.push('วันที่เดินทาง')
+    if (!rawTime) missingFields.push('เวลาออกเดินทาง')
+    if (!Number.isFinite(seats) || seats < 1) missingFields.push('จำนวนที่นั่งที่รับได้')
+    if (!Number.isFinite(price) || price < 0) missingFields.push('ราคาต่อที่นั่ง')
+
+    if (missingFields.length) {
+        toast.error('ข้อมูลไม่ครบถ้วน', `กรุณาตรวจสอบ: ${missingFields.join(', ')}`)
+        return
+    }
+
+    // sync ค่ากลับเข้า state เพื่อใช้ขั้นตอนถัดไป
+    form.date = rawDate
+    form.time = rawTime
+
+    const timeForDate = rawTime.length === 5 ? `${rawTime}:00` : rawTime
+    const departureDate = new Date(`${rawDate}T${timeForDate}`)
+    if (Number.isNaN(departureDate.getTime())) {
+        toast.error('เวลาไม่ถูกต้อง', 'กรุณาตรวจสอบ: เวลาออกเดินทาง')
         return
     }
 
     isLoading.value = true
 
-    // รวมวันที่+เวลาเป็น ISO (ตามเดิม)
-    const departureTime = new Date(`${form.date}T${form.time}`).toISOString()
+    // รวมวันที่+เวลาเป็น ISO
+    const departureTime = departureDate.toISOString()
 
     // เติมพิกัดจากข้อความ (ถ้ายังไม่มี)
     await ensureMetaFromText(startMeta, form.startPoint)
@@ -749,8 +880,8 @@ const handleSubmit = async () => {
         waypoints: waypointsPayload,    // << เพิ่ม
         optimizeWaypoints: true,
         departureTime,
-        availableSeats: Number(form.availableSeats),
-        pricePerSeat: Number(form.pricePerSeat),
+        availableSeats: seats,
+        pricePerSeat: price,
         conditions: form.conditions
     }
 

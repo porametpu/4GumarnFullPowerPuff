@@ -137,9 +137,11 @@ const createRoute = asyncHandler(async (req, res) => {
   applyExtraLuggagePolicy(payload);
 
   // ===== Enrich จาก Google Directions =====
+  const origin = payload.startLocation;
+  const destination = payload.endLocation;
   const directions = await getDirections({
-origin: origin,
-destination: destination,
+    origin,
+    destination,
     waypoints: routeFields.waypoints || [],
     optimizeWaypoints,
     alternatives: false,
@@ -359,9 +361,11 @@ const adminCreateRoute = asyncHandler(async (req, res) => {
   applyExtraLuggagePolicy(payload);
 
   // Enrich แบบเดียวกับ createRoute (รองรับ waypoints/optimizeWaypoints)
+  const origin = payload.startLocation;
+  const destination = payload.endLocation;
   const directions = await getDirections({
-origin: origin,
-destination: destination,
+    origin,
+    destination,
     waypoints: routeFields.waypoints || [],
     optimizeWaypoints,
     alternatives: false,

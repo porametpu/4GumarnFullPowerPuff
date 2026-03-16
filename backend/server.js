@@ -19,9 +19,23 @@ promClient.collectDefaultMetrics();
 
 app.use(helmet());
 
+const defaultOrigins = [
+    'http://localhost:3001',
+    'http://127.0.0.1:3001'
+];
+const envOrigins = (process.env.CORS_ORIGINS || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+const allowedOrigins = Array.from(new Set([...defaultOrigins, ...envOrigins]));
+
 const corsOptions = {
-    origin: ['http://localhost:3001',
-        'https://amazing-crisp-9bcb1a.netlify.app'],
+    origin: (origin, callback) => {
+        // Allow non-browser/server-to-server requests that don't send Origin
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

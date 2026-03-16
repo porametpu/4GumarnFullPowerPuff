@@ -1,11 +1,5 @@
--- AlterEnum
-ALTER TYPE "MessageType" ADD VALUE 'LOCATION';
-
 -- CreateEnum
 CREATE TYPE "ExtraLuggageType" AS ENUM ('MEDIUM', 'LARGE', 'EXTRA_LARGE');
-
--- AlterEnum
-ALTER TYPE "MessageType" ADD VALUE 'LOCATION';
 
 -- AlterTable
 ALTER TABLE "Booking" ADD COLUMN     "extraLuggageFee" DOUBLE PRECISION NOT NULL DEFAULT 0,

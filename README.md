@@ -128,13 +128,22 @@ CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 
-# Google Maps API Key (Backend)
+# Longdo Map API Key (Backend)
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key_for_backend
 NUXT_PUBLIC_LONGDO_MAP_API_KEY=your_google_maps_api_key_for_backend
 LONGDO_MAP_API_KEY=your_google_maps_api_key_for_backend
 
+# Admin (auto-create on backend start)
+ADMIN_EMAIL=admin@example.com
+ADMIN_USERNAME=admin123
+ADMIN_PASSWORD=123456789
+ADMIN_FIRST_NAME=System
+ADMIN_LAST_NAME=Administrator
+
+
 # Google Maps API Key (Frontend)
 NUXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_for_frontend
+NUXT_PUBLIC_LONGDO_MAP_API_KEY=your_google_maps_api_key_for_frontend
 ```
 
 ## Database Setup

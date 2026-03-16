@@ -4,6 +4,8 @@ const validate = require('../middlewares/validate');
 const upload = require('../middlewares/upload.middleware');
 const { idParamSchema, createUserSchema, updateMyProfileSchema, updateUserByAdminSchema, updateUserStatusSchema, listUsersQuerySchema } = require('../validations/user.validation');
 const { protect, requireAdmin } = require('../middlewares/auth');
+const prisma = require('../utils/prisma');
+const { RouteStatus, BookingStatus } = require('@prisma/client');
 
 const router = express.Router();
 
@@ -108,6 +110,30 @@ router.post('/delete-account', protect, async (req, res) => {
     const { email } = req.body;
     if (!email?.trim()) {
       return res.status(400).json({ message: 'กรุณาส่งอีเมลเพื่อยืนยัน' });
+    }
+
+    // Check for active bookings (as passenger)
+    const activeBookingsCount = await prisma.booking.count({
+      where: {
+        passengerId: userId,
+        status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED] }
+      }
+    });
+
+    if (activeBookingsCount > 0) {
+      return res.status(400).json({ message: 'คุณยังมีรายการจองที่ค้างอยู่ กรุณายกเลิกหรือทำรายการให้เสร็จสิ้นก่อนลบบัญชี' });
+    }
+
+    // Check for active routes (as driver)
+    const activeRoutesCount = await prisma.route.count({
+      where: {
+        driverId: userId,
+        status: { in: [RouteStatus.AVAILABLE, RouteStatus.FULL, RouteStatus.IN_TRANSIT] }
+      }
+    });
+
+    if (activeRoutesCount > 0) {
+      return res.status(400).json({ message: 'คุณยังมีเส้นทางที่กำลังดำเนินการอยู่ กรุณายกเลิกหรือทำรายการให้เสร็จสิ้นก่อนลบบัญชี' });
     }
 
     const user = await prisma.user.findUnique({

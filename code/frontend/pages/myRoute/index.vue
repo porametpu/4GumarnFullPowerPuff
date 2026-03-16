@@ -92,9 +92,9 @@
                                                 <li class="mt-1">
                                                     • จุดปลายทาง:
                                                     <span class="font-medium text-gray-900">{{ route.destination
-                                                    }}</span>
+                                                        }}</span>
                                                     <span v-if="route.destinationAddress"> — {{ route.destinationAddress
-                                                    }}</span>
+                                                        }}</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -126,45 +126,106 @@
                                         </div>
 
                                         <!-- ผู้โดยสารของเส้นทางนี้ -->
-                                        <div v-if="route.passengers && route.passengers.length">
-                                            <h5 class="mb-2 font-medium text-gray-900">ผู้โดยสาร ({{
-                                                route.passengers.length }} คน)</h5>
-                                            <div class="space-y-3">
-                                                <div v-for="p in route.passengers" :key="p.id"
-                                                    class="flex items-center space-x-3">
-                                                    <img :src="p.image" :alt="p.name"
-                                                        class="object-cover w-12 h-12 rounded-full" />
-                                                    <div class="flex-1">
-                                                        <div class="flex items-center">
-                                                            <span class="font-medium text-gray-900">{{ p.name }}</span>
-                                                            <div v-if="p.isVerified"
-                                                                class="relative group ml-1.5 flex items-center">
-                                                                <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24"
-                                                                    fill="currentColor">
-                                                                    <path fill-rule="evenodd"
-                                                                        d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12c0 1.357-.6 2.573-1.549 3.397a4.49 4.49 0 01-1.307 3.498 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.07-.01l3.5-4.875z"
-                                                                        clip-rule="evenodd" />
+                                        <!-- ผู้โดยสารของเส้นทางนี้ (Driver Management Console) -->
+                                        <div v-if="route.passengers && route.passengers.length" class="mt-6 border-t border-gray-100 pt-6">
+                                            <div class="flex items-center justify-between mb-4">
+                                                <h5 class="text-lg font-bold text-gray-900 flex items-center">
+                                                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                                    </svg>
+                                                    ผู้โดยสาร ({{ route.passengers.length }})
+                                                </h5>
+                                                <div class="flex items-center space-x-2">
+                                                    <button 
+                                                        @click.stop="refreshConsole(route)"
+                                                        :disabled="isRefreshingConsole"
+                                                        class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors disabled:opacity-50"
+                                                    >
+                                                        <svg class="w-4 h-4 mr-1.5" :class="{'animate-spin': isRefreshingConsole}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                                        </svg>
+                                                        รีเฟรชตำแหน่ง
+                                                    </button>
+                                                    <button 
+                                                        @click.stop="route.isConsoleExpanded = !route.isConsoleExpanded"
+                                                        class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                                                        title="ย่อ/ขยาย"
+                                                    >
+                                                        <svg class="w-5 h-5 transition-transform duration-300" :class="{'rotate-180': !route.isConsoleExpanded}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div v-show="route.isConsoleExpanded" class="grid gap-4 animate-in fade-in duration-300">
+                                                <div v-for="(p, idx) in route.passengers" :key="p.id"
+                                                    class="relative flex flex-col sm:flex-row sm:items-center p-4 bg-white border border-gray-200 rounded-xl hover:border-blue-300 transition-all shadow-sm"
+                                                >
+                                                    <!-- Distance Badge -->
+                                                    <div v-if="p.distance !== null" class="absolute -top-2 -right-2 px-2 py-1 bg-blue-600 text-white text-[10px] font-bold rounded-full shadow-md z-10">
+                                                        {{ p.distance < 1 ? (p.distance * 1000).toFixed(0) + ' ม.' : p.distance.toFixed(1) + ' กม.' }}
+                                                    </div>
+
+                                                    <div class="flex items-center space-x-4 flex-1">
+                                                        <div class="relative">
+                                                            <img :src="p.image" :alt="p.name" class="object-cover w-14 h-14 rounded-full border-2 border-gray-100 shadow-sm" />
+                                                            <div v-if="p.isVerified" class="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
+                                                                <svg class="w-4 h-4 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                                                 </svg>
                                                             </div>
                                                         </div>
-                                                        <div class="text-sm text-gray-600">
-                                                            ที่นั่ง: {{ p.seats }}
-                                                            <span v-if="p.email" class="mx-2 text-gray-300">|</span>
-                                                            <a v-if="p.email" :href="`mailto:${p.email}`"
-                                                                class="text-blue-600 hover:underline" @click.stop>
-                                                                {{ p.email }}
-                                                            </a>
+                                                        <div class="flex-1 min-w-0">
+                                                            <h6 class="font-bold text-gray-900 truncate">{{ idx + 1 }}. {{ p.name }}</h6>
+                                                            <div class="flex flex-col text-xs text-gray-500 space-y-0.5">
+                                                                <span class="flex items-center">
+                                                                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                                    </svg>
+                                                                    จุดรับ: {{ p.pickupLocation?.name || 'ไม่ระบุชื่อจุดรับ' }}
+                                                                </span>
+                                                                <span>ที่นั่ง: {{ p.seats }} ที่</span>
+                                                            </div>
                                                         </div>
+                                                    </div>
+
+                                                    <div class="mt-4 sm:mt-0 sm:ml-4 flex items-center space-x-2">
+                                                        <button 
+                                                            @click.stop="openChat(p.bookingId || p.id)"
+                                                            class="flex-1 sm:flex-none inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-100"
+                                                        >
+                                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                                            </svg>
+                                                            แชท
+                                                        </button>
+                                                        <button 
+                                                            @click.stop="notifySinglePassenger(route, p)"
+                                                            :disabled="p.loading || p.distance === null || p.distance > 5"
+                                                            class="flex-1 sm:flex-none inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                                                        >
+                                                            <svg v-if="!p.loading" class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                                            </svg>
+                                                            <svg v-else class="w-4 h-4 mr-1.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                            </svg>
+                                                            แจ้งใกล้ถึง
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        </div>
                                     </div>
-                                </div>
+
 
                                 <!-- ปุ่มขวาล่าง -->
                                 <div class="flex justify-end" :class="{ 'mt-4': selectedTripId !== route.id }">
-                                    <NuxtLink :to="`/myRoute/${route.id}/edit`"
+
+                                    <NuxtLink v-if="route.canEdit" :to="`/myRoute/${route.id}/edit`"
                                         class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700"
                                         @click.stop>
                                         แก้ไขเส้นทาง
@@ -306,9 +367,9 @@
                                                 <li class="mt-1">
                                                     • จุดปลายทาง:
                                                     <span class="font-medium text-gray-900">{{ trip.destination
-                                                    }}</span>
+                                                        }}</span>
                                                     <span v-if="trip.destinationAddress"> — {{ trip.destinationAddress
-                                                    }}</span>
+                                                        }}</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -364,6 +425,7 @@
                                     </template>
 
                                     <button v-else-if="trip.status === 'confirmed'"
+                                        @click.stop="openChat(trip.id)"
                                         class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
                                         แชทกับผู้โดยสาร
                                     </button>
@@ -401,13 +463,15 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { navigateTo } from '#app'
 import dayjs from 'dayjs'
 import 'dayjs/locale/th'
 import buddhistEra from 'dayjs/plugin/buddhistEra'
 import ConfirmModal from '~/components/ConfirmModal.vue'
 import { useToast } from '~/composables/useToast'
 import { useLongdoMap } from '~/composables/useLongdoMap'
+import { useChatWidget } from '~/composables/useChatWidget'
 
 dayjs.locale('th')
 dayjs.extend(buddhistEra)
@@ -415,6 +479,7 @@ dayjs.extend(buddhistEra)
 const { $api } = useNuxtApp()
 const { toast } = useToast()
 const { loadLongdoMap } = useLongdoMap()
+const { openChat } = useChatWidget()
 
 // --- State Management ---
 const activeTab = ref('pending')
@@ -423,6 +488,9 @@ const isLoading = ref(false)
 const mapContainer = ref(null)
 const allTrips = ref([])
 const myRoutes = ref([])
+const nearAlertNow = ref(Date.now())
+const isRefreshingConsole = ref(false)
+let nearAlertClockTimer = null
 
 // ---------- Longdo Maps states ----------
 let gmap = null
@@ -474,13 +542,24 @@ const coerceLatLng = (item) => {
         if (Number.isFinite(locLat) && Number.isFinite(locLng)) return { lat: locLat, lng: locLng }
     }
     if (Array.isArray(item) && item.length >= 2) {
-        const a = Number(item[0])
-        const b = Number(item[1])
+        const a = num(item[0])
+        const b = num(item[1])
         if (Number.isFinite(a) && Number.isFinite(b)) {
             return Math.abs(a) > 90 ? { lat: b, lng: a } : { lat: a, lng: b }
         }
     }
     return null
+}
+function haversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
 }
 
 const formatReverseAddress = (data) => {
@@ -502,6 +581,121 @@ const reverseGeocode = async (lat, lng) => {
         return null
     }
 }
+
+const nearAlertLoadingRouteId = ref(null);
+
+function isTravelDayNow(departureTime) {
+    if (!departureTime) return false
+    return dayjs(departureTime).isSame(dayjs(nearAlertNow.value), 'day')
+}
+
+function canShowNearAlert(route) {
+    return Number(route?.confirmedPassengerCount || 0) > 0 && isTravelDayNow(route?.departureTime)
+}
+
+function startNearAlertClock() {
+    if (nearAlertClockTimer) return
+    nearAlertClockTimer = setInterval(() => {
+        nearAlertNow.value = Date.now()
+    }, 60000)
+}
+
+function stopNearAlertClock() {
+    if (!nearAlertClockTimer) return
+    clearInterval(nearAlertClockTimer)
+    nearAlertClockTimer = null
+}
+
+function getCurrentPosition() {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('อุปกรณ์ไม่รองรับการระบุตำแหน่ง'));
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(
+            (pos) => resolve(pos),
+            (err) => reject(err),
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 5000 }
+        );
+    });
+}
+
+async function notifyPassengerNearby(route) {
+    try {
+        nearAlertLoadingRouteId.value = route.id;
+
+        const pos = await getCurrentPosition();
+        const driverLat = Number(pos.coords.latitude);
+        const driverLng = Number(pos.coords.longitude);
+
+        const result = await $api(`/routes/${route.id}/nearby-alert`, {
+            method: 'POST',
+            body: { driverLat, driverLng, radiusKm: 10 },
+        });
+
+        toast.info(
+            'ส่งแจ้งเตือนแล้ว',
+            `แจ้งเตือนสำเร็จ ${result.sentCount || 0} รายการ`
+        );
+    } finally {
+        nearAlertLoadingRouteId.value = null;
+    }
+}
+
+async function refreshConsole(route) {
+    if (isRefreshingConsole.value) return
+    isRefreshingConsole.value = true
+    try {
+        const pos = await getCurrentPosition()
+        const dLat = pos.coords.latitude
+        const dLng = pos.coords.longitude
+
+        route.passengers.forEach(p => {
+            const loc = coerceLatLng(p.pickupLocation)
+            if (loc) {
+                p.distance = haversineDistance(dLat, dLng, loc.lat, loc.lng)
+            } else {
+                p.distance = Infinity
+            }
+        })
+
+        // Sort: Closest first
+        route.passengers.sort((a, b) => (a.distance || 0) - (b.distance || 0))
+        
+        toast.success('อัปเดตตำแหน่งแล้ว', 'เรียงลำดับผู้โดยสารตามระยะทางปัจจุบัน')
+    } catch (e) {
+        console.error(e)
+        // Fallback for location errors if needed
+    } finally {
+        isRefreshingConsole.value = false
+    }
+}
+
+async function notifySinglePassenger(route, passenger) {
+    try {
+        passenger.loading = true
+        const pos = await getCurrentPosition()
+        const lat = pos.coords.latitude
+        const lng = pos.coords.longitude
+
+        await $api(`/routes/${route.id}/nearby-alert`, {
+            method: 'POST',
+            body: { 
+                driverLat: lat, 
+                driverLng: lng, 
+                bookingId: passenger.bookingId || passenger.id,
+                radiusKm: 10 
+            }
+        })
+
+        toast.success('สำเร็จ', `ส่งแจ้งเตือนให้ ${passenger.name} แล้ว`)
+    } catch (error) {
+        toast.error('แจ้งเตือนไม่สำเร็จ', error?.data?.message || 'โปรดลองอีกครั้ง')
+    } finally {
+        passenger.loading = false
+    }
+}
+
 
 const reasonLabelMap = {
     CHANGE_OF_PLAN: 'เปลี่ยนแผน/มีธุระกะทันหัน',
@@ -595,7 +789,7 @@ async function fetchMyRoutes() {
                 .filter(Boolean)
 
             // แปลงเป็น "คำขอจอง" ต่อ booking
-            for (const b of (r.bookings || [])) {
+            for (const b of (r.booking || [])) {
                 formatted.push({
                     id: b.id,
                     status: (b.status || '').toLowerCase(),
@@ -636,11 +830,14 @@ async function fetchMyRoutes() {
             }
 
             // เก็บ “เส้นทางของฉัน”
-            const confirmedBookings = (r.bookings || []).filter(
+            const confirmedBookings = (r.booking || []).filter(
                 b => (b.status || '').toUpperCase() === 'CONFIRMED'
             )
             ownRoutes.push({
                 id: r.id,
+                canEdit: confirmedBookings.length === 0,
+                departureTime: r.departureTime,
+                confirmedPassengerCount: confirmedBookings.length,
                 status: (r.status || '').toLowerCase(),
                 origin: start?.name || `(${Number(start.lat).toFixed(2)}, ${Number(start.lng).toFixed(2)})`,
                 destination: end?.name || `(${Number(end.lat).toFixed(2)}, ${Number(end.lng).toFixed(2)})`,
@@ -662,6 +859,7 @@ async function fetchMyRoutes() {
                 conditions: r.conditions || '',
                 passengers: confirmedBookings.map(b => ({
                     id: b.id,
+                    bookingId: b.id,
                     seats: b.numberOfSeats || 0,
                     status: 'confirmed',
                     name: `${b.passenger?.firstName || ''} ${b.passenger?.lastName || ''}`.trim() || 'ผู้โดยสาร',
@@ -670,9 +868,13 @@ async function fetchMyRoutes() {
                     isVerified: !!b.passenger?.isVerified,
                     rating: 4.5,
                     reviews: Math.floor(Math.random() * 50) + 5,
+                    pickupLocation: b.pickupLocation,
+                    distance: null,
+                    loading: false
                 })),
                 durationText: (typeof r.duration === 'string' ? formatDuration(r.duration) : r.duration) || (r.durationSeconds ? `${Math.round(r.durationSeconds / 60)} นาที` : '-'),
                 distanceText: (typeof r.distance === 'string' ? formatDistance(r.distance) : r.distance) || (r.distanceMeters ? `${(r.distanceMeters / 1000).toFixed(1)} กม.` : '-'),
+                isConsoleExpanded: true,
             })
         }
 
@@ -826,6 +1028,9 @@ async function updateMap(trip) {
     if (!trip) return
     await waitMapReady()
     if (!gmap || !window.longdo) return
+    
+    // Fix map not full issue
+    try { gmap.checkSize() } catch (e) {}
 
     clearMapDrawing()
 
@@ -989,6 +1194,7 @@ useHead({
 })
 
 onMounted(async () => {
+    startNearAlertClock()
     try {
         await loadLongdoMap()
     } catch (e) {
@@ -1007,12 +1213,22 @@ onMounted(async () => {
     })
 })
 
+onUnmounted(() => {
+    stopNearAlertClock()
+})
+
 function initializeMap() {
     if (!mapContainer.value || gmap) return
     if (!window.longdo) return
     gmap = new longdo.Map({ placeholder: mapContainer.value })
     gmap.location({ lon: 100.5018, lat: 13.7563 })
     gmap.zoom(6)
+    
+    // Ensure map fills container
+    setTimeout(() => {
+        if (gmap) gmap.checkSize()
+    }, 500)
+    
     mapReady.value = true
 }
 
@@ -1060,8 +1276,8 @@ watch(activeTab, () => {
 }
 
 #map {
-    height: 100%;
-    min-height: 600px;
+    height: calc(100vh - 200px);
+    min-height: 500px;
     border-radius: 0 0 0.5rem 0.5rem;
 }
 

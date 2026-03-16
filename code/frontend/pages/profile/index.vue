@@ -136,7 +136,7 @@
                             </div>
                             <div class="flex justify-end gap-4 pt-6">
                                 <button type="button" @click="resetForm" :disabled="isLoading"
-                                    class="px-6 py-3 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50 ">
+                                    class="px-6 py-3 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50">
                                     ยกเลิก
                                 </button>
                                 <button type="submit" :disabled="isLoading"

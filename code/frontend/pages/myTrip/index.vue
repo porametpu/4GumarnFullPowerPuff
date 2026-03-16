@@ -171,7 +171,7 @@
                                             class="px-4 py-2 text-sm text-red-600 transition duration-200 border border-red-300 rounded-md hover:bg-red-50">
                                             ยกเลิกการจอง
                                         </button>
-                                        <button @click.stop="openChatPage(trip.id)"
+                                        <button @click.stop="openChat(trip.id)"
                                             class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
                                             แชทกับผู้ขับ
                                         </button>
@@ -194,7 +194,7 @@
                         <div class="p-6 border-b border-gray-300">
                             <h3 class="text-lg font-semibold text-gray-900">แผนที่เส้นทาง</h3>
                         </div>
-                        <div ref="mapContainer" id="map" class="h-96"></div>
+                        <div ref="mapContainer" id="map"></div>
                     </div>
                 </div>
             </div>
@@ -247,6 +247,7 @@ import buddhistEra from 'dayjs/plugin/buddhistEra'
 import ConfirmModal from '~/components/ConfirmModal.vue'
 import { useToast } from '~/composables/useToast'
 import { useLongdoMap } from '~/composables/useLongdoMap'
+import { useChatWidget } from '~/composables/useChatWidget'
 
 // Setup dayjs for Thai locale
 dayjs.locale('th')
@@ -255,6 +256,7 @@ dayjs.extend(buddhistEra)
 const { $api } = useNuxtApp()
 const { toast } = useToast()
 const { loadLongdoMap } = useLongdoMap()
+const { openChat } = useChatWidget()
 
 // --- State Management ---
 const activeTab = ref('pending')
@@ -622,6 +624,9 @@ async function updateMap(trip) {
     await waitMapReady()
     if (!gmap || !window.longdo) return
 
+    // Fix map not full issue
+    try { gmap.checkSize() } catch (e) {}
+
     clearMapDrawing()
 
     const points = []
@@ -664,14 +669,6 @@ async function updateMap(trip) {
     }
 
     fitMapToPoints(points)
-}
-
-// --- Chat Widget Navigation ---
-import { useChatWidget } from '~/composables/useChatWidget'
-const { openChat } = useChatWidget()
-
-const openChatPage = (bookingId) => {
-    openChat(bookingId)
 }
 
 // --- Modal Logic ---
@@ -838,6 +835,12 @@ function initializeMap() {
     gmap = new longdo.Map({ placeholder: mapContainer.value })
     gmap.location({ lon: 100.5018, lat: 13.7563 })
     gmap.zoom(6)
+    
+    // Ensure map fills container
+    setTimeout(() => {
+        if (gmap) gmap.checkSize()
+    }, 500)
+    
     mapReady.value = true
 }
 </script>
@@ -875,8 +878,8 @@ function initializeMap() {
 }
 
 #map {
-    height: 100%;
-    min-height: 600px;
+    height: calc(100vh - 200px);
+    min-height: 500px;
     border-radius: 0 0 0.5rem 0.5rem;
 }
 

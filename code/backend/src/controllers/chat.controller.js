@@ -33,7 +33,7 @@ const sendMessage = asyncHandler(async (req, res) => {
 
         if (room) {
             room.participants.forEach(p => {
-                io.to(`user_${p.userId}`).emit('message-notification', {
+                io.to(`user-${p.userId}`).emit('message-notification', {
                     roomId: roomId,
                     message: message
                 });
@@ -66,7 +66,7 @@ const sendImageMessage = asyncHandler(async (req, res) => {
 
     if (room) {
         room.participants.forEach(p => {
-            io.to(`user_${p.userId}`).emit('message-notification', {
+            io.to(`user-${p.userId}`).emit('message-notification', {
                 roomId: roomId,
                 message: message
             });
@@ -86,7 +86,22 @@ const markAsRead = asyncHandler(async (req, res) => {
     const { roomId } = req.params;
     const userId = req.user.sub;
     await chatService.markAsRead(roomId, userId);
+    
+    const io = req.app.get('io');
+    io.to(roomId).emit('messages-read', { roomId, userId });
+    
     res.status(200).json({ success: true, message: 'Messages marked as read' });
+});
+
+const deleteMessage = asyncHandler(async (req, res) => {
+    const { messageId } = req.params;
+    const userId = req.user.sub;
+    const message = await chatService.deleteMessage(messageId, userId);
+    
+    const io = req.app.get('io');
+    io.to(message.chatRoomId).emit('message-deleted', { messageId, roomId: message.chatRoomId });
+    
+    res.status(200).json({ success: true, message: 'Message deleted' });
 });
 
 module.exports = {
@@ -95,5 +110,6 @@ module.exports = {
     sendMessage,
     sendImageMessage,
     getMyChatRooms,
-    markAsRead
+    markAsRead,
+    deleteMessage
 };

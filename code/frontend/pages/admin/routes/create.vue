@@ -7,7 +7,7 @@
             <div class="mx-auto max-w-7xl">
                 <!-- Back -->
                 <div class="mb-8">
-                    <NuxtLink to="/admin/bookings"
+                    <NuxtLink to="/admin/routes"
                         class="inline-flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
                         <i class="fa-solid fa-arrow-left"></i>
                         <span>ย้อนกลับ</span>
@@ -17,65 +17,33 @@
                 <!-- Title -->
                 <div class="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex items-center gap-3">
-                        <h1 class="text-2xl font-semibold text-gray-800">สร้างการจอง (แอดมิน)</h1>
-                        <span class="text-sm text-gray-500">เลือกเส้นทางและผู้โดยสาร
-                            จากนั้นกำหนดจำนวนที่นั่งและจุดรับ-ส่ง</span>
+                        <h1 class="text-2xl font-semibold text-gray-800">สร้างเส้นทาง (แอดมิน)</h1>
+                        <span class="text-sm text-gray-500">กรอกข้อมูลเส้นทาง เลือกผู้ขับ และรถที่ใช้</span>
                     </div>
                 </div>
 
                 <!-- Card -->
                 <div class="flex w-full overflow-hidden bg-white border border-gray-300 rounded-lg shadow-lg">
                     <main class="flex-1 p-8 space-y-8">
-
-                        <!-- SECTION: เส้นทาง + ผู้โดยสาร -->
+                        <!-- SECTION: ผู้ขับขี่ / รถ (ตำแหน่งอ้างอิงจากหน้า detail > ผู้ขับขี่/รถ) -->
                         <section>
-                            <h3 class="mb-3 text-sm font-semibold text-gray-700">เส้นทางและผู้โดยสาร</h3>
-                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                <!-- Route search -->
-                                <div class="relative">
-                                    <label class="block mb-2 text-sm font-medium text-gray-700">
-                                        เลือกเส้นทาง (ค้นหา: ต้นทาง/ปลายทาง/ผู้ขับ/เวลา) <span
-                                            class="text-red-500">*</span>
-                                    </label>
-                                    <input v-model.trim="routeQuery" @input="onSearchRoutes" type="text"
-                                        placeholder="เช่น มข. → เซ็นทรัล / ชื่อคนขับ / เวลา"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    <div v-if="showRouteList"
-                                        class="absolute z-20 w-full mt-1 overflow-auto bg-white border rounded-md shadow max-h-60">
-                                        <button v-for="r in routeResults" :key="r.id" type="button"
-                                            @click="selectRoute(r)" class="w-full px-3 py-2 text-left hover:bg-blue-50">
-                                            <div class="text-sm font-medium text-gray-800">
-                                                {{ summarizeRoute(r) }}
-                                            </div>
-                                            <div class="text-xs text-gray-500">
-                                                {{ formatDateTime(r.departureTime) }} • ที่นั่งคงเหลือ {{
-                                                    r.availableSeats }} • ฿{{ r.pricePerSeat }}/ที่นั่ง
-                                            </div>
-                                        </button>
-                                        <div v-if="!isSearchingRoutes && routeResults.length === 0"
-                                            class="px-3 py-2 text-sm text-gray-500">
-                                            ไม่พบเส้นทางที่ตรงกับคำค้น
-                                        </div>
-                                    </div>
-                                    <p v-if="!selectedRouteId" class="mt-2 text-xs text-amber-600">*
-                                        ต้องเลือกเส้นทางจากรายการ</p>
-                                    <p v-else class="mt-2 text-xs text-gray-600 truncate">เลือกแล้ว: {{
-                                        selectedRouteLabel }}</p>
-                                </div>
+                            <h3 class="mb-3 text-sm font-semibold text-gray-700">ผู้ขับขี่และรถ</h3>
 
-                                <!-- Passenger search -->
+                            <!-- Driver search (เหมือน DV) -->
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <div class="relative">
                                     <label class="block mb-2 text-sm font-medium text-gray-700">
-                                        เลือกผู้โดยสาร (ค้นหา: อีเมล / ชื่อ / Username) <span
+                                        เลือกผู้ขับขี่ (ค้นหา: อีเมล / ชื่อ / Username) <span
                                             class="text-red-500">*</span>
                                     </label>
-                                    <input v-model.trim="userQuery" @input="onSearchUsers" type="text"
-                                        placeholder="เช่น user1@gmail.com / User1"
+                                    <input v-model.trim="driverQuery" @input="onSearchDrivers" type="text"
+                                        placeholder="เช่น user@example.com หรือ User"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    <div v-if="showUserList"
+                                    <div v-if="showDriverList"
                                         class="absolute z-20 w-full mt-1 overflow-auto bg-white border rounded-md shadow max-h-60">
-                                        <button v-for="u in userResults" :key="u.id" type="button"
-                                            @click="selectUser(u)" class="w-full px-3 py-2 text-left hover:bg-blue-50">
+                                        <button v-for="u in driverResults" :key="u.id" type="button"
+                                            @click="selectDriver(u)"
+                                            class="w-full px-3 py-2 text-left hover:bg-blue-50">
                                             <div class="text-sm font-medium text-gray-800">
                                                 {{ u.firstName }} {{ u.lastName }}
                                                 <span v-if="u.username" class="text-xs text-gray-500">(@{{ u.username
@@ -83,63 +51,72 @@
                                             </div>
                                             <div class="text-xs text-gray-500">{{ u.email }}</div>
                                         </button>
-                                        <div v-if="!isSearchingUsers && userResults.length === 0"
+                                        <div v-if="!isSearchingDrivers && driverResults.length === 0"
                                             class="px-3 py-2 text-sm text-gray-500">
                                             ไม่พบผู้ใช้ที่ตรงกับคำค้น
                                         </div>
                                     </div>
-                                    <p v-if="!selectedPassengerId" class="mt-2 text-xs text-amber-600">*
-                                        ต้องเลือกผู้โดยสารจากรายการ</p>
-                                    <p v-else class="mt-2 text-xs text-gray-600 truncate">เลือกแล้ว: {{
-                                        selectedPassengerLabel }}</p>
+                                    <p v-if="!form.driverId" class="mt-2 text-xs text-amber-600">*
+                                        ต้องเลือกผู้ขับจากรายการ</p>
                                 </div>
-                            </div>
-                        </section>
 
-                        <!-- SECTION: รายละเอียดการจอง -->
-                        <section>
-                            <h3 class="mb-3 text-sm font-semibold text-gray-700">รายละเอียดการจอง</h3>
-                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                                <div>
-                                    <label class="block mb-1 text-xs font-medium text-gray-600">
-                                        จำนวนที่นั่ง <span class="text-red-500">*</span>
+                                <!-- Vehicle (โหลดตาม driverId) -->
+                                <div class="relative">
+                                    <label class="block mb-2 text-sm font-medium text-gray-700">
+                                        เลือกรถของผู้ขับ <span class="text-red-500">*</span>
                                     </label>
-                                    <input v-model.number="form.numberOfSeats" type="number" min="1"
-                                        :max="maxSeats || undefined"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    <p class="mt-1 text-xs text-gray-500">
-                                        {{
-                                            selectedRoute?.availableSeats != null
-                                                ? `เลือกได้สูงสุด ${selectedRoute.availableSeats} ที่นั่ง`
-                                                : 'กรุณาเลือกเส้นทางก่อน'
-                                        }}
+                                    <input v-model.trim="vehicleQuery" @focus="openVehicleList = true"
+                                        @input="filterVehicleLocal" type="text" :disabled="!form.driverId"
+                                        placeholder="ค้นหาด้วย รุ่น/ป้ายทะเบียน"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100" />
+                                    <div v-if="openVehicleList && form.driverId"
+                                        class="absolute z-20 w-full mt-1 overflow-auto bg-white border rounded-md shadow max-h-60">
+                                        <button v-for="v in vehicleFiltered" :key="v.id" type="button"
+                                            @click="selectVehicle(v)"
+                                            class="w-full px-3 py-2 text-left hover:bg-blue-50">
+                                            <div class="text-sm font-medium text-gray-800">
+                                                {{ v.vehicleModel }} <span class="text-xs text-gray-500">({{
+                                                    v.vehicleType }})</span>
+                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                {{ v.licensePlate || '— ไม่มีป้าย —' }}
+                                            </div>
+                                        </button>
+                                        <div v-if="!isLoadingVehicles && vehicleFiltered.length === 0"
+                                            class="px-3 py-2 text-sm text-gray-500">
+                                            ไม่มีรถในรายการ
+                                        </div>
+                                    </div>
+                                    <p v-if="!form.vehicleId" class="mt-2 text-xs text-amber-600">* ต้องเลือกรถจากรายการ
                                     </p>
                                 </div>
-                                <div>
-                                    <label class="block mb-1 text-xs font-medium text-gray-600">ราคาต่อที่นั่ง
-                                        (อ้างอิงจากเส้นทาง)</label>
-                                    <input :value="selectedRoute ? selectedRoute.pricePerSeat : ''" disabled
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md disabled:bg-gray-100" />
-                                </div>
-                                <div>
-                                    <label class="block mb-1 text-xs font-medium text-gray-600">เวลาออกเดินทาง</label>
-                                    <input :value="selectedRoute ? formatDateTime(selectedRoute.departureTime) : ''"
-                                        disabled
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md disabled:bg-gray-100" />
-                                </div>
                             </div>
+                        </section>
 
-                            <!-- เปลี่ยนส่วนนี้ให้เหมือน findTrip (booking) : มีเฉพาะ input + ปุ่มปักหมุด -->
-                            <div class="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2">
+                        <!-- SECTION: แผนที่เส้นทาง (อ้างอิงตำแหน่งจาก detail: แสดงบนสุดก่อนฟิลด์เส้นทาง) -->
+                        <section>
+                            <h3 class="mb-3 text-sm font-semibold text-gray-700">แผนที่เส้นทาง</h3>
+                            <div class="overflow-hidden border border-gray-300 rounded-lg">
+                                <div ref="mapEl" class="w-full" style="height: 360px;"></div>
+                            </div>
+                        </section>
+
+                        <!-- SECTION: เส้นทาง (ต้นทาง/ปลายทาง) -->
+                        <section>
+                            <h3 class="mb-3 text-sm font-semibold text-gray-700">เส้นทาง</h3>
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <!-- Start -->
                                 <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-700">เลือกจุดขึ้นรถ</label>
+                                    <label class="block mb-1 text-xs font-medium text-gray-600">จุดเริ่มต้น <span
+                                            class="text-red-500">*</span></label>
                                     <div class="relative">
-                                        <input ref="pickupInputEl" v-model="pickupPoint" type="text"
-                                            placeholder="พิมพ์ชื่อสถานที่..." @input="onPickupInput"
-                                            @focus="onPickupFocus" @blur="onPickupBlur"
-                                            @change="onPickupManual"
+                                        <input ref="startInputEl" v-model="startName" type="text"
+                                            placeholder="พิมพ์ชื่อสถานที่ หรือใช้ปุ่มปักหมุด"
+                                            @input="onStartInput"
+                                            @focus="onStartFocus"
+                                            @blur="onStartBlur"
                                             class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                        <button type="button" @click="startBookingPicker('pickup')"
+                                        <button type="button" @click="openPicker('start')"
                                             class="absolute inset-y-0 my-auto text-gray-500 right-2 hover:text-blue-600"
                                             title="เลือกจากแผนที่">
                                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -147,23 +124,30 @@
                                                     d="M12 2a7 7 0 00-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" />
                                             </svg>
                                         </button>
-                                        <ul v-if="pickupFocused && pickupSuggestions.length" class="suggest-list">
-                                            <li v-for="(s, i) in pickupSuggestions" :key="i" class="suggest-item"
-                                                @mousedown.prevent="applyPickupSuggestion(s)">
+                                        <ul v-if="startFocused && startSuggestions.length" class="suggest-list">
+                                            <li v-for="(s, i) in startSuggestions" :key="i" class="suggest-item"
+                                                @mousedown.prevent="applyStartSuggestion(s)">
                                                 {{ s.label }}
                                             </li>
                                         </ul>
                                     </div>
+                                    <p class="mt-1 text-xs text-gray-500 truncate" v-if="form.startLocation.address">
+                                        {{ form.startLocation.address }} ({{ form.startLocation.lat }}, {{
+                                        form.startLocation.lng }})
+                                    </p>
                                 </div>
+                                <!-- End -->
                                 <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-700">เลือกจุดลงรถ</label>
+                                    <label class="block mb-1 text-xs font-medium text-gray-600">จุดปลายทาง <span
+                                            class="text-red-500">*</span></label>
                                     <div class="relative">
-                                        <input ref="dropoffInputEl" v-model="dropoffPoint" type="text"
-                                            placeholder="พิมพ์ชื่อสถานที่..." @input="onDropoffInput"
-                                            @focus="onDropoffFocus" @blur="onDropoffBlur"
-                                            @change="onDropoffManual"
+                                        <input ref="endInputEl" v-model="endName" type="text"
+                                            placeholder="พิมพ์ชื่อสถานที่ หรือใช้ปุ่มปักหมุด"
+                                            @input="onEndInput"
+                                            @focus="onEndFocus"
+                                            @blur="onEndBlur"
                                             class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                        <button type="button" @click="startBookingPicker('dropoff')"
+                                        <button type="button" @click="openPicker('end')"
                                             class="absolute inset-y-0 my-auto text-gray-500 right-2 hover:text-blue-600"
                                             title="เลือกจากแผนที่">
                                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -171,18 +155,102 @@
                                                     d="M12 2a7 7 0 00-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" />
                                             </svg>
                                         </button>
-                                        <ul v-if="dropoffFocused && dropoffSuggestions.length" class="suggest-list">
-                                            <li v-for="(s, i) in dropoffSuggestions" :key="i" class="suggest-item"
-                                                @mousedown.prevent="applyDropoffSuggestion(s)">
+                                        <ul v-if="endFocused && endSuggestions.length" class="suggest-list">
+                                            <li v-for="(s, i) in endSuggestions" :key="i" class="suggest-item"
+                                                @mousedown.prevent="applyEndSuggestion(s)">
                                                 {{ s.label }}
                                             </li>
                                         </ul>
                                     </div>
+                                    <p class="mt-1 text-xs text-gray-500 truncate" v-if="form.endLocation.address">
+                                        {{ form.endLocation.address }} ({{ form.endLocation.lat }}, {{
+                                        form.endLocation.lng }})
+                                    </p>
                                 </div>
                             </div>
                         </section>
 
-                        <!-- Actions (เหมือนเดิม) -->
+                        <!-- SECTION: จุดแวะระหว่างทาง -->
+                        <section>
+                            <h3 class="mb-3 text-sm font-semibold text-gray-700">จุดแวะระหว่างทาง</h3>
+                            <div class="space-y-3">
+                                <div v-for="(w, idx) in form.waypoints" :key="idx"
+                                    class="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]">
+                                    <div class="relative">
+                                        <input :ref="el => (waypointInputs[idx] = el)" v-model="waypointNames[idx]"
+                                            type="text" placeholder="ชื่อสถานที่ / ที่อยู่"
+                                            @input="onWaypointInput(idx)"
+                                            @focus="onWaypointFocus(idx)"
+                                            @blur="onWaypointBlur(idx)"
+                                            class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <button type="button" @click="openPicker('waypoint', idx)"
+                                            class="absolute inset-y-0 my-auto text-gray-500 right-2 hover:text-blue-600"
+                                            title="เลือกจากแผนที่">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path
+                                                    d="M12 2a7 7 0 00-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" />
+                                            </svg>
+                                        </button>
+                                        <ul v-if="waypointFocused[idx] && (waypointSuggestions[idx] || []).length" class="suggest-list">
+                                            <li v-for="(s, i) in (waypointSuggestions[idx] || [])" :key="i"
+                                                class="suggest-item"
+                                                @mousedown.prevent="applyWaypointSuggestion(idx, s)">
+                                                {{ s.label }}
+                                            </li>
+                                        </ul>
+                                        <p class="mt-1 text-xs text-gray-500 truncate" v-if="w.address">
+                                            {{ w.address }} ({{ w.lat }}, {{ w.lng }})
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" @click="removeWaypoint(idx)"
+                                            class="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+                                            ลบ
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button type="button" @click="addWaypoint"
+                                    class="px-4 py-2 text-blue-700 border border-blue-600 rounded-md hover:bg-blue-50">
+                                    + เพิ่มจุดแวะ
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- SECTION: เวลา / ราคา / ที่นั่ง -->
+                        <section>
+                            <h3 class="mb-3 text-sm font-semibold text-gray-700">เวลา ราคา และความพร้อมที่นั่ง</h3>
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                <div>
+                                    <label class="block mb-1 text-xs font-medium text-gray-600">วัน-เวลาออกเดินทาง <span
+                                            class="text-red-500">*</span></label>
+                                    <input v-model="departureLocal" type="datetime-local"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                </div>
+                                <div>
+                                    <label class="block mb-1 text-xs font-medium text-gray-600">ราคา / ที่นั่ง (บาท)
+                                        <span class="text-red-500">*</span></label>
+                                    <input v-model.number="form.pricePerSeat" type="number" min="0"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                </div>
+                                <div>
+                                    <label class="block mb-1 text-xs font-medium text-gray-600">ที่นั่งคงเหลือ <span
+                                            class="text-red-500">*</span></label>
+                                    <input v-model.number="form.availableSeats" type="number" min="1"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- SECTION: เงื่อนไข -->
+                        <section>
+                            <h3 class="mb-3 text-sm font-semibold text-gray-700">เงื่อนไขการเดินทาง</h3>
+                            <textarea v-model="form.conditions" rows="4"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="พิมพ์เงื่อนไข เช่น งดเปิดเพลงเสียงดัง, ไม่สูบบุหรี่ในรถ ฯลฯ"></textarea>
+                        </section>
+
+                        <!-- Actions (อ้างอิงปุ่มจาก DV) -->
                         <div class="flex justify-end gap-4 pt-2">
                             <button type="button" @click="handleCancel" :disabled="isSubmitting"
                                 class="px-6 py-3 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50">
@@ -197,7 +265,7 @@
                                     <path class="opacity-75" fill="currentColor"
                                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                 </svg>
-                                {{ isSubmitting ? 'กำลังสร้าง...' : 'สร้างการจอง' }}
+                                {{ isSubmitting ? 'กำลังสร้าง...' : 'สร้างเส้นทาง' }}
                             </button>
                         </div>
                     </main>
@@ -209,29 +277,30 @@
         <div id="overlay" class="fixed inset-0 z-40 hidden bg-black bg-opacity-50 lg:hidden"
             @click="closeMobileSidebar"></div>
 
-        <!-- Modal: Map Picker (แบบเดียวกับ findTrip booking) -->
+        <!-- Modal: Map Picker -->
         <transition name="modal-fade">
-            <div v-if="bookingPickingTarget" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
-                @click.self="stopBookingPicker">
+            <div v-if="showPicker" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+                @click.self="closePicker">
                 <div class="bg-white rounded-lg w-[95%] max-w-3xl overflow-hidden">
-                    <div class="flex items-center justify-between p-4 border-b border-gray-300">
+                    <div class="flex items-center justify-between p-4 border-b border-gray-200">
                         <h3 class="text-lg font-semibold text-gray-900">
-                            เลือก{{ bookingPickingTarget === 'pickup' ? 'จุดขึ้นรถ' : 'จุดลงรถ' }}
+                            เลือก{{ pickerTarget === 'start' ? 'จุดเริ่มต้น' : pickerTarget === 'end' ? 'จุดปลายทาง' :
+                            'จุดแวะ' }}
                         </h3>
-                        <button @click="stopBookingPicker" class="text-gray-400 hover:text-gray-600">
+                        <button @click="closePicker" class="text-gray-400 hover:text-gray-600">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
                     <div class="p-0">
-                        <div ref="bookingPickerMapEl" class="w-full" style="height: 65vh;"></div>
+                        <div ref="pickerMapEl" class="w-full" style="height: 65vh;"></div>
                         <div class="flex items-center justify-between p-4 border-t border-gray-200">
                             <div class="text-sm text-gray-700 truncate">
                                 <span class="font-medium">ตำแหน่ง:</span>
-                                <span class="truncate">{{ bookingPicked.name || '— ยังไม่เลือก —' }}</span>
+                                <span class="truncate">{{ picked.name || '— ยังไม่เลือก —' }}</span>
                             </div>
                             <button
                                 class="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                                :disabled="!bookingPicked.name" @click="applyBookingPicked">
+                                :disabled="!picked.name" @click="applyPicked">
                                 ใช้ตำแหน่งนี้
                             </button>
                         </div>
@@ -243,19 +312,16 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, reactive, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRuntimeConfig, useCookie } from '#app'
 import AdminHeader from '~/components/admin/AdminHeader.vue'
 import AdminSidebar from '~/components/admin/AdminSidebar.vue'
 import { useToast } from '~/composables/useToast'
 import { useLongdoMap } from '~/composables/useLongdoMap'
-import dayjs from 'dayjs'
-import 'dayjs/locale/th'
-dayjs.locale('th')
 
 definePageMeta({ middleware: ['admin-auth'] })
 useHead({
-    title: 'Create Booking • Admin',
+    title: 'Create Route • Admin',
     link: [{ rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css' }]
 })
 
@@ -264,139 +330,137 @@ const config = useRuntimeConfig()
 const token = useCookie('token')?.value || (process.client ? localStorage.getItem('token') : '')
 const { loadLongdoMap } = useLongdoMap()
 
-const isSubmitting = ref(false)
-
-/* ====================== ฟอร์ม (payload) ====================== */
+/* ====================== Driver & Vehicle (แบบ DV) ====================== */
+const driverQuery = ref('')
+const driverResults = ref([])
+const isSearchingDrivers = ref(false)
+const lastDriverLabel = ref('')
 const form = reactive({
-    numberOfSeats: 1
+    driverId: '',
+    vehicleId: '',
+    startLocation: { lat: null, lng: null, name: '', address: '' },
+    endLocation: { lat: null, lng: null, name: '', address: '' },
+    waypoints: [],
+    departureTime: '', // ISO
+    availableSeats: 1,
+    pricePerSeat: 0,
+    conditions: ''
 })
+const showDriverList = computed(() => driverQuery.value && (isSearchingDrivers.value || driverResults.value.length > 0))
 
-// เก็บผลจุดรับ/ส่งแบบเดียวกับ findTrip
-const pickupPoint = ref('')
-const dropoffPoint = ref('')
-const pickupData = ref({ lat: null, lng: null, placeId: null, address: null, name: null })
-const dropoffData = ref({ lat: null, lng: null, placeId: null, address: null, name: null })
-
-/* ====================== Route search ====================== */
-const routeQuery = ref('')
-const selectedRouteId = ref('')
-const selectedRoute = ref(null)
-const selectedRouteLabel = ref('')
-const routeResults = ref([])
-const isSearchingRoutes = ref(false)
-const lastRouteLabel = ref('')
-
-const showRouteList = computed(() => routeQuery.value && (isSearchingRoutes.value || routeResults.value.length > 0))
-
-function summarizeRoute(r) {
-    const s = r.startLocation?.name || 'ต้นทาง'
-    const e = r.endLocation?.name || 'ปลายทาง'
-    const driver = r.driver ? `${r.driver.firstName || ''} ${r.driver.lastName || ''}`.trim() : ''
-    return `${s} → ${e}${driver ? ' • ' + driver : ''}`
-}
-function formatDateTime(iso) {
-    return iso ? dayjs(iso).format('D MMM YYYY HH:mm') : '-'
-}
-
-let routeTimer = null
-async function onSearchRoutes() {
-    if (routeQuery.value !== lastRouteLabel.value) {
-        selectedRouteId.value = ''
-        selectedRoute.value = null
-        selectedRouteLabel.value = ''
-    }
-    clearTimeout(routeTimer)
-    const q = routeQuery.value.trim()
-    if (!q) { routeResults.value = []; return }
-    routeTimer = setTimeout(async () => {
+let userSearchTimer = null
+async function onSearchDrivers() {
+    if (driverQuery.value !== lastDriverLabel.value) form.driverId = ''
+    clearTimeout(userSearchTimer)
+    const q = driverQuery.value.trim()
+    if (!q) { driverResults.value = []; return }
+    userSearchTimer = setTimeout(async () => {
         try {
-            isSearchingRoutes.value = true
-            const res = await $fetch('/routes/admin', {
-                baseURL: config.public.apiBase,
-                headers: { Accept: 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-                query: { q, page: 1, limit: 10 }
-            })
-            routeResults.value = res?.data || []
-        } catch (e) {
-            routeResults.value = []
-        } finally {
-            isSearchingRoutes.value = false
-        }
-    }, 300)
-}
-function selectRoute(r) {
-    selectedRouteId.value = r.id
-    selectedRoute.value = r
-    const label = `${summarizeRoute(r)} • ${formatDateTime(r.departureTime)}`
-    routeQuery.value = label
-    lastRouteLabel.value = label
-    selectedRouteLabel.value = label
-    routeResults.value = []
-}
-
-/* ====================== Passenger search ====================== */
-const userQuery = ref('')
-const selectedPassengerId = ref('')
-const selectedPassengerLabel = ref('')
-const userResults = ref([])
-const isSearchingUsers = ref(false)
-const lastUserLabel = ref('')
-
-const showUserList = computed(() => userQuery.value && (isSearchingUsers.value || userResults.value.length > 0))
-
-let userTimer = null
-async function onSearchUsers() {
-    if (userQuery.value !== lastUserLabel.value) selectedPassengerId.value = ''
-    clearTimeout(userTimer)
-    const q = userQuery.value.trim()
-    if (!q) { userResults.value = []; return }
-    userTimer = setTimeout(async () => {
-        try {
-            isSearchingUsers.value = true
+            isSearchingDrivers.value = true
             const res = await $fetch('/users/admin', {
                 baseURL: config.public.apiBase,
                 headers: { Accept: 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
                 query: { q, page: 1, limit: 10 }
             })
-            userResults.value = res?.data || []
+            driverResults.value = res?.data || []
         } catch (e) {
-            userResults.value = []
+            driverResults.value = []
         } finally {
-            isSearchingUsers.value = false
+            isSearchingDrivers.value = false
         }
     }, 300)
 }
-function selectUser(u) {
-    selectedPassengerId.value = u.id
-    const label = `${u.firstName || ''} ${u.lastName || ''} (${u.username ? '@' + u.username : u.email})`
-    userQuery.value = label
-    lastUserLabel.value = label
-    selectedPassengerLabel.value = label
-    userResults.value = []
+function selectDriver(u) {
+    form.driverId = u.id
+    const label = `${u.firstName || ''} ${u.lastName || ''} (@${u.username || ''})`.trim()
+    driverQuery.value = label
+    lastDriverLabel.value = label
+    driverResults.value = []
+    // load vehicles for this driver
+    loadVehiclesForDriver(u.id)
 }
 
-/* ====================== Pickup/Dropoff: Suggest + Picker (Longdo) ====================== */
-const pickupInputEl = ref(null)
-const dropoffInputEl = ref(null)
-const bookingPickingTarget = ref(/** @type {'pickup'|'dropoff'|null} */(null))
-const bookingPickerMapEl = ref(null)
-let bookingPickerMap = null
-let bookingPickerMarker = null
-const bookingPicked = ref({ name: '', lat: null, lng: null, address: null })
+/* Vehicles */
+const vehicleQuery = ref('')
+const openVehicleList = ref(false)
+const isLoadingVehicles = ref(false)
+const vehicles = ref([])
+const vehicleFiltered = ref([])
+async function loadVehiclesForDriver(driverId) {
+    if (!driverId) return
+    try {
+        isLoadingVehicles.value = true
+        const res = await $fetch(`/vehicles/admin/user/${driverId}`, {
+            baseURL: config.public.apiBase,
+            headers: { Accept: 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }
+        })
+        vehicles.value = res?.data || res || []
+        vehicleFiltered.value = vehicles.value
+        vehicleQuery.value = ''
+        form.vehicleId = ''
+    } catch (e) {
+        vehicles.value = []
+        vehicleFiltered.value = []
+        form.vehicleId = ''
+    } finally {
+        isLoadingVehicles.value = false
+    }
+}
+function filterVehicleLocal() {
+    const q = vehicleQuery.value.trim().toLowerCase()
+    vehicleFiltered.value = vehicles.value.filter(v =>
+        (v.vehicleModel || '').toLowerCase().includes(q) ||
+        (v.licensePlate || '').toLowerCase().includes(q) ||
+        (v.vehicleType || '').toLowerCase().includes(q)
+    )
+}
+function selectVehicle(v) {
+    form.vehicleId = v.id
+    vehicleQuery.value = `${v.vehicleModel} (${v.licensePlate || '—'})`
+    openVehicleList.value = false
+}
 
-const pickupSuggestions = ref([])
-const dropoffSuggestions = ref([])
-const pickupFocused = ref(false)
-const dropoffFocused = ref(false)
-let pickupBlurTimer = null
-let dropoffBlurTimer = null
-let pickupInputTimer = null
-let dropoffInputTimer = null
+/* ====================== Map & Place Picker (Longdo) ====================== */
+const mapEl = ref(null)
+let gmap = null
+let startMarker = null, endMarker = null, waypointMarkers = []
+let activePolyline = null
+const mapReady = ref(false)
+let mapOverlays = []
+
+const startInputEl = ref(null)
+const endInputEl = ref(null)
+const waypointInputs = reactive([])
+const startSuggestions = ref([])
+const endSuggestions = ref([])
+const waypointSuggestions = ref([])
+const startFocused = ref(false)
+const endFocused = ref(false)
+const waypointFocused = ref([])
+let startBlurTimer = null
+let endBlurTimer = null
+const waypointBlurTimers = {}
+let startInputTimer = null
+let endInputTimer = null
+const waypointInputTimers = {}
+
+// modal picker
+const showPicker = ref(false)
+const pickerMapEl = ref(null)
+let pickerMap = null, pickerMarker = null
+const pickerTarget = ref(/** @type {'start'|'end'|'waypoint'|null} */(null))
+const pickerIndex = ref(-1)
+const picked = ref({ name: '', lat: null, lng: null, address: '' })
+
+const startName = ref('')
+const endName = ref('')
+const waypointNames = reactive([])
 
 const stripHtml = (html) => {
     if (!html) return null
     return String(html).replace(/<[^>]+>/g, '')
 }
+
 const toSuggestLabel = (item) => {
     if (!item) return null
     if (typeof item === 'string') return item
@@ -412,6 +476,7 @@ const toSuggestLabel = (item) => {
         null
     )
 }
+
 const normalizeResultList = (data) => {
     if (!data) return []
     if (Array.isArray(data)) return data
@@ -429,6 +494,7 @@ const normalizeResultList = (data) => {
     if (data.data && Array.isArray(data.data.data)) return data.data.data
     return []
 }
+
 const coerceLatLng = (item) => {
     if (!item) return null
     const num = (v) => (typeof v === 'string' ? Number(v) : v)
@@ -459,6 +525,7 @@ const coerceLatLng = (item) => {
     }
     return null
 }
+
 const pickFirstLocation = (data) => {
     const list = normalizeResultList(data)
     const item = list[0]
@@ -469,6 +536,7 @@ const pickFirstLocation = (data) => {
     const address = item.address || item.addr || item.display_name || name || null
     return { ...ll, name, address }
 }
+
 const formatReverseAddress = (data) => {
     if (!data) return null
     if (typeof data === 'string') return data
@@ -477,6 +545,7 @@ const formatReverseAddress = (data) => {
     const parts = [data.road, data.subdistrict, data.district, data.province, data.postcode].filter(Boolean)
     return parts.length ? parts.join(' ') : null
 }
+
 const geocodeAddress = async (text) => {
     if (!text) return null
     try {
@@ -491,6 +560,7 @@ const geocodeAddress = async (text) => {
         return null
     }
 }
+
 const searchKeyword = async (text) => {
     if (!text) return null
     try {
@@ -505,6 +575,7 @@ const searchKeyword = async (text) => {
         return null
     }
 }
+
 const reverseGeocode = async (lat, lng) => {
     try {
         const res = await $fetch('/maps/reverse-geocode', {
@@ -519,6 +590,7 @@ const reverseGeocode = async (lat, lng) => {
         return null
     }
 }
+
 const fetchSuggestions = async (text) => {
     const q = (text || '').trim()
     if (q.length < 2) return []
@@ -529,18 +601,19 @@ const fetchSuggestions = async (text) => {
             query: { keyword: q }
         })
         const list = normalizeResultList(res?.data ?? res)
-        return list
+        const mapped = list
             .map((it) => {
                 const label = toSuggestLabel(it)
                 return label ? { label, raw: it } : null
             })
             .filter(Boolean)
-            .slice(0, 8)
+        return mapped.slice(0, 8)
     } catch (e) {
         console.error('Suggest failed:', e)
         return []
     }
 }
+
 const setMetaFromSuggestion = async (label, raw) => {
     let ll = coerceLatLng(raw)
     let name = toSuggestLabel(raw) || label
@@ -563,276 +636,372 @@ const setMetaFromSuggestion = async (label, raw) => {
     if (!ll) return null
     return { lat: ll.lat, lng: ll.lng, name, address }
 }
-const resolveTextToLocation = async (text) => {
-    const s = await searchKeyword(text)
-    if (s && s.lat != null && s.lng != null) return s
-    const g = await geocodeAddress(text)
-    if (g && g.lat != null && g.lng != null) return g
-    return null
-}
 
-const onPickupInput = () => {
-    pickupFocused.value = true
-    if (pickupBlurTimer) clearTimeout(pickupBlurTimer)
-    if (pickupInputTimer) clearTimeout(pickupInputTimer)
-    if (pickupData.value.lat != null || pickupData.value.lng != null) {
-        pickupData.value = { ...pickupData.value, lat: null, lng: null }
+const onStartInput = () => {
+    startFocused.value = true
+    if (startBlurTimer) clearTimeout(startBlurTimer)
+    if (startInputTimer) clearTimeout(startInputTimer)
+    if (form.startLocation.lat != null || form.startLocation.lng != null) {
+        form.startLocation = { ...form.startLocation, lat: null, lng: null }
     }
-    const text = pickupPoint.value || ''
-    pickupInputTimer = setTimeout(async () => {
+    const text = startName.value || ''
+    startInputTimer = setTimeout(async () => {
         const list = await fetchSuggestions(text)
-        if ((pickupPoint.value || '') === text) pickupSuggestions.value = list
+        if ((startName.value || '') === text) startSuggestions.value = list
     }, 250)
 }
-const onDropoffInput = () => {
-    dropoffFocused.value = true
-    if (dropoffBlurTimer) clearTimeout(dropoffBlurTimer)
-    if (dropoffInputTimer) clearTimeout(dropoffInputTimer)
-    if (dropoffData.value.lat != null || dropoffData.value.lng != null) {
-        dropoffData.value = { ...dropoffData.value, lat: null, lng: null }
+
+const onEndInput = () => {
+    endFocused.value = true
+    if (endBlurTimer) clearTimeout(endBlurTimer)
+    if (endInputTimer) clearTimeout(endInputTimer)
+    if (form.endLocation.lat != null || form.endLocation.lng != null) {
+        form.endLocation = { ...form.endLocation, lat: null, lng: null }
     }
-    const text = dropoffPoint.value || ''
-    dropoffInputTimer = setTimeout(async () => {
+    const text = endName.value || ''
+    endInputTimer = setTimeout(async () => {
         const list = await fetchSuggestions(text)
-        if ((dropoffPoint.value || '') === text) dropoffSuggestions.value = list
+        if ((endName.value || '') === text) endSuggestions.value = list
     }, 250)
 }
-const onPickupFocus = () => { pickupFocused.value = true }
-const onDropoffFocus = () => { dropoffFocused.value = true }
-const onPickupBlur = () => {
-    pickupBlurTimer = setTimeout(() => {
-        pickupFocused.value = false
-        pickupSuggestions.value = []
-    }, 150)
-}
-const onDropoffBlur = () => {
-    dropoffBlurTimer = setTimeout(() => {
-        dropoffFocused.value = false
-        dropoffSuggestions.value = []
-    }, 150)
-}
-const applyPickupSuggestion = async (s) => {
-    pickupPoint.value = s.label
-    pickupSuggestions.value = []
-    const meta = await setMetaFromSuggestion(s.label, s.raw)
-    if (meta) {
-        pickupData.value = { lat: meta.lat, lng: meta.lng, name: meta.name, address: meta.address, placeId: null }
+
+const onWaypointInput = (idx) => {
+    waypointFocused.value[idx] = true
+    if (waypointBlurTimers[idx]) clearTimeout(waypointBlurTimers[idx])
+    if (waypointInputTimers[idx]) clearTimeout(waypointInputTimers[idx])
+    if (form.waypoints[idx]?.lat != null || form.waypoints[idx]?.lng != null) {
+        form.waypoints[idx] = { ...form.waypoints[idx], lat: null, lng: null }
     }
-}
-const applyDropoffSuggestion = async (s) => {
-    dropoffPoint.value = s.label
-    dropoffSuggestions.value = []
-    const meta = await setMetaFromSuggestion(s.label, s.raw)
-    if (meta) {
-        dropoffData.value = { lat: meta.lat, lng: meta.lng, name: meta.name, address: meta.address, placeId: null }
-    }
-}
-const onPickupManual = async () => {
-    const text = pickupPoint.value
-    if (!text) return
-    const r = await resolveTextToLocation(text)
-    if (!r) return
-    pickupData.value = { lat: r.lat, lng: r.lng, name: r.name || text, address: r.address || text, placeId: null }
-}
-const onDropoffManual = async () => {
-    const text = dropoffPoint.value
-    if (!text) return
-    const r = await resolveTextToLocation(text)
-    if (!r) return
-    dropoffData.value = { lat: r.lat, lng: r.lng, name: r.name || text, address: r.address || text, placeId: null }
+    const text = waypointNames[idx] || ''
+    waypointInputTimers[idx] = setTimeout(async () => {
+        const list = await fetchSuggestions(text)
+        if ((waypointNames[idx] || '') === text) waypointSuggestions.value[idx] = list
+    }, 250)
 }
 
-async function startBookingPicker(target) {
-    bookingPickingTarget.value = target
-    bookingPicked.value = { name: '', lat: null, lng: null, address: null }
+const onStartFocus = () => { startFocused.value = true }
+const onEndFocus = () => { endFocused.value = true }
+const onWaypointFocus = (idx) => { waypointFocused.value[idx] = true }
+
+const onStartBlur = () => {
+    startBlurTimer = setTimeout(() => {
+        startFocused.value = false
+        startSuggestions.value = []
+    }, 150)
+}
+
+const onEndBlur = () => {
+    endBlurTimer = setTimeout(() => {
+        endFocused.value = false
+        endSuggestions.value = []
+    }, 150)
+}
+
+const onWaypointBlur = (idx) => {
+    waypointBlurTimers[idx] = setTimeout(() => {
+        waypointFocused.value[idx] = false
+        waypointSuggestions.value[idx] = []
+    }, 150)
+}
+
+const applyStartSuggestion = async (s) => {
+    startName.value = s.label
+    startSuggestions.value = []
+    const meta = await setMetaFromSuggestion(s.label, s.raw)
+    if (meta) {
+        form.startLocation = { lat: meta.lat, lng: meta.lng, name: meta.name, address: meta.address }
+        redrawMap()
+    }
+}
+
+const applyEndSuggestion = async (s) => {
+    endName.value = s.label
+    endSuggestions.value = []
+    const meta = await setMetaFromSuggestion(s.label, s.raw)
+    if (meta) {
+        form.endLocation = { lat: meta.lat, lng: meta.lng, name: meta.name, address: meta.address }
+        redrawMap()
+    }
+}
+
+const applyWaypointSuggestion = async (idx, s) => {
+    waypointNames[idx] = s.label
+    waypointSuggestions.value[idx] = []
+    const meta = await setMetaFromSuggestion(s.label, s.raw)
+    if (meta) {
+        form.waypoints[idx] = { lat: meta.lat, lng: meta.lng, name: meta.name, address: meta.address }
+        redrawMap()
+    }
+}
+
+const addOverlay = (overlay) => {
+    if (!gmap || !overlay) return
+    gmap.Overlays.add(overlay)
+    mapOverlays.push(overlay)
+}
+
+const clearMapOverlays = () => {
+    if (!gmap) return
+    if (mapOverlays.length) {
+        mapOverlays.forEach((o) => {
+            try { gmap.Overlays.remove(o) } catch { }
+        })
+    }
+    mapOverlays = []
+    activePolyline = null
+    startMarker = null
+    endMarker = null
+    waypointMarkers = []
+}
+
+const fitMapToPoints = (points) => {
+    if (!gmap || !points?.length) return
+    const lats = points.map(p => p.lat).filter((v) => typeof v === 'number')
+    const lngs = points.map(p => p.lng).filter((v) => typeof v === 'number')
+    if (!lats.length || !lngs.length) return
+    const minLat = Math.min(...lats)
+    const maxLat = Math.max(...lats)
+    const minLon = Math.min(...lngs)
+    const maxLon = Math.max(...lngs)
+    gmap.location({ lat: (minLat + maxLat) / 2, lon: (minLon + maxLon) / 2 })
+    if (typeof gmap.bound === 'function') {
+        try {
+            gmap.bound({ minLat, minLon, maxLat, maxLon })
+            return
+        } catch { }
+    }
+    const span = Math.max(Math.abs(maxLat - minLat), Math.abs(maxLon - minLon))
+    let zoom = 12
+    if (span > 20) zoom = 5
+    else if (span > 10) zoom = 6
+    else if (span > 5) zoom = 7
+    else if (span > 2) zoom = 8
+    else if (span > 1) zoom = 9
+    else if (span > 0.5) zoom = 10
+    else if (span > 0.2) zoom = 11
+    gmap.zoom(zoom)
+}
+
+const initMap = () => {
+    if (!mapEl.value || gmap) return
+    if (!window.longdo) return
+    gmap = new longdo.Map({ placeholder: mapEl.value })
+    gmap.location({ lat: 13.7563, lon: 100.5018 })
+    gmap.zoom(6)
+    mapReady.value = true
+    redrawMap()
+}
+
+function redrawMap() {
+    if (!gmap) return
+    clearMapOverlays()
+    const points = []
+    if (form.startLocation.lat && form.startLocation.lng) {
+        startMarker = new longdo.Marker({ lon: form.startLocation.lng, lat: form.startLocation.lat }, { title: 'จุดเริ่มต้น' })
+        addOverlay(startMarker)
+        points.push({ lat: form.startLocation.lat, lng: form.startLocation.lng })
+    }
+    if (form.endLocation.lat && form.endLocation.lng) {
+        endMarker = new longdo.Marker({ lon: form.endLocation.lng, lat: form.endLocation.lat }, { title: 'จุดปลายทาง' })
+        addOverlay(endMarker)
+        points.push({ lat: form.endLocation.lat, lng: form.endLocation.lng })
+    }
+    if (form.waypoints.length) {
+        waypointMarkers = form.waypoints.filter(Boolean).map((w, i) => {
+            const marker = new longdo.Marker(
+                { lon: w.lng, lat: w.lat },
+                { title: w.name || w.address || `จุดแวะ ${i + 1}` }
+            )
+            addOverlay(marker)
+            points.push({ lat: w.lat, lng: w.lng })
+            return marker
+        })
+    }
+    if (points.length) fitMapToPoints(points)
+}
+
+/* Picker */
+async function openPicker(target, idx = -1) {
+    pickerTarget.value = target
+    pickerIndex.value = idx
+    picked.value = { name: '', lat: null, lng: null, address: '' }
+    showPicker.value = true
     try {
         await loadLongdoMap()
     } catch (e) {
         console.error(e)
         toast.error('ไม่สามารถโหลดแผนที่ได้', 'กรุณาตรวจสอบคีย์ Longdo Map')
-        bookingPickingTarget.value = null
+        showPicker.value = false
         return
     }
     nextTick(() => {
-        const fallbackCenter = { lat: 13.7563, lng: 100.5018 }
-        const base = target === 'pickup' ? pickupData.value : dropoffData.value
-        const center = (base.lat && base.lng) ? { lat: base.lat, lng: base.lng } : fallbackCenter
-
-        bookingPickerMap = new longdo.Map({ placeholder: bookingPickerMapEl.value })
-        bookingPickerMap.location({ lon: center.lng, lat: center.lat })
-        bookingPickerMap.zoom(base.lat ? 14 : 6)
-        if (base.lat && base.lng) {
-            setBookingPickerMarker(base.lat, base.lng)
-            bookingPicked.value = { name: base.name || '', lat: base.lat, lng: base.lng, address: base.address || '' }
-        }
-        bookingPickerMap.Event.bind('click', () => {
-            const loc = bookingPickerMap.location(longdo.LocationMode.Pointer)
+        const center =
+            target === 'start' && form.startLocation.lat ? { lat: form.startLocation.lat, lng: form.startLocation.lng } :
+                target === 'end' && form.endLocation.lat ? { lat: form.endLocation.lat, lng: form.endLocation.lng } :
+                    (idx > -1 && form.waypoints[idx]?.lat) ? { lat: form.waypoints[idx].lat, lng: form.waypoints[idx].lng } :
+                        { lat: 13.7563, lng: 100.5018 }
+        pickerMap = new longdo.Map({ placeholder: pickerMapEl.value })
+        pickerMap.location({ lon: center.lng, lat: center.lat })
+        pickerMap.zoom(center.lat ? 14 : 6)
+        pickerMap.Event.bind('click', () => {
+            const loc = pickerMap.location(longdo.LocationMode.Pointer)
             if (!loc || loc.lat == null || loc.lon == null) return
-            setBookingPickerMarker(loc.lat, loc.lon)
-            resolveBookingPicked(loc.lat, loc.lon)
+            setPicker(loc.lat, loc.lon)
+            resolvePicked(loc.lat, loc.lon)
         })
     })
 }
-function stopBookingPicker() {
-    bookingPickingTarget.value = null
-    if (bookingPickerMap && bookingPickerMarker) {
-        bookingPickerMap.Overlays.remove(bookingPickerMarker)
+function setPicker(lat, lng) {
+    if (!pickerMap || !window.longdo) return
+    if (pickerMarker) {
+        pickerMap.Overlays.remove(pickerMarker)
+        pickerMarker = null
     }
-    bookingPickerMap = null
-    bookingPickerMarker = null
+    pickerMarker = new longdo.Marker({ lon: lng, lat }, { title: 'ตำแหน่งที่เลือก' })
+    pickerMap.Overlays.add(pickerMarker)
 }
-function setBookingPickerMarker(lat, lng) {
-    if (!bookingPickerMap || !window.longdo) return
-    if (bookingPickerMarker) {
-        bookingPickerMap.Overlays.remove(bookingPickerMarker)
-        bookingPickerMarker = null
-    }
-    bookingPickerMarker = new longdo.Marker({ lon: lng, lat }, { title: 'ตำแหน่งที่เลือก' })
-    bookingPickerMap.Overlays.add(bookingPickerMarker)
-}
-async function resolveBookingPicked(lat, lng) {
+async function resolvePicked(lat, lng) {
     const info = await reverseGeocode(lat, lng)
     const name = cleanAddr(info?.name || `${lat.toFixed(5)}, ${lng.toFixed(5)}`)
     const address = cleanAddr(info?.address || name)
-    bookingPicked.value = { name, lat, lng, address }
+    picked.value = { name, lat, lng, address }
 }
-function applyBookingPicked() {
-    if (!bookingPickingTarget.value || !bookingPicked.value.name) return
-    const data = {
-        lat: bookingPicked.value.lat,
-        lng: bookingPicked.value.lng,
-        placeId: null,
-        address: bookingPicked.value.address,
-        name: bookingPicked.value.name
+function applyPicked() {
+    if (!picked.value?.lat) return
+    if (pickerTarget.value === 'start') {
+        startName.value = picked.value.name
+        form.startLocation = { ...picked.value }
+    } else if (pickerTarget.value === 'end') {
+        endName.value = picked.value.name
+        form.endLocation = { ...picked.value }
+    } else if (pickerTarget.value === 'waypoint' && pickerIndex.value > -1) {
+        waypointNames[pickerIndex.value] = picked.value.name
+        form.waypoints[pickerIndex.value] = { ...picked.value }
     }
-    if (bookingPickingTarget.value === 'pickup') {
-        pickupPoint.value = data.name || data.address || ''
-        pickupData.value = data
-    } else {
-        dropoffPoint.value = data.name || data.address || ''
-        dropoffData.value = data
-    }
-    stopBookingPicker()
+    closePicker()
+    redrawMap()
 }
-
-function normalizeBookingError(err) {
-    const status =
-        err?.statusCode || err?.status || err?.response?.status || err?.data?.statusCode
-    const rawMsg = err?.data?.message || err?.message || ''
-    const msg = String(rawMsg || '').trim()
-    const lower = msg.toLowerCase()
-
-    let title = 'เกิดข้อผิดพลาด'
-    let body = msg || 'ไม่สามารถสร้างการจองได้'
-
-    // เคสเฉพาะที่เจอบ่อย
-    if (/driver cannot book their own route/i.test(msg)) {
-        title = 'ไม่สามารถดำเนินการ'
-        body = 'ผู้ขับไม่สามารถจองเส้นทางของตนเองได้ (Driver cannot book their own route.)'
-    } else if (/booking already exists|duplicate booking/i.test(lower) || status === 409) {
-        title = 'ข้อมูลซ้ำ'
-        body = msg || 'มีคำขอจองนี้อยู่ในระบบแล้ว'
-    } else if (/no available seats|route .* full|insufficient seats|exceeds available seats/i.test(lower)) {
-        title = 'ที่นั่งไม่เพียงพอ'
-        body = 'จำนวนที่นั่งไม่พอหรือเส้นทางเต็มแล้ว'
-    } else if (/route not found/i.test(lower)) {
-        title = 'ไม่พบเส้นทาง'
-        body = 'กรุณาเลือกเส้นทางใหม่อีกครั้ง'
-    } else if (/passenger not found|user not found/i.test(lower)) {
-        title = 'ไม่พบผู้โดยสาร'
-        body = 'ตรวจสอบผู้โดยสารที่เลือกอีกครั้ง'
-    } else if (status === 400) {
-        title = 'ข้อมูลไม่ถูกต้อง'
-        body = msg || 'รูปแบบข้อมูลไม่ถูกต้อง'
-    } else if (status === 401 || status === 403) {
-        title = 'ไม่ได้รับอนุญาต'
-        body = 'สิทธิ์ไม่เพียงพอสำหรับการกระทำนี้'
+function closePicker() {
+    showPicker.value = false
+    if (pickerMap && pickerMarker) {
+        pickerMap.Overlays.remove(pickerMarker)
     }
-
-    return { title, body, status, raw: msg }
+    pickerMap = null; pickerMarker = null
 }
 
-function cleanAddr(a) {
-    return (a || '').replace(/,?\s*(Thailand|ไทย|ประเทศ)\s*$/i, '').replace(/\s{2,}/g, ' ').trim()
+/* ====================== Waypoints helpers ====================== */
+function addWaypoint() {
+    form.waypoints.push({ lat: null, lng: null, name: '', address: '' })
+    waypointNames.push('')
+    waypointSuggestions.value.push([])
+    waypointFocused.value.push(false)
+}
+function removeWaypoint(idx) {
+    form.waypoints.splice(idx, 1)
+    waypointNames.splice(idx, 1)
+    waypointInputs.splice(idx, 1)
+    waypointSuggestions.value.splice(idx, 1)
+    waypointFocused.value.splice(idx, 1)
+    if (waypointBlurTimers[idx]) {
+        clearTimeout(waypointBlurTimers[idx])
+        delete waypointBlurTimers[idx]
+    }
+    if (waypointInputTimers[idx]) {
+        clearTimeout(waypointInputTimers[idx])
+        delete waypointInputTimers[idx]
+    }
+    redrawMap()
 }
 
 /* ====================== Submit ====================== */
-const maxSeats = computed(() => selectedRoute.value?.availableSeats ?? null)
+const isSubmitting = ref(false)
+const departureLocal = ref('')
+
 const canSubmit = computed(() =>
-    !!selectedRouteId.value &&
-    !!selectedPassengerId.value &&
-    form.numberOfSeats >= 1 &&
-    (!maxSeats.value || form.numberOfSeats <= maxSeats.value) &&
-    // ต้องมีพิกัดจาก autocomplete/ปักหมุด หรือ geocode ข้อความก่อนส่ง
-    (!!pickupData.value.lat || !!pickupPoint.value) &&
-    (!!dropoffData.value.lat || !!dropoffPoint.value)
+    !!form.driverId &&
+    !!form.vehicleId &&
+    !!form.startLocation.lat &&
+    !!form.endLocation.lat &&
+    !!departureLocal.value &&
+    form.availableSeats > 0 &&
+    form.pricePerSeat >= 0
 )
 
-async function geocodeText(text) {
-    if (!text) return null
-    const r = await resolveTextToLocation(text)
-    if (!r) return null
-    return {
-        lat: r.lat,
-        lng: r.lng,
-        placeId: null,
-        address: r.address || null,
-        name: r.name || null
-    }
+function toISOLocal(datetimeLocal) {
+    // datetime-local เป็น local time → แปลงเป็น ISO (UTC)
+    const d = new Date(datetimeLocal)
+    return d.toISOString()
 }
 
 async function handleCreate() {
+    // เติมพิกัดจากข้อความ ถ้ายังไม่มี
+    if ((form.startLocation.lat == null || form.startLocation.lng == null) && startName.value) {
+        const g = await geocodeAddress(startName.value)
+        if (g && g.lat != null && g.lng != null) {
+            form.startLocation = { lat: g.lat, lng: g.lng, name: g.name || startName.value, address: g.address || startName.value }
+        }
+    }
+    if ((form.endLocation.lat == null || form.endLocation.lng == null) && endName.value) {
+        const g = await geocodeAddress(endName.value)
+        if (g && g.lat != null && g.lng != null) {
+            form.endLocation = { lat: g.lat, lng: g.lng, name: g.name || endName.value, address: g.address || endName.value }
+        }
+    }
+    for (let i = 0; i < form.waypoints.length; i++) {
+        const w = form.waypoints[i]
+        const text = waypointNames[i]
+        if ((w?.lat == null || w?.lng == null) && text) {
+            const g = await geocodeAddress(text)
+            if (g && g.lat != null && g.lng != null) {
+                form.waypoints[i] = { lat: g.lat, lng: g.lng, name: g.name || text, address: g.address || text }
+            }
+        }
+    }
     if (!canSubmit.value) {
-        toast.warning('ข้อมูลไม่ครบถ้วน', 'กรุณาเลือกเส้นทาง/ผู้โดยสาร ระบุจำนวนที่นั่ง และกำหนดจุดรับ-ส่งให้ถูกต้อง')
+        toast.warning('ข้อมูลไม่ครบถ้วน', 'กรุณากรอก/เลือกข้อมูลที่จำเป็นให้ครบ')
         return
     }
-    // ถ้ายังไม่มีพิกัด (ผู้ใช้พิมพ์เอง) ให้ geocode
-    if (pickupPoint.value && !pickupData.value.lat) {
-        const g1 = await geocodeText(pickupPoint.value); if (g1) pickupData.value = g1
-    }
-    if (dropoffPoint.value && !dropoffData.value.lat) {
-        const g2 = await geocodeText(dropoffPoint.value); if (g2) dropoffData.value = g2
-    }
-    if (!pickupData.value.lat || !dropoffData.value.lat) {
-        toast.warning('ข้อมูลไม่ครบถ้วน', 'กรุณาเลือกจุดขึ้นรถและจุดลงรถจากรายการหรือปักหมุดบนแผนที่')
-        return
-    }
-
     isSubmitting.value = true
     try {
         const payload = {
-            routeId: selectedRouteId.value,
-            passengerId: selectedPassengerId.value,
-            numberOfSeats: Number(form.numberOfSeats),
-            pickupLocation: pickupData.value,
-            dropoffLocation: dropoffData.value
+            driverId: form.driverId,
+            vehicleId: form.vehicleId,
+            startLocation: form.startLocation,
+            endLocation: form.endLocation,
+            waypoints: form.waypoints.filter(w => w && w.lat != null && w.lng != null),
+            departureTime: toISOLocal(departureLocal.value),
+            availableSeats: Number(form.availableSeats),
+            pricePerSeat: Number(form.pricePerSeat),
+            conditions: form.conditions || ''
         }
-        const res = await $fetch('/bookings/admin', {
+
+        await $fetch('/routes/admin', {
             baseURL: config.public.apiBase,
             method: 'POST',
             headers: {
-                Accept: 'application/json',
                 'Content-Type': 'application/json',
                 ...(token ? { Authorization: `Bearer ${token}` } : {})
             },
             body: payload
         })
-        toast.success('สร้างการจองสำเร็จ', 'บันทึกการจองเรียบร้อย')
-        const id = res?.data?.id || ''
-        navigateTo(id ? `/admin/bookings/${id}` : '/admin/bookings').catch(() => { })
+
+        toast.success('สร้างเส้นทางสำเร็จ', 'บันทึกเส้นทางเรียบร้อย')
+        navigateTo('/admin/routes')
     } catch (error) {
-        const mapped = normalizeBookingError(error)
-        console.error('Create booking error:', { status: mapped.status, message: mapped.raw })
-        toast.error(mapped.title, mapped.body)
+        console.error('Create route error:', error)
+        toast.error('เกิดข้อผิดพลาด', error?.data?.message || 'ไม่สามารถสร้างเส้นทางได้')
     } finally {
         isSubmitting.value = false
     }
 }
 function handleCancel() {
-    navigateTo('/admin/bookings')
+    navigateTo('/admin/routes')
 }
 
-/* ====================== Layout helper (เดิม) ====================== */
+/* ====================== Utils / Layout ====================== */
+function cleanAddr(a) {
+    return (a || '').replace(/,?\s*(Thailand|ไทย|ประเทศ)\s*$/i, '').replace(/\s{2,}/g, ' ').trim()
+}
 function closeMobileSidebar() {
     const sidebar = document.getElementById('sidebar')
     const overlay = document.getElementById('overlay')
@@ -849,6 +1018,11 @@ function defineGlobalScripts() {
             sidebar.classList.remove('mobile-open'); overlay.classList.add('hidden')
             mainContent.style.marginLeft = sidebar.classList.contains('collapsed') ? '80px' : '280px'
         } else { mainContent.style.marginLeft = '0' }
+
+        if (gmap && mapReady.value) {
+            try { gmap.resize && gmap.resize() } catch { }
+            redrawMap()
+        }
     }
     window.addEventListener('resize', window.__adminResizeHandler__)
 }
@@ -864,9 +1038,14 @@ onMounted(async () => {
         await loadLongdoMap()
     } catch (e) {
         console.error(e)
+        toast.error('ไม่สามารถโหลดแผนที่ได้', 'กรุณาตรวจสอบคีย์ Longdo Map')
+        return
     }
+    initMap()
 })
-onUnmounted(() => { cleanupGlobalScripts() })
+onUnmounted(() => {
+    cleanupGlobalScripts()
+})
 </script>
 
 <style scoped>
@@ -886,25 +1065,25 @@ onUnmounted(() => { cleanupGlobalScripts() })
 
 .suggest-list {
     position: absolute;
-    z-index: 30;
+    z-index: 50;
     width: 100%;
-    margin-top: 0.25rem;
+    margin-top: 4px;
     background: #fff;
     border: 1px solid #e5e7eb;
-    border-radius: 0.5rem;
-    max-height: 220px;
-    overflow: auto;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    max-height: 240px;
+    overflow-y: auto;
 }
 
 .suggest-item {
-    padding: 0.5rem 0.75rem;
+    padding: 8px 12px;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: 0.9rem;
+    color: #111827;
 }
 
 .suggest-item:hover {
-    background: #eff6ff;
+    background: #f3f4f6;
 }
-
 </style>

@@ -82,33 +82,11 @@ app.use(errorHandler);
 // --- Start Server ---
 const PORT = process.env.PORT || 3000;
 const http = require('http');
-const { Server } = require('socket.io');
+const socketService = require('./src/socket');
 
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: corsOptions
-});
-
-// Attach io to app for use in controllers/services
+const io = socketService.init(server);
 app.set('io', io);
-
-io.on('connection', (socket) => {
-    console.log('User connected:', socket.id);
-
-    socket.on('join-room', (roomId) => {
-        socket.join(roomId);
-        console.log(`User ${socket.id} joined room ${roomId}`);
-    });
-
-    socket.on('join-user', (userId) => {
-        socket.join(`user_${userId}`);
-        console.log(`User ${socket.id} joined personal room user_${userId}`);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
-    });
-});
 
 (async () => {
     try {

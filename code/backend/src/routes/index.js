@@ -8,7 +8,11 @@ const bookingRoutes = require('./booking.routes');
 const notificationRoutes = require('./notification.routes')
 const mapRoutes = require('./maps.routes')
 const chatRoutes = require('./chat.routes');
+<<<<<<< HEAD
 const investigationRoutes = require("./investigation.routes");
+=======
+const investigationRoutes = require('./investigation.routes');
+>>>>>>> porametpu
 
 const router = express.Router();
 
@@ -21,6 +25,10 @@ router.use('/bookings', bookingRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/maps', mapRoutes);
 router.use('/chats', chatRoutes);
+<<<<<<< HEAD
 router.use(investigationRoutes);
+=======
+router.use('/investigations', investigationRoutes);
+>>>>>>> porametpu
 
 module.exports = router;

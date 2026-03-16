@@ -255,6 +255,31 @@ const adminUpdateBooking = async (id, patch) => {
       },
       include: { route: true, passenger: true }
     });
+
+    if (targetStatus === BookingStatus.CONFIRMED) {
+      const existingRoom = await tx.chatRoom.findUnique({
+        where: { bookingId: updated.id }
+      });
+      if (!existingRoom) {
+        await tx.chatRoom.create({
+          data: {
+            bookingId: updated.id,
+            participants: {
+              create: [
+                {
+                  userId: updated.route.driverId,
+                  displayName: "คนขับรถ",
+                },
+                {
+                  userId: updated.passengerId,
+                  displayName: `${updated.passenger.firstName || ''} ${updated.passenger.lastName ? updated.passenger.lastName.charAt(0) + '.' : ''}`.trim(),
+                }
+              ]
+            }
+          }
+        });
+      }
+    }
     return updated;
   });
 };
@@ -423,6 +448,32 @@ const updateBookingStatus = async (id, status, userId) => {
           metadata: { kind: 'BOOKING_STATUS', bookingId: id, routeId: booking.route.id, status: 'CONFIRMED' }
         }
       });
+
+      // 💬 สร้างห้องแชทอัตโนมัติ
+      const existingRoom = await tx.chatRoom.findUnique({
+        where: { bookingId: id }
+      });
+
+      if (!existingRoom) {
+        const passenger = await tx.user.findUnique({ where: { id: booking.passengerId } });
+        await tx.chatRoom.create({
+          data: {
+            bookingId: id,
+            participants: {
+              create: [
+                {
+                  userId: booking.route.driverId,
+                  displayName: "คนขับรถ",
+                },
+                {
+                  userId: booking.passengerId,
+                  displayName: `${passenger.firstName || ''} ${passenger.lastName ? passenger.lastName.charAt(0) + '.' : ''}`.trim(),
+                }
+              ]
+            }
+          }
+        });
+      }
     }
     return updated;
   });

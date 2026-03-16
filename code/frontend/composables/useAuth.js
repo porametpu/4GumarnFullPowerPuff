@@ -1,6 +1,5 @@
 import { useCookie } from '#app'
 import { useRouter } from 'vue-router'
-import { useChatWidget } from './useChatWidget'
 
 export function useAuth() {
   const { $api } = useNuxtApp()
@@ -53,16 +52,6 @@ export function useAuth() {
   const logout = () => {
     token.value = null
     user.value = null
-
-    // Force close chat widget by clearing the global state
-    try {
-      const activeBookingId = useChatWidget().activeBookingId
-      if (activeBookingId) activeBookingId.value = null
-
-      const isWidgetOpen = useChatWidget().isWidgetOpen
-      if (isWidgetOpen) isWidgetOpen.value = false
-    } catch (e) { }
-
     return router.push('/')
   }
 

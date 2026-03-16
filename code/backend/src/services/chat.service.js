@@ -89,6 +89,7 @@ const getMessages = async (roomId, userId) => {
         const participant = room.participants.find(p => p.userId === msg.senderId);
         return {
             ...msg,
+            content: msg.isDeleted ? 'ข้อความนี้ถูกลบแล้ว' : msg.content,
             senderDisplayName: participant ? participant.displayName : 'Unknown',
             senderAvatar: msg.sender?.profilePicture || null,
             isMine: msg.senderId === userId
@@ -129,11 +130,16 @@ const getMyChatRooms = async (userId) => {
             }
         });
 
+        const lastMessage = room.messages[0] || null;
+        if (lastMessage && lastMessage.isDeleted) {
+            lastMessage.content = 'ข้อความนี้ถูกลบแล้ว';
+        }
+
         return {
             id: room.id,
             bookingId: room.bookingId,
             otherParticipantName: otherParticipant ? otherParticipant.displayName : 'Unknown',
-            lastMessage: room.messages[0] || null,
+            lastMessage,
             unreadCount,
             booking: room.booking
         };
@@ -223,11 +229,30 @@ const sendImageMessage = async (roomId, userId, file) => {
     };
 };
 
+const deleteMessage = async (messageId, userId) => {
+    const message = await prisma.message.findUnique({
+        where: { id: messageId }
+    });
+
+    if (!message) throw new ApiError(404, 'Message not found');
+    if (message.senderId !== userId) {
+        throw new ApiError(403, 'You can only delete your own messages');
+    }
+
+    await prisma.message.update({
+        where: { id: messageId },
+        data: { isDeleted: true }
+    });
+
+    return { ...message, isDeleted: true };
+};
+
 module.exports = {
     getChatRoom,
     getMessages,
     sendMessage,
     sendImageMessage,
     getMyChatRooms,
-    markAsRead
+    markAsRead,
+    deleteMessage
 };

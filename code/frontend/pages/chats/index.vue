@@ -95,6 +95,7 @@ watch(socket, (newSocket) => {
     if (newSocket) {
         newSocket.on('message-notification', () => {
             fetchHistory()
+            refreshUnreadCount()
         })
     }
 }, { immediate: true })

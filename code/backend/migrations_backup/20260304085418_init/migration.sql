@@ -1,6 +1,3 @@
--- AlterEnum
-ALTER TYPE "MessageType" ADD VALUE 'LOCATION';
-
 -- CreateEnum
 CREATE TYPE "ExtraLuggageType" AS ENUM ('MEDIUM', 'LARGE', 'EXTRA_LARGE');
 

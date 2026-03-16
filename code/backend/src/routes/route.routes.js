@@ -11,7 +11,8 @@ const {
   updateRouteByAdminSchema,
   adminDriverIdParamSchema,
   listRoutesQuerySchema,
-  cancelRouteSchema
+  cancelRouteSchema,
+  driverNearbyAlertBodySchema
 } = require("../validations/route.validation");
 
 const router = express.Router();
@@ -101,6 +102,15 @@ router.post(
   requireDriverVerified,
   validate({ body: createRouteSchema }),
   routeController.createRoute
+);
+
+// POST /routes/:id/nearby-alert
+router.post(
+  "/:id/nearby-alert",
+  protect,
+  requireDriverVerified,
+  validate({ params: idParamSchema, body: driverNearbyAlertBodySchema }),
+  routeController.notifyNearbyPassengers
 );
 
 // PUT /routes/:id

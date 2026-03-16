@@ -25,20 +25,30 @@
           </div>
 
           <div class="space-y-4">
-            <input
-              v-model="emailConfirm"
-              type="email"
-              placeholder="กรอกอีเมลของคุณเพื่อยืนยัน"
-              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div v-if="isLoadingData" class="flex justify-center items-center py-4 text-gray-500">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>กำลังตรวจสอบข้อมูล...</span>
+            </div>
+            <template v-else>
+              <input
+                v-model="emailConfirm"
+                type="email"
+                placeholder="กรอกอีเมลของคุณเพื่อยืนยัน"
+                :disabled="hasActiveBookings"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
 
-            <button
-              @click="handleDelete"
-              :disabled="loading || !emailConfirm.trim()"
-              class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {{ loading ? 'กำลังลบบัญชี...' : 'ลบบัญชีถาวร' }}
-            </button>
+              <button
+                @click="handleDelete"
+                :disabled="loading || hasActiveBookings || !emailConfirm.trim()"
+                class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {{ loading ? 'กำลังลบบัญชี...' : 'ลบบัญชีถาวร' }}
+              </button>
+            </template>
           </div>
         </div>
       </main>
@@ -47,21 +57,80 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import ProfileSidebar from '~/components/ProfileSidebar.vue';
+import { useAuth } from '~/composables/useAuth'
+
 const { $api } = useNuxtApp()
+const { user } = useAuth()
 
 const emailConfirm = ref('')
 const loading = ref(false)
+const isLoadingData = ref(true)
 const errorMessage = ref('')
 const successMessage = ref('')
+const hasActiveBookings = ref(false)
+const activeBookingMessage = ref('')
 
 definePageMeta({
     middleware: 'auth'
 });
 
+onMounted(async () => {
+  await checkActiveBookings()
+})
+
+const checkActiveBookings = async () => {
+  isLoadingData.value = true
+  try {
+    const tokenCookie = useCookie('token')
+    const token = tokenCookie.value
+    if (!token) return
+
+    let activeCount = 0
+
+    // ตรวจสอบจาก bookings (ฝั่งคนนั่ง)
+    try {
+      const bookings = await $api('/bookings/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      const activeBookings = bookings.filter(b => b.status === 'PENDING' || b.status === 'CONFIRMED')
+      activeCount += activeBookings.length
+    } catch (e) {
+      console.error('Cannot fetch bookings:', e)
+    }
+
+    // ตรวจสอบจาก routes (ฝั่งคนขับ)
+    if (user.value?.role === 'DRIVER') {
+      try {
+        const routes = await $api('/routes/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        const activeRoutes = routes.filter(r => r.status === 'AVAILABLE' || r.status === 'FULL' || r.status === 'IN_TRANSIT')
+        activeCount += activeRoutes.length
+      } catch (e) {
+        console.error('Cannot fetch routes:', e)
+      }
+    }
+
+    if (activeCount > 0) {
+      hasActiveBookings.value = true
+      activeBookingMessage.value = 'คุณมีรายการจองหรือการเดินทางที่กำลังดำเนินการอยู่ กรุณายกเลิกหรือทำรายการให้เสร็จสิ้นก่อนลบบัญชี'
+      errorMessage.value = activeBookingMessage.value
+    }
+  } catch (err) {
+    console.error('Error checking active bookings:', err)
+  } finally {
+    isLoadingData.value = false
+  }
+}
 
 const handleDelete = async () => {
+  if (hasActiveBookings.value) {
+    errorMessage.value = activeBookingMessage.value
+    return
+  }
+
   if (!emailConfirm.value.trim()) {
     errorMessage.value = 'กรุณากรอกอีเมลเพื่อยืนยัน'
     return

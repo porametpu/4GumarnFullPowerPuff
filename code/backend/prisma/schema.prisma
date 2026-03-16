@@ -198,6 +198,7 @@ model Message {
   type       MessageType @default(TEXT)
   createdAt  DateTime    @default(now())
   isRead     Boolean     @default(false)
+  isDeleted  Boolean     @default(false)
   chatRoom   ChatRoom    @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   sender     User        @relation("SentMessages", fields: [senderId], references: [id])
 

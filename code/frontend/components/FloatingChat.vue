@@ -55,57 +55,82 @@
 
         <template v-else>
           <!-- Messages List -->
-          <div v-for="msg in messages" :key="msg.id" class="flex items-end space-x-2" :class="msg.isMine ? 'justify-end' : 'justify-start'">
+          <div v-for="msg in messages" :key="msg.id" class="flex items-end space-x-2 group" :class="msg.isMine ? 'justify-end' : 'justify-start'">
             
             <!-- Avatar -->
             <img v-if="!msg.isMine" :src="msg.senderAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(msg.senderDisplayName)}&background=random`" alt="Avatar" class="w-7 h-7 rounded-full object-cover shadow-sm flex-shrink-0" />
 
-            <div class="max-w-[75%] sm:max-w-[80%] flex flex-col space-y-1">
+            <div class="max-w-[75%] sm:max-w-[80%] flex flex-col space-y-1 relative">
               <!-- Name & Time -->
               <div class="flex items-center space-x-2 text-[10px] text-gray-500" :class="msg.isMine ? 'justify-end' : 'justify-start'">
                 <span v-if="!msg.isMine" class="font-medium text-gray-700">{{ msg.senderDisplayName }}</span>
                 <span>{{ formatTime(msg.createdAt) }}</span>
+                <!-- Read Status Indicator -->
+                <div v-if="msg.isMine" class="flex items-center ml-1">
+                   <svg v-if="msg.isRead" class="w-3 h-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7M5 13l4 4L19 7" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" class="translate-x-0.5" />
+                   </svg>
+                   <svg v-else class="w-3 h-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                   </svg>
+                </div>
               </div>
               <div class="px-3 py-2 shadow-sm" :class="getBubbleClass(msg)">
-                
-                <!-- TEXT -->
-                <p v-if="msg.type === 'TEXT'" class="text-[14px] whitespace-pre-wrap break-words leading-relaxed">{{ msg.content }}</p>
-
-                <!-- IMAGE  -->
-                <div v-else-if="msg.type === 'IMAGE'" class="relative group cursor-pointer" @click="openImage(msg.content)">
-                  <img :src="msg.content" alt="Image" class="rounded-md max-h-48 object-cover w-full bg-white" loading="lazy" />
-                  <div class="absolute inset-0 bg-black/opacity-0 group-hover:bg-black/10 transition-colors rounded-md"></div>
+                <!-- Deleted Message Placeholder -->
+                <div v-if="msg.isDeleted" class="flex items-center space-x-2 py-0.5">
+                  <svg class="w-3.5 h-3.5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <p class="text-[13px]">{{ msg.content || 'ข้อความนี้ถูกลบแล้ว' }}</p>
                 </div>
 
-                <!-- LOCATION -->
-                <div v-else-if="msg.type === 'LOCATION'" class="flex flex-col space-y-2">
-                  <div class="flex items-center space-x-2 pb-2 border-b" :class="msg.isMine ? 'border-blue-500/30' : 'border-gray-200'">
-                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                    <span class="font-medium text-[13px]">ส่งตำแหน่งที่ตั้ง</span>
+                <template v-else>
+                  <!-- TEXT -->
+                  <p v-if="msg.type === 'TEXT'" class="text-[14px] whitespace-pre-wrap break-words leading-relaxed">{{ msg.content }}</p>
+
+                  <!-- IMAGE  -->
+                  <div v-else-if="msg.type === 'IMAGE'" class="relative group cursor-pointer" @click="openImage(msg.content)">
+                    <img :src="msg.content" alt="Image" class="rounded-md max-h-48 object-cover w-full bg-white" loading="lazy" />
+                    <div class="absolute inset-0 bg-black/opacity-0 group-hover:bg-black/10 transition-colors rounded-md"></div>
                   </div>
-                  <p class="text-[13px] truncate max-w-full">{{ parseLocationName(msg.content) || 'ตำแหน่งถูกแชร์' }}</p>
-                  <a :href="getLocationUrl(msg.content)" target="_blank" rel="noopener noreferrer" 
-                     class="mt-1 inline-block text-[12px] font-medium hover:underline flex items-center gap-1"
-                     :class="msg.isMine ? 'text-blue-100 hover:text-white' : 'text-blue-600'">
-                     ดูบนแผนที่ 
-                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                  </a>
-                </div>
-                
-                <!-- SYSTEM Type -->
-                 <div v-else-if="msg.type === 'SYSTEM'" class="text-center italic text-[12px] opacity-90">
-                  {{ msg.content }}
-                 </div>
 
+                  <!-- LOCATION -->
+                  <div v-else-if="msg.type === 'LOCATION'" class="flex flex-col space-y-2">
+                    <div class="flex items-center space-x-2 pb-2 border-b" :class="msg.isMine ? 'border-blue-500/30' : 'border-gray-200'">
+                      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                      </svg>
+                      <span class="font-medium text-[13px]">ส่งตำแหน่งที่ตั้ง</span>
+                    </div>
+                    <p class="text-[13px] truncate max-w-full">{{ parseLocationName(msg.content) || 'ตำแหน่งถูกแชร์' }}</p>
+                    <a :href="getLocationUrl(msg.content)" target="_blank" rel="noopener noreferrer" 
+                       class="mt-1 inline-block text-[12px] font-medium hover:underline flex items-center gap-1"
+                       :class="msg.isMine ? 'text-blue-100 hover:text-white' : 'text-blue-600'">
+                       ดูบนแผนที่ 
+                       <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                  </div>
+                  
+                  <!-- SYSTEM Type -->
+                   <div v-else-if="msg.type === 'SYSTEM'" class="text-center italic text-[12px] opacity-90">
+                    {{ msg.content }}
+                   </div>
+                </template>
               </div>
+                <!-- Delete Button (Hover) -->
+                 <button 
+                    v-if="msg.isMine && !msg.isDeleted" 
+                    @click.stop="deleteMessageLocal(msg.id)"
+                    class="absolute -left-7 top-1/2 -translate-y-1/2 p-1 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all focus:outline-none hover:bg-white rounded-full shadow-sm border border-gray-100"
+                    title="ลบข้อความ"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                 </button>
             </div>
-            
             <!-- Avatar (Me) -->
             <img v-if="msg.isMine" :src="msg.senderAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(msg.senderDisplayName)}&background=random`" alt="Avatar" class="w-7 h-7 rounded-full object-cover shadow-sm flex-shrink-0" />
-          
           </div>
         </template>
         
@@ -119,7 +144,7 @@
           <div class="flex-1">
             <p class="text-[12px] text-amber-800 font-bold leading-tight">⚠️ โปรดระวังการส่งข้อมูลส่วนตัว</p>
             <p class="text-[11px] text-amber-700 mt-1 leading-relaxed">
-              การแชร์ชื่อ-นามสกุล, ที่อยู่, เบอร์โทรศัพท์ หรือเลขบัญชีธนาคาร ขัดต่อแนวทางและนโยบายของเว็บไซต์ มีความเสี่ยงต่อความปลอดภัย โปรดตรวจสอบให้มั่นใจก่อนส่งข้อมูล
+              การแชร์ชื่อ-นามสกุล, ที่อยู่, เบอร์โทรศัพท์ ซึ่งขัดต่อแนวทางและนโยบายของเว็บไซต์ มีความเสี่ยงต่อความปลอดภัย โปรดตรวจสอบให้มั่นใจก่อนส่งข้อมูล
             </p>
           </div>
         </div>
@@ -288,13 +313,16 @@ const quickReplies = computed(() => {
 
 const sensitiveKeywords = [
   'เบอร์', 'โทร', '08', '06', '09', 'ที่อยู่', 'บ้านเลขที่', 'เลขบัตร', 'บัตรประชาชน',
-  'โอนเงิน', 'เลขบัญชี', 'ธนาคาร', 'กสิกร', 'ไทยพาณิชย์', 'ออมสิน', 'กรุงไทย', 
-  'ชื่อจริง', 'นามสกุล', 'ชื่อ-นามสกุล', 'ไลน์', 'line', 'add' , 'ซอย' , 'หมู่' , 'ตำบล' , 'อำเภอ' , 'จังหวัด' , 'รหัสไปรษณีย์' , 'เลขที่','ถนน','ชื่อ','นามสกุล'
+  'ชื่อจริง', 'นามสกุล', 'ชื่อ-นามสกุล', 'ไลน์', 'line', 'add' , 'ซอย' , 'หมู่' , 'ตำบล' , 'อำเภอ' , 'จังหวัด' , 'รหัสไปรษณีย์' , 'เลขที่','ถนน','ชื่อ','นามสกุล','ตำแหน่ง','ที่ตั้ง'
 ]
 
 const showSecurityWarning = computed(() => {
   if (messages.value.length === 0) return false
   const lastMsg = messages.value[messages.value.length - 1]
+  
+  // Always show warning for locations
+  if (lastMsg.type === 'LOCATION') return true
+  
   if (lastMsg.type !== 'TEXT') return false
   
   const content = lastMsg.content.toLowerCase()
@@ -360,8 +388,47 @@ watch(socket, (newSocket) => {
                 }
             }
         })
+
+        newSocket.on('message-deleted', ({ messageId, roomId }) => {
+            if (roomId === chatRoomId.value) {
+                const msg = messages.value.find(m => m.id === messageId);
+                if (msg) {
+                    msg.isDeleted = true;
+                    msg.content = 'ข้อความนี้ถูกลบแล้ว';
+                }
+            }
+        })
+
+        newSocket.on('messages-read', ({ roomId, userId }) => {
+            if (roomId === chatRoomId.value && userId !== currentUser.value?.id) {
+                // Someone else read my messages
+                messages.value = messages.value.map(msg => {
+                    if (msg.senderId === currentUser.value?.id) {
+                        return { ...msg, isRead: true }
+                    }
+                    return msg
+                })
+            }
+        })
     }
 }, { immediate: true })
+
+const deleteMessageLocal = async (messageId) => {
+  if (!confirm('ยืนยันลบข้อความนี้ใช่หรือไม่? บุคคลร่วมสนทนาของคุณจะไม่เห็นข้อความนี้อีกต่อไป')) return
+  
+  try {
+    await $api(`/chats/messages/${messageId}`, { method: 'DELETE' })
+    const msg = messages.value.find(m => m.id === messageId)
+    if (msg) {
+        msg.isDeleted = true
+        msg.content = 'ข้อความนี้ถูกลบแล้ว'
+    }
+    toast.success('ลบข้อความแล้ว')
+  } catch (error) {
+    console.error('Failed to delete message:', error)
+    toast.error('ไม่สามารถลบข้อความได้')
+  }
+}
 
 const adjustTextareaHeight = () => {
     if (!messageInput.value) return;
@@ -377,6 +444,7 @@ const handleKeydown = (e) => {
 }
 
 const getBubbleClass = (msg) => {
+  if (msg.isDeleted) return 'bg-gray-100 text-gray-400 italic border border-gray-200 rounded-xl'
   if (msg.type === 'SYSTEM') return 'bg-transparent border border-dashed border-gray-300 text-gray-500 rounded-xl'
   if (msg.isMine) return 'bg-blue-600 text-white rounded-[1.2rem] rounded-br-[4px]'
   return 'bg-white text-gray-800 border rounded-[1.2rem] rounded-bl-[4px]'

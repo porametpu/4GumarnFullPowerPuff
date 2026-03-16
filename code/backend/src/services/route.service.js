@@ -447,13 +447,18 @@ const getRouteById = async (id) => {
   });
 };
 
-const getMyRoutes = async (driverId) => {
-  return prisma.route.findMany({
-    where: {
-      driverId
-    },
-    include: {
+const getMyRoutes = async (driverId, options = {}) => {
+  const { status, limit } = options;
+  const where = { driverId };
+  
+  if (status) {
+    const statusArray = status.split(',');
+    where.status = { in: statusArray };
+  }
 
+  return prisma.route.findMany({
+    where,
+    include: {
       booking: {
         include: {
           passenger: {
@@ -470,8 +475,8 @@ const getMyRoutes = async (driverId) => {
       },
       ...baseInclude
     },
-
     orderBy: { createdAt: 'desc' },
+    ...(limit ? { take: parseInt(limit) } : {})
   })
 }
 

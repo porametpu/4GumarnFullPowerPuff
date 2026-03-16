@@ -401,6 +401,10 @@
         <main>
             <NuxtPage />
         </main>
+
+        <!-- Global Widgets -->
+        <FloatingDriverConsole v-if="user && user.role === 'DRIVER'" />
+        <FloatingChat />
     </div>
 </template>
 
@@ -413,16 +417,23 @@ import 'dayjs/locale/th'
 import { useChatWidget } from '~/composables/useChatWidget'
 import { useSocket } from '~/composables/useSocket'
 import { useNearAlert } from '~/composables/useNearAlert'
+import FloatingDriverConsole from '~/components/FloatingDriverConsole.vue'
+import FloatingChat from '~/components/FloatingChat.vue'
 
 const { token, user, logout } = useAuth()
 const { socket, joinUser, disconnect } = useSocket()
 const { totalUnreadCount, refreshUnreadCount } = useChatWidget()
-const { showAlert } = useNearAlert()
+const { showAlert, requestPermission } = useNearAlert()
 
 // Client Notification
-onMounted(() => {
+onMounted(async () => {
     window.addEventListener('resize', handleResize)
     
+    // Request permission for system notifications
+    if (process.client) {
+        await requestPermission()
+    }
+
     if (process.client) {
         if (token.value) {
             refreshUnreadCount()

@@ -135,19 +135,30 @@
                                                     </svg>
                                                     ผู้โดยสาร ({{ route.passengers.length }})
                                                 </h5>
-                                                <button 
-                                                    @click.stop="refreshConsole(route)"
-                                                    :disabled="isRefreshingConsole"
-                                                    class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors disabled:opacity-50"
-                                                >
-                                                    <svg class="w-4 h-4 mr-1.5" :class="{'animate-spin': isRefreshingConsole}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                                    </svg>
-                                                    รีเฟรชตำแหน่ง
-                                                </button>
+                                                <div class="flex items-center space-x-2">
+                                                    <button 
+                                                        @click.stop="refreshConsole(route)"
+                                                        :disabled="isRefreshingConsole"
+                                                        class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors disabled:opacity-50"
+                                                    >
+                                                        <svg class="w-4 h-4 mr-1.5" :class="{'animate-spin': isRefreshingConsole}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                                        </svg>
+                                                        รีเฟรชตำแหน่ง
+                                                    </button>
+                                                    <button 
+                                                        @click.stop="route.isConsoleExpanded = !route.isConsoleExpanded"
+                                                        class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                                                        title="ย่อ/ขยาย"
+                                                    >
+                                                        <svg class="w-5 h-5 transition-transform duration-300" :class="{'rotate-180': !route.isConsoleExpanded}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                                        </svg>
+                                                    </button>
+                                                </div>
                                             </div>
 
-                                            <div class="grid gap-4">
+                                            <div v-show="route.isConsoleExpanded" class="grid gap-4 animate-in fade-in duration-300">
                                                 <div v-for="(p, idx) in route.passengers" :key="p.id"
                                                     class="relative flex flex-col sm:flex-row sm:items-center p-4 bg-white border border-gray-200 rounded-xl hover:border-blue-300 transition-all shadow-sm"
                                                 >
@@ -863,6 +874,7 @@ async function fetchMyRoutes() {
                 })),
                 durationText: (typeof r.duration === 'string' ? formatDuration(r.duration) : r.duration) || (r.durationSeconds ? `${Math.round(r.durationSeconds / 60)} นาที` : '-'),
                 distanceText: (typeof r.distance === 'string' ? formatDistance(r.distance) : r.distance) || (r.distanceMeters ? `${(r.distanceMeters / 1000).toFixed(1)} กม.` : '-'),
+                isConsoleExpanded: true,
             })
         }
 

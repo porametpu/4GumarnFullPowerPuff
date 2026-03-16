@@ -68,7 +68,7 @@ const getRouteById = asyncHandler(async (req, res) => {
 
 const getMyRoutes = asyncHandler(async (req, res) => {
   const driverId = req.user.sub
-  const list = await routeService.getMyRoutes(driverId)
+  const list = await routeService.getMyRoutes(driverId, req.query)
   res.status(200).json({
     success: true,
     message: "Route retrieved successfully",

@@ -12,5 +12,6 @@ router.get('/:roomId/messages', chatController.getMessages);
 router.post('/:roomId/messages', chatController.sendMessage);
 router.post('/:roomId/messages/image', upload.single('image'), chatController.sendImageMessage);
 router.post('/:roomId/read', chatController.markAsRead);
+router.delete('/messages/:messageId', chatController.deleteMessage);
 
 module.exports = router;

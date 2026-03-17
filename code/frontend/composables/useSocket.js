@@ -14,8 +14,8 @@ export const useSocket = () => {
             return socketRef.value
         }
 
-        let socketUrl = config.public.apiBase.replace('/api', '')
-        if (socketUrl.endsWith('//')) socketUrl = socketUrl.slice(0, -1)
+        let socketUrl = (config.public.apiBase || '').replace(/\/api\/?$/, '')
+        if (socketUrl.endsWith('/')) socketUrl = socketUrl.slice(0, -1)
 
         if (!socketRef.value) {
             console.log('[Socket.io] Initializing connection to:', socketUrl)

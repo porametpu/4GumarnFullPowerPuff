@@ -2,14 +2,27 @@ const socketIo = require('socket.io');
 
 let io;
 
+const defaultOrigins = ['http://localhost:3001', 'http://127.0.0.1:3001'];
+const envOrigins = (process.env.SOCKET_CORS_ORIGINS || process.env.CORS_ORIGINS || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+const allowedOrigins = Array.from(new Set([...defaultOrigins, ...envOrigins]));
+
 const init = (server) => {
     io = socketIo(server, {
         cors: {
-            origin: ['http://localhost:3001', 'https://amazing-crisp-9bcb1a.netlify.app'],
+            origin: (origin, callback) => {
+                if (!origin) return callback(null, true);
+                if (allowedOrigins.includes(origin)) return callback(null, true);
+                return callback(new Error(`Socket CORS blocked for origin: ${origin}`));
+            },
             methods: ['GET', 'POST'],
             credentials: true
         }
     });
+
+    console.log('[Socket.io] Allowed origins:', allowedOrigins);
 
     io.on('connection', (socket) => {
         console.log(`[Socket.io] New client connected: ${socket.id}`);

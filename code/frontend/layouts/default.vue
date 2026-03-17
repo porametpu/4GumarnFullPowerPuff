@@ -442,9 +442,11 @@ onMounted(async () => {
 
         watch(socket, (newSocket) => {
             if (newSocket) {
+                newSocket.off('message-notification')
                 newSocket.on('message-notification', () => {
                     console.log('[Socket.io] Received notification, refreshing...')
                     refreshUnreadCount()
+                    fetchUserNotifications()
                 })
                 
                 refreshUnreadCount()

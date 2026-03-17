@@ -1,0 +1,1424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.13.7 on darwin)" generated="2026-03-17T23:41:32.799136" rpa="false" schemaversion="5">
+<suite id="s1" name="NearbyAlert" source="/Users/3mrch/Project/Project11/4GumarnFullPowerPuff/test/Sprint2/Item18/UAT/NearbyAlert.robot">
+<test id="s1-t1" name="TC-ALERT-01 Driver Hub Shows Active Route List" line="135">
+<kw name="Login As Driver">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:32.889563" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/login'.</msg>
+<arg>${BASE_URL}/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-17T23:41:32.889401" elapsed="1.426276"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-17T23:41:34.316077" elapsed="0.577871"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=identifier</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:34.894195" elapsed="0.014309"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:34.908785" level="INFO">Typing text 'driver123' into text field 'id=identifier'.</msg>
+<arg>id=identifier</arg>
+<arg>${DRIVER_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:34.908618" elapsed="0.100921"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:35.009789" level="INFO">Typing password into text field 'id=password'.</msg>
+<msg time="2026-03-17T23:41:35.019555" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>id=password</arg>
+<arg>${DRIVER_PASSWORD}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.009647" elapsed="0.027927"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:35.037774" level="INFO">Clicking element 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.037668" elapsed="0.022602"/>
+</kw>
+<kw name="Wait Until Location Does Not Contain" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>15s</arg>
+<doc>Waits until the current URL does not contains ``location``.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.060370" elapsed="0.205614"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:35.266179" level="INFO">Driver logged in successfully</msg>
+<arg>Driver logged in successfully</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.266099" elapsed="0.000102"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:32.889124" elapsed="2.377134"/>
+</kw>
+<kw name="Verify Driver Hub Shows Active Routes">
+<kw name="Navigate To Driver Hub Panel">
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=driver-hub-toggle</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.266677" elapsed="0.003907"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Element Should Not Be Visible" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:35.275322" level="INFO">Element 'id=driver-hub-panel' did not exist.</msg>
+<arg>id=driver-hub-panel</arg>
+<doc>Verifies that the element identified by ``locator`` is NOT visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.270745" elapsed="0.004635"/>
+</kw>
+<msg time="2026-03-17T23:41:35.275483" level="INFO">${is_closed} = True</msg>
+<var>${is_closed}</var>
+<arg>Element Should Not Be Visible</arg>
+<arg>id=driver-hub-panel</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.270667" elapsed="0.004828"/>
+</kw>
+<if>
+<branch type="IF" condition="${is_closed}">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:35.275768" level="INFO">Clicking element 'id=driver-hub-toggle'.</msg>
+<arg>id=driver-hub-toggle</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.275673" elapsed="0.033408"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=driver-hub-panel</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.309174" elapsed="0.218987"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:35.275579" elapsed="0.252636"/>
+</branch>
+<status status="PASS" start="2026-03-17T23:41:35.275559" elapsed="0.252697"/>
+</if>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:35.528399" level="INFO">Driver Hub panel is open</msg>
+<arg>Driver Hub panel is open</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.528324" elapsed="0.000104"/>
+</kw>
+<doc>เปิด Driver Hub ลอยตัวโดยกดปุ่มเปิด</doc>
+<status status="PASS" start="2026-03-17T23:41:35.266595" elapsed="0.261869"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=driver-hub-panel</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.528511" elapsed="0.002340"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>xpath://div[contains(@id,'route-card-')]</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.530980" elapsed="0.004156"/>
+</kw>
+<msg time="2026-03-17T23:41:35.535200" level="INFO">${has_routes} = True</msg>
+<var>${has_routes}</var>
+<arg>Wait Until Page Contains Element</arg>
+<arg>xpath://div[contains(@id,'route-card-')]</arg>
+<arg>timeout=10s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.530912" elapsed="0.004301"/>
+</kw>
+<if>
+<branch type="IF" condition="${has_routes}">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:35.535373" level="INFO">Driver Hub shows active routes</msg>
+<arg>Driver Hub shows active routes</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.535330" elapsed="0.000060"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:35.535262" elapsed="0.000143"/>
+</branch>
+<branch type="ELSE">
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<var>${no_route_msg}</var>
+<arg>Page Should Contain</arg>
+<arg>ยังไม่มีเส้นทาง</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="NOT RUN" start="2026-03-17T23:41:35.535461" elapsed="0.000010"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>Driver Hub shows empty state (no active routes today)</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-03-17T23:41:35.535506" elapsed="0.000009"/>
+</kw>
+<status status="NOT RUN" start="2026-03-17T23:41:35.535422" elapsed="0.000108"/>
+</branch>
+<status status="PASS" start="2026-03-17T23:41:35.535248" elapsed="0.000296"/>
+</if>
+<doc>ตรวจสอบว่า Driver Hub แสดงรายการเส้นทางที่กำลังใช้งาน</doc>
+<status status="PASS" start="2026-03-17T23:41:35.266445" elapsed="0.269121"/>
+</kw>
+<kw name="Close Browser And Capture" type="TEARDOWN">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:35.668369" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.535861" elapsed="0.132633"/>
+</kw>
+<arg>Capture Page Screenshot</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.535806" elapsed="0.132727"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.668591" elapsed="0.126766"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:35.535708" elapsed="0.259721"/>
+</kw>
+<doc>คนขับเปิดแอป → Driver Hub ลอยตัวแสดงเส้นทางที่กำลังดำเนินการวันนี้</doc>
+<tag>driver</tag>
+<tag>driver-hub</tag>
+<tag>nearby-alert</tag>
+<tag>smoke</tag>
+<status status="PASS" start="2026-03-17T23:41:32.888473" elapsed="2.907013"/>
+</test>
+<test id="s1-t2" name="TC-ALERT-03 Nearby Alert Button Enabled After Refresh" line="145">
+<kw name="Login As Driver">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:35.796362" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/login'.</msg>
+<arg>${BASE_URL}/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-17T23:41:35.796258" elapsed="0.792456"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-17T23:41:36.589065" elapsed="0.341244"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=identifier</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:36.930436" elapsed="0.007023"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:36.937649" level="INFO">Typing text 'driver123' into text field 'id=identifier'.</msg>
+<arg>id=identifier</arg>
+<arg>${DRIVER_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:36.937538" elapsed="0.066133"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:37.003887" level="INFO">Typing password into text field 'id=password'.</msg>
+<msg time="2026-03-17T23:41:37.014700" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>id=password</arg>
+<arg>${DRIVER_PASSWORD}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:37.003760" elapsed="0.023641"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:37.027582" level="INFO">Clicking element 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:37.027489" elapsed="0.020068"/>
+</kw>
+<kw name="Wait Until Location Does Not Contain" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>15s</arg>
+<doc>Waits until the current URL does not contains ``location``.</doc>
+<status status="PASS" start="2026-03-17T23:41:37.047677" elapsed="0.204707"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:37.252585" level="INFO">Driver logged in successfully</msg>
+<arg>Driver logged in successfully</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:37.252503" elapsed="0.000104"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:35.796146" elapsed="1.456542"/>
+</kw>
+<kw name="Navigate To Driver My Routes">
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:37.253075" level="INFO">Opening url 'http://localhost:3001/myRoute'</msg>
+<arg>${BASE_URL}/myRoute</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-17T23:41:37.253006" elapsed="0.075190"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:41:39.328781" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:41:37.328347" elapsed="2.000683"/>
+</kw>
+<kw name="Wait Until Page Does Not Contain" owner="SeleniumLibrary">
+<arg>กำลังโหลดข้อมูล</arg>
+<arg>timeout=30s</arg>
+<doc>Waits until ``text`` disappears from the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:39.329353" elapsed="0.017457"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>คำขอจองเส้นทาง</arg>
+<arg>timeout=20s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:39.347037" elapsed="0.010747"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:39.358046" level="INFO">Driver myRoute page loaded</msg>
+<arg>Driver myRoute page loaded</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:39.357922" elapsed="0.000159"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:37.252859" elapsed="2.105276"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:39.358568" level="INFO">Switch to confirmed tab if needed</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:39.358490" elapsed="0.000108"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T23:41:39.358655" elapsed="0.000119"/>
+</kw>
+<arg>Switch to confirmed tab if needed</arg>
+<status status="PASS" start="2026-03-17T23:41:39.358312" elapsed="0.000496"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath://button[contains(., 'เส้นทางของฉัน')]</arg>
+<arg>timeout=8s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:39.359002" elapsed="0.008972"/>
+</kw>
+<msg time="2026-03-17T23:41:39.368056" level="INFO">${has_tab} = True</msg>
+<var>${has_tab}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>xpath://button[contains(., 'เส้นทางของฉัน')]</arg>
+<arg>timeout=8s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:41:39.358893" elapsed="0.009179"/>
+</kw>
+<if>
+<branch type="IF" condition="${has_tab}">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:39.368384" level="INFO">Clicking element 'xpath://button[contains(., 'เส้นทางของฉัน')]'.</msg>
+<arg>xpath://button[contains(., 'เส้นทางของฉัน')]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:39.368268" elapsed="0.029650"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:41:41.398366" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:41:39.398015" elapsed="2.000693"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:39.368170" elapsed="2.030708"/>
+</branch>
+<status status="PASS" start="2026-03-17T23:41:39.368147" elapsed="2.030851"/>
+</if>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:41.400375" level="INFO">Click refresh distance button</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:41.400149" elapsed="0.000303"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T23:41:41.400598" elapsed="0.000521"/>
+</kw>
+<arg>Click refresh distance button</arg>
+<status status="PASS" start="2026-03-17T23:41:41.399562" elapsed="0.001733"/>
+</kw>
+<kw name="Click Refresh Distance Button">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-17T23:41:41.402126" level="INFO">${refresh_btn} = xpath://button[contains(@title, 'รีเฟรช') or contains(@aria-label, 'refresh') or contains(., 'รีเฟรช') or @id='refresh-distance-btn']</msg>
+<var>${refresh_btn}</var>
+<arg>xpath://button[contains(@title, 'รีเฟรช') or contains(@aria-label, 'refresh') or contains(., 'รีเฟรช') or @id='refresh-distance-btn']</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-17T23:41:41.401931" elapsed="0.000234"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>${refresh_btn}</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:41.402297" elapsed="0.649804"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:42.052579" level="INFO">Clicking element 'xpath://button[contains(@title, 'รีเฟรช') or contains(@aria-label, 'refresh') or contains(., 'รีเฟรช') or @id='refresh-distance-btn']'.</msg>
+<arg>${refresh_btn}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:42.052330" elapsed="0.033310"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:41:44.088118" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:41:42.085880" elapsed="2.002505"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:44.089083" level="INFO">Refresh distance button clicked</msg>
+<arg>Refresh distance button clicked</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:44.088800" elapsed="0.000352"/>
+</kw>
+<doc>กดปุ่ม Refresh ระยะทางในหน้า myRoute หรือ Driver Hub</doc>
+<status status="PASS" start="2026-03-17T23:41:41.401624" elapsed="2.687655"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:44.090959" level="INFO">Verify button is now enabled</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:44.090707" elapsed="0.000335"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T23:41:44.091284" elapsed="0.000276"/>
+</kw>
+<arg>Verify button is now enabled</arg>
+<status status="PASS" start="2026-03-17T23:41:44.089868" elapsed="0.001787"/>
+</kw>
+<kw name="Verify Nearby Alert Button Is Enabled After Refresh">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-17T23:41:44.092297" level="INFO">${btn_xpath} = xpath://button[contains(., 'แจ้งใกล้ถึง')]</msg>
+<var>${btn_xpath}</var>
+<arg>xpath://button[contains(., 'แจ้งใกล้ถึง')]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-17T23:41:44.092157" elapsed="0.000174"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${btn_xpath}</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:44.092444" elapsed="0.019489"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Element Should Be Disabled" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:44.368073" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-2.png"&gt;&lt;img src="selenium-screenshot-2.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2026-03-17T23:41:44.368186" level="FAIL">Element 'xpath://button[contains(., 'แจ้งใกล้ถึง')]' is enabled.</msg>
+<arg>${btn_xpath}</arg>
+<doc>Verifies that element identified by ``locator`` is disabled.</doc>
+<status status="FAIL" start="2026-03-17T23:41:44.112260" elapsed="0.258245">Element 'xpath://button[contains(., 'แจ้งใกล้ถึง')]' is enabled.</status>
+</kw>
+<msg time="2026-03-17T23:41:44.370579" level="INFO">${is_disabled} = False</msg>
+<var>${is_disabled}</var>
+<arg>Element Should Be Disabled</arg>
+<arg>${btn_xpath}</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:41:44.112121" elapsed="0.258471"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>not ${is_disabled}</arg>
+<arg>msg=ปุ่มแจ้งใกล้ถึงควร enabled หลังจาก Refresh</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-17T23:41:44.370662" elapsed="0.000134"/>
+</kw>
+<doc>หลังกดปุ่ม Refresh / อัปเดตระยะทางแล้ว ปุ่มแจ้งใกล้ถึงควร enabled</doc>
+<status status="PASS" start="2026-03-17T23:41:44.091907" elapsed="0.278920"/>
+</kw>
+<kw name="Close Browser And Capture" type="TEARDOWN">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:44.573060" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-3.png"&gt;&lt;img src="selenium-screenshot-3.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-03-17T23:41:44.371100" elapsed="0.202030"/>
+</kw>
+<arg>Capture Page Screenshot</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-17T23:41:44.371047" elapsed="0.202133"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-17T23:41:44.573249" elapsed="0.107018"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:44.370952" elapsed="0.309376"/>
+</kw>
+<doc>หน้าเส้นทางของฉัน → กดปุ่ม Refresh → ปุ่ม "แจ้งใกล้ถึง" ถูก enabled</doc>
+<tag>driver</tag>
+<tag>nearby-alert</tag>
+<tag>post-refresh</tag>
+<tag>ui</tag>
+<status status="PASS" start="2026-03-17T23:41:35.795656" elapsed="8.884723"/>
+</test>
+<test id="s1-t3" name="TC-ALERT-04 Driver Sends Nearby Alert Successfully" line="166">
+<kw name="Login As Driver">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:44.681125" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/login'.</msg>
+<arg>${BASE_URL}/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-17T23:41:44.681038" elapsed="0.833702"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-17T23:41:45.514985" elapsed="0.340643"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=identifier</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:45.856047" elapsed="0.008436"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:45.864720" level="INFO">Typing text 'driver123' into text field 'id=identifier'.</msg>
+<arg>id=identifier</arg>
+<arg>${DRIVER_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:45.864578" elapsed="0.065895"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:45.930796" level="INFO">Typing password into text field 'id=password'.</msg>
+<msg time="2026-03-17T23:41:45.943695" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>id=password</arg>
+<arg>${DRIVER_PASSWORD}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:45.930635" elapsed="0.026283"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:45.957144" level="INFO">Clicking element 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:45.957022" elapsed="0.022886"/>
+</kw>
+<kw name="Wait Until Location Does Not Contain" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>15s</arg>
+<doc>Waits until the current URL does not contains ``location``.</doc>
+<status status="PASS" start="2026-03-17T23:41:45.980025" elapsed="0.205401"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:46.185624" level="INFO">Driver logged in successfully</msg>
+<arg>Driver logged in successfully</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:46.185541" elapsed="0.000104"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:44.680939" elapsed="1.504759"/>
+</kw>
+<kw name="Navigate To Driver My Routes">
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:46.186459" level="INFO">Opening url 'http://localhost:3001/myRoute'</msg>
+<arg>${BASE_URL}/myRoute</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-17T23:41:46.185990" elapsed="0.081695"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:41:48.269026" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:41:46.267807" elapsed="2.001546"/>
+</kw>
+<kw name="Wait Until Page Does Not Contain" owner="SeleniumLibrary">
+<arg>กำลังโหลดข้อมูล</arg>
+<arg>timeout=30s</arg>
+<doc>Waits until ``text`` disappears from the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:48.269759" elapsed="0.018565"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>คำขอจองเส้นทาง</arg>
+<arg>timeout=20s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:48.288515" elapsed="0.013307"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:48.302140" level="INFO">Driver myRoute page loaded</msg>
+<arg>Driver myRoute page loaded</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:48.302003" elapsed="0.000172"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:46.185855" elapsed="2.116376"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:48.302662" level="INFO">Switch to confirmed tab if needed</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:48.302603" elapsed="0.000080"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T23:41:48.302726" elapsed="0.000069"/>
+</kw>
+<arg>Switch to confirmed tab if needed</arg>
+<status status="PASS" start="2026-03-17T23:41:48.302427" elapsed="0.000394"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath://button[contains(., 'เส้นทางของฉัน')]</arg>
+<arg>timeout=8s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:48.302971" elapsed="0.009913"/>
+</kw>
+<msg time="2026-03-17T23:41:48.312992" level="INFO">${has_tab} = True</msg>
+<var>${has_tab}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>xpath://button[contains(., 'เส้นทางของฉัน')]</arg>
+<arg>timeout=8s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:41:48.302887" elapsed="0.010125"/>
+</kw>
+<if>
+<branch type="IF" condition="${has_tab}">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:48.313345" level="INFO">Clicking element 'xpath://button[contains(., 'เส้นทางของฉัน')]'.</msg>
+<arg>xpath://button[contains(., 'เส้นทางของฉัน')]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:48.313239" elapsed="0.043801"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:41:50.357776" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:41:48.357210" elapsed="2.000884"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:48.313127" elapsed="2.045134"/>
+</branch>
+<status status="PASS" start="2026-03-17T23:41:48.313103" elapsed="2.045225"/>
+</if>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:50.359172" level="INFO">Refresh to get distance</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:50.359080" elapsed="0.000120"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T23:41:50.359252" elapsed="0.000091"/>
+</kw>
+<arg>Refresh to get distance</arg>
+<status status="PASS" start="2026-03-17T23:41:50.358783" elapsed="0.000594"/>
+</kw>
+<kw name="Click Refresh Distance Button">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-17T23:41:50.359677" level="INFO">${refresh_btn} = xpath://button[contains(@title, 'รีเฟรช') or contains(@aria-label, 'refresh') or contains(., 'รีเฟรช') or @id='refresh-distance-btn']</msg>
+<var>${refresh_btn}</var>
+<arg>xpath://button[contains(@title, 'รีเฟรช') or contains(@aria-label, 'refresh') or contains(., 'รีเฟรช') or @id='refresh-distance-btn']</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-17T23:41:50.359593" elapsed="0.000102"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>${refresh_btn}</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:50.359778" elapsed="0.006777"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:50.366823" level="INFO">Clicking element 'xpath://button[contains(@title, 'รีเฟรช') or contains(@aria-label, 'refresh') or contains(., 'รีเฟรช') or @id='refresh-distance-btn']'.</msg>
+<arg>${refresh_btn}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:50.366673" elapsed="0.034750"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:41:52.403538" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:41:50.401560" elapsed="2.002353"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:52.404896" level="INFO">Refresh distance button clicked</msg>
+<arg>Refresh distance button clicked</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:52.404545" elapsed="0.000451"/>
+</kw>
+<doc>กดปุ่ม Refresh ระยะทางในหน้า myRoute หรือ Driver Hub</doc>
+<status status="PASS" start="2026-03-17T23:41:50.359482" elapsed="2.045688"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:52.406948" level="INFO">Click nearby alert button</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:52.406759" elapsed="0.000255"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T23:41:52.407141" elapsed="0.000207"/>
+</kw>
+<arg>Click nearby alert button</arg>
+<status status="PASS" start="2026-03-17T23:41:52.405625" elapsed="0.001796"/>
+</kw>
+<kw name="Click Nearby Alert Button For First Passenger">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-17T23:41:52.407958" level="INFO">${btn_xpath} = xpath:(//button[contains(., 'แจ้งใกล้ถึง')])[1]</msg>
+<var>${btn_xpath}</var>
+<arg>xpath:(//button[contains(., 'แจ้งใกล้ถึง')])[1]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-17T23:41:52.407836" elapsed="0.000149"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${btn_xpath}</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:52.408092" elapsed="0.017511"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:52.426273" level="INFO">Clicking element 'xpath:(//button[contains(., 'แจ้งใกล้ถึง')])[1]'.</msg>
+<arg>${btn_xpath}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:52.425871" elapsed="0.029853"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:41:54.456538" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:41:52.455870" elapsed="2.000905"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:54.457331" level="INFO">Nearby alert button clicked for first passenger</msg>
+<arg>Nearby alert button clicked for first passenger</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:54.457095" elapsed="0.000283"/>
+</kw>
+<doc>กดปุ่ม "แจ้งใกล้ถึง" สำหรับผู้โดยสารแรก</doc>
+<status status="PASS" start="2026-03-17T23:41:52.407634" elapsed="2.049833"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:54.458329" level="INFO">Verify toast notification</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:54.458202" elapsed="0.000167"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T23:41:54.458449" elapsed="0.000136"/>
+</kw>
+<arg>Verify toast notification</arg>
+<status status="PASS" start="2026-03-17T23:41:54.457829" elapsed="0.000810"/>
+</kw>
+<kw name="Verify Toast Notification Success">
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>แจ้งเตือน</arg>
+<arg>timeout=8s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:54.459183" elapsed="0.015724"/>
+</kw>
+<msg time="2026-03-17T23:41:54.475033" level="INFO">${found} = True</msg>
+<var>${found}</var>
+<arg>Wait Until Page Contains</arg>
+<arg>แจ้งเตือน</arg>
+<arg>timeout=8s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:41:54.459054" elapsed="0.016004"/>
+</kw>
+<if>
+<branch type="IF" condition="not ${found}">
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<var>${found2}</var>
+<arg>Wait Until Page Contains</arg>
+<arg>เรียบร้อยแล้ว</arg>
+<arg>timeout=5s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="NOT RUN" start="2026-03-17T23:41:54.475369" elapsed="0.000026"/>
+</kw>
+<status status="NOT RUN" start="2026-03-17T23:41:54.475144" elapsed="0.000282"/>
+</branch>
+<status status="PASS" start="2026-03-17T23:41:54.475121" elapsed="0.000331"/>
+</if>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:54.475585" level="INFO">Toast notification appeared (success)</msg>
+<arg>Toast notification appeared (success)</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:54.475505" elapsed="0.000108"/>
+</kw>
+<doc>ตรวจสอบว่า Toast notification แสดงข้อความสำเร็จ</doc>
+<status status="PASS" start="2026-03-17T23:41:54.458875" elapsed="0.016777"/>
+</kw>
+<kw name="Close Browser And Capture" type="TEARDOWN">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:54.653759" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-4.png"&gt;&lt;img src="selenium-screenshot-4.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-03-17T23:41:54.476073" elapsed="0.177746"/>
+</kw>
+<arg>Capture Page Screenshot</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-17T23:41:54.475985" elapsed="0.177875"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-17T23:41:54.653928" elapsed="0.105702"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:54.475835" elapsed="0.283877"/>
+</kw>
+<doc>คนขับกดปุ่ม "แจ้งใกล้ถึง" → Toast แสดงสำเร็จ</doc>
+<tag>driver</tag>
+<tag>nearby-alert</tag>
+<tag>positive</tag>
+<status status="PASS" start="2026-03-17T23:41:44.680527" elapsed="10.079244"/>
+</test>
+<test id="s1-t4" name="TC-ALERT-05 Driver Sends Nearby Alert From Driver Hub" line="189">
+<kw name="Login As Driver">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:54.760530" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/login'.</msg>
+<arg>${BASE_URL}/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-17T23:41:54.760440" elapsed="0.807001"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-17T23:41:55.567721" elapsed="0.344327"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=identifier</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:55.912183" elapsed="0.007472"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:55.919875" level="INFO">Typing text 'driver123' into text field 'id=identifier'.</msg>
+<arg>id=identifier</arg>
+<arg>${DRIVER_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:55.919744" elapsed="0.065074"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:55.985019" level="INFO">Typing password into text field 'id=password'.</msg>
+<msg time="2026-03-17T23:41:55.995775" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>id=password</arg>
+<arg>${DRIVER_PASSWORD}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:55.984903" elapsed="0.027421"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:56.012501" level="INFO">Clicking element 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:56.012411" elapsed="0.022567"/>
+</kw>
+<kw name="Wait Until Location Does Not Contain" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>15s</arg>
+<doc>Waits until the current URL does not contains ``location``.</doc>
+<status status="PASS" start="2026-03-17T23:41:56.035087" elapsed="0.207795"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:56.243073" level="INFO">Driver logged in successfully</msg>
+<arg>Driver logged in successfully</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:56.242997" elapsed="0.000096"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:54.760340" elapsed="1.482803"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:56.243307" level="INFO">Opening url 'http://localhost:3001'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-17T23:41:56.243242" elapsed="0.706274"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:41:58.951625" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:41:56.949759" elapsed="2.002125"/>
+</kw>
+<kw name="Navigate To Driver Hub Panel">
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=driver-hub-toggle</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:58.953229" elapsed="0.011805"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Element Should Not Be Visible" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:58.974942" level="INFO">Element 'id=driver-hub-panel' did not exist.</msg>
+<arg>id=driver-hub-panel</arg>
+<doc>Verifies that the element identified by ``locator`` is NOT visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:58.965699" elapsed="0.009374"/>
+</kw>
+<msg time="2026-03-17T23:41:58.975252" level="INFO">${is_closed} = True</msg>
+<var>${is_closed}</var>
+<arg>Element Should Not Be Visible</arg>
+<arg>id=driver-hub-panel</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:41:58.965429" elapsed="0.009840"/>
+</kw>
+<if>
+<branch type="IF" condition="${is_closed}">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:58.975752" level="INFO">Clicking element 'id=driver-hub-toggle'.</msg>
+<arg>id=driver-hub-toggle</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:58.975599" elapsed="0.035456"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=driver-hub-panel</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:41:59.011170" elapsed="0.215005"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:58.975405" elapsed="0.250854"/>
+</branch>
+<status status="PASS" start="2026-03-17T23:41:58.975358" elapsed="0.250944"/>
+</if>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:59.226526" level="INFO">Driver Hub panel is open</msg>
+<arg>Driver Hub panel is open</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:59.226406" elapsed="0.000154"/>
+</kw>
+<doc>เปิด Driver Hub ลอยตัวโดยกดปุ่มเปิด</doc>
+<status status="PASS" start="2026-03-17T23:41:58.952680" elapsed="0.273932"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:41:59.227047" level="INFO">Find route card and refresh distance</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:41:59.226955" elapsed="0.000118"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T23:41:59.227128" elapsed="0.000087"/>
+</kw>
+<arg>Find route card and refresh distance</arg>
+<status status="PASS" start="2026-03-17T23:41:59.226774" elapsed="0.000476"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>xpath://button[contains(@id, 'refresh-') or contains(@title, 'รีเฟรช')]</arg>
+<arg>timeout=5s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:41:59.227418" elapsed="0.006571"/>
+</kw>
+<msg time="2026-03-17T23:41:59.234068" level="INFO">${refresh_in_hub} = True</msg>
+<var>${refresh_in_hub}</var>
+<arg>Wait Until Page Contains Element</arg>
+<arg>xpath://button[contains(@id, 'refresh-') or contains(@title, 'รีเฟรช')]</arg>
+<arg>timeout=5s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:41:59.227323" elapsed="0.006760"/>
+</kw>
+<if>
+<branch type="IF" condition="${refresh_in_hub}">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:41:59.234377" level="INFO">Clicking element 'xpath:(//button[contains(@id, 'refresh-') or contains(@title, 'รีเฟรช')])[1]'.</msg>
+<arg>xpath:(//button[contains(@id, 'refresh-') or contains(@title, 'รีเฟรช')])[1]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:41:59.234267" elapsed="0.032045"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:42:01.268651" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:41:59.266433" elapsed="2.002465"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:41:59.234169" elapsed="2.034863"/>
+</branch>
+<status status="PASS" start="2026-03-17T23:41:59.234150" elapsed="2.034968"/>
+</if>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:42:01.270250" level="INFO">Click nearby alert in Driver Hub</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:42:01.270070" elapsed="0.000246"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T23:42:01.270428" elapsed="0.000174"/>
+</kw>
+<arg>Click nearby alert in Driver Hub</arg>
+<status status="PASS" start="2026-03-17T23:42:01.269572" elapsed="0.001098"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:11.663802" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-5.png"&gt;&lt;img src="selenium-screenshot-5.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2026-03-17T23:42:11.663915" level="FAIL">Element 'xpath://button[contains(., 'แจ้งใกล้ถึง')]' did not appear in 10 seconds.</msg>
+<arg>xpath://button[contains(., 'แจ้งใกล้ถึง')]</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="FAIL" start="2026-03-17T23:42:01.270976" elapsed="10.393937">Element 'xpath://button[contains(., 'แจ้งใกล้ถึง')]' did not appear in 10 seconds.</status>
+</kw>
+<msg time="2026-03-17T23:42:11.664979" level="INFO">${alert_btn} = False</msg>
+<var>${alert_btn}</var>
+<arg>Wait Until Page Contains Element</arg>
+<arg>xpath://button[contains(., 'แจ้งใกล้ถึง')]</arg>
+<arg>timeout=10s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:42:01.270822" elapsed="10.394167"/>
+</kw>
+<if>
+<branch type="IF" condition="${alert_btn}">
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath:(//button[contains(., 'แจ้งใกล้ถึง')])[1]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-17T23:42:11.665334" elapsed="0.000012"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-03-17T23:42:11.665378" elapsed="0.000009"/>
+</kw>
+<kw name="Verify Toast Notification Success">
+<doc>ตรวจสอบว่า Toast notification แสดงข้อความสำเร็จ</doc>
+<status status="NOT RUN" start="2026-03-17T23:42:11.665456" elapsed="0.000012"/>
+</kw>
+<status status="NOT RUN" start="2026-03-17T23:42:11.665264" elapsed="0.000217"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:42:11.665585" level="WARN">No passengers available for nearby alert in Driver Hub (route may have no confirmed bookings today)</msg>
+<arg>No passengers available for nearby alert in Driver Hub (route may have no confirmed bookings today)</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:42:11.665524" elapsed="0.000108"/>
+</kw>
+<kw name="Pass Execution" owner="BuiltIn">
+<msg time="2026-03-17T23:42:11.665719" level="INFO">Execution passed with message:
+Skipped: No passengers with CONFIRMED bookings for today's route</msg>
+<arg>Skipped: No passengers with CONFIRMED bookings for today's route</arg>
+<doc>Skips rest of the current test, setup, or teardown with PASS status.</doc>
+<status status="PASS" start="2026-03-17T23:42:11.665676" elapsed="0.000075">Skipped: No passengers with CONFIRMED bookings for today's route</status>
+</kw>
+<status status="PASS" start="2026-03-17T23:42:11.665494" elapsed="0.000276">Skipped: No passengers with CONFIRMED bookings for today's route</status>
+</branch>
+<status status="PASS" start="2026-03-17T23:42:11.665252" elapsed="0.000533">Skipped: No passengers with CONFIRMED bookings for today's route</status>
+</if>
+<kw name="Close Browser And Capture" type="TEARDOWN">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:11.829761" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-6.png"&gt;&lt;img src="selenium-screenshot-6.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-03-17T23:42:11.666002" elapsed="0.163811"/>
+</kw>
+<arg>Capture Page Screenshot</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-17T23:42:11.665955" elapsed="0.163897"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-17T23:42:11.829911" elapsed="0.145391"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:42:11.665874" elapsed="0.309505"/>
+</kw>
+<doc>คนขับกดแจ้งใกล้ถึงจาก Driver Hub ลอยตัว (ใช้งานได้ทุกหน้า)</doc>
+<tag>driver</tag>
+<tag>driver-hub</tag>
+<tag>nearby-alert</tag>
+<tag>positive</tag>
+<status status="PASS" start="2026-03-17T23:41:54.759927" elapsed="17.215505">Skipped: No passengers with CONFIRMED bookings for today's route</status>
+</test>
+<test id="s1-t5" name="TC-ALERT-06 Driver Can Collapse And Expand Route In Driver Hub" line="222">
+<kw name="Login As Driver">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:11.976357" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/login'.</msg>
+<arg>${BASE_URL}/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-17T23:42:11.976255" elapsed="0.806674"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-17T23:42:12.783200" elapsed="0.344068"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=identifier</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.127453" elapsed="0.010835"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:13.138519" level="INFO">Typing text 'driver123' into text field 'id=identifier'.</msg>
+<arg>id=identifier</arg>
+<arg>${DRIVER_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.138371" elapsed="0.074794"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:13.213383" level="INFO">Typing password into text field 'id=password'.</msg>
+<msg time="2026-03-17T23:42:13.228477" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>id=password</arg>
+<arg>${DRIVER_PASSWORD}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.213260" elapsed="0.028490"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:13.241968" level="INFO">Clicking element 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.241856" elapsed="0.019574"/>
+</kw>
+<kw name="Wait Until Location Does Not Contain" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>15s</arg>
+<doc>Waits until the current URL does not contains ``location``.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.261533" elapsed="0.204672"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:42:13.466410" level="INFO">Driver logged in successfully</msg>
+<arg>Driver logged in successfully</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.466319" elapsed="0.000114"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:42:11.976146" elapsed="1.490329"/>
+</kw>
+<kw name="Navigate To Driver Hub Panel">
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=driver-hub-toggle</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.466769" elapsed="0.004170"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Element Should Not Be Visible" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:13.474851" level="INFO">Element 'id=driver-hub-panel' did not exist.</msg>
+<arg>id=driver-hub-panel</arg>
+<doc>Verifies that the element identified by ``locator`` is NOT visible.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.471077" elapsed="0.003811"/>
+</kw>
+<msg time="2026-03-17T23:42:13.474952" level="INFO">${is_closed} = True</msg>
+<var>${is_closed}</var>
+<arg>Element Should Not Be Visible</arg>
+<arg>id=driver-hub-panel</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.471007" elapsed="0.003955"/>
+</kw>
+<if>
+<branch type="IF" condition="${is_closed}">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:13.475165" level="INFO">Clicking element 'id=driver-hub-toggle'.</msg>
+<arg>id=driver-hub-toggle</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.475081" elapsed="0.026110"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=driver-hub-panel</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.501304" elapsed="0.214011"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:42:13.475008" elapsed="0.240446"/>
+</branch>
+<status status="PASS" start="2026-03-17T23:42:13.474993" elapsed="0.240577"/>
+</if>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:42:13.715870" level="INFO">Driver Hub panel is open</msg>
+<arg>Driver Hub panel is open</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.715709" elapsed="0.000192"/>
+</kw>
+<doc>เปิด Driver Hub ลอยตัวโดยกดปุ่มเปิด</doc>
+<status status="PASS" start="2026-03-17T23:42:13.466641" elapsed="0.249313"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>xpath://div[contains(@id,'route-card-')]</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.716167" elapsed="0.005101"/>
+</kw>
+<msg time="2026-03-17T23:42:13.721352" level="INFO">${has_route} = True</msg>
+<var>${has_route}</var>
+<arg>Wait Until Page Contains Element</arg>
+<arg>xpath://div[contains(@id,'route-card-')]</arg>
+<arg>timeout=10s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.716070" elapsed="0.005297"/>
+</kw>
+<if>
+<branch type="IF" condition="${has_route}">
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:42:13.721932" level="INFO">Click collapse button on first route</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.721869" elapsed="0.000085"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.722000" elapsed="0.000082"/>
+</kw>
+<arg>Click collapse button on first route</arg>
+<status status="PASS" start="2026-03-17T23:42:13.721716" elapsed="0.000397"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>xpath:(//button[contains(@aria-label,'ย่อ') or contains(@title,'ย่อ') or contains(@id,'collapse-')])[1]</arg>
+<arg>timeout=5s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.722225" elapsed="0.006304"/>
+</kw>
+<msg time="2026-03-17T23:42:13.728641" level="INFO">${collapse_btn} = True</msg>
+<var>${collapse_btn}</var>
+<arg>Wait Until Page Contains Element</arg>
+<arg>xpath:(//button[contains(@aria-label,'ย่อ') or contains(@title,'ย่อ') or contains(@id,'collapse-')])[1]</arg>
+<arg>timeout=5s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.722160" elapsed="0.006499"/>
+</kw>
+<if>
+<branch type="IF" condition="${collapse_btn}">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:13.728923" level="INFO">Clicking element 'xpath:(//button[contains(@aria-label,'ย่อ') or contains(@title,'ย่อ') or contains(@id,'collapse-')])[1]'.</msg>
+<arg>xpath:(//button[contains(@aria-label,'ย่อ') or contains(@title,'ย่อ') or contains(@id,'collapse-')])[1]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.728817" elapsed="0.024245"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:42:14.753726" level="INFO">Slept 1 second.</msg>
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:42:13.753187" elapsed="1.000884"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:42:14.754931" level="INFO">Route collapsed in Driver Hub</msg>
+<arg>Route collapsed in Driver Hub</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:42:14.754584" elapsed="0.000430"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:14.755649" level="INFO">Clicking element 'xpath:(//button[contains(@aria-label,'ขยาย') or contains(@title,'ขยาย') or contains(@id,'expand-')])[1]'.</msg>
+<arg>xpath:(//button[contains(@aria-label,'ขยาย') or contains(@title,'ขยาย') or contains(@id,'expand-')])[1]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:42:14.755241" elapsed="0.044826"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:42:15.801469" level="INFO">Slept 1 second.</msg>
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:42:14.800363" elapsed="1.001404"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:42:15.802532" level="INFO">Route expanded back in Driver Hub</msg>
+<arg>Route expanded back in Driver Hub</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:42:15.802197" elapsed="0.000427"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:42:13.728722" elapsed="2.073995"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" owner="BuiltIn">
+<arg>No collapse/expand button found — may use chevron icon</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-03-17T23:42:15.803087" elapsed="0.000069"/>
+</kw>
+<status status="NOT RUN" start="2026-03-17T23:42:15.802850" elapsed="0.000393"/>
+</branch>
+<status status="PASS" start="2026-03-17T23:42:13.728705" elapsed="2.074606"/>
+</if>
+<status status="PASS" start="2026-03-17T23:42:13.721447" elapsed="2.081934"/>
+</branch>
+<branch type="ELSE">
+<kw name="Pass Execution" owner="BuiltIn">
+<arg>Skipped: No active routes in Driver Hub today</arg>
+<doc>Skips rest of the current test, setup, or teardown with PASS status.</doc>
+<status status="NOT RUN" start="2026-03-17T23:42:15.803608" elapsed="0.000068"/>
+</kw>
+<status status="NOT RUN" start="2026-03-17T23:42:15.803446" elapsed="0.000301"/>
+</branch>
+<status status="PASS" start="2026-03-17T23:42:13.721430" elapsed="2.082374"/>
+</if>
+<kw name="Close Browser And Capture" type="TEARDOWN">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:16.006809" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-7.png"&gt;&lt;img src="selenium-screenshot-7.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-03-17T23:42:15.805105" elapsed="0.201782"/>
+</kw>
+<arg>Capture Page Screenshot</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-17T23:42:15.804893" elapsed="0.202065"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-17T23:42:16.007046" elapsed="0.095182"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:42:15.804492" elapsed="0.297812"/>
+</kw>
+<doc>ใน Driver Hub → กดปุ่มย่อ/ขยายในแต่ละเส้นทาง → รายการผู้โดยสารหายและกลับมา</doc>
+<tag>driver</tag>
+<tag>driver-hub</tag>
+<tag>ui</tag>
+<status status="PASS" start="2026-03-17T23:42:11.975576" elapsed="4.126831"/>
+</test>
+<test id="s1-t6" name="TC-ALERT-07 Passenger Receives Near Arrival Notification" line="253">
+<kw name="Login As Passenger">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:16.103817" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/login'.</msg>
+<arg>${BASE_URL}/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-17T23:42:16.103709" elapsed="0.751096"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-17T23:42:16.855089" elapsed="0.350332"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=identifier</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T23:42:17.205617" elapsed="0.010162"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:17.216018" level="INFO">Typing text 'passenger123' into text field 'id=identifier'.</msg>
+<arg>id=identifier</arg>
+<arg>${PASSENGER_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:42:17.215885" elapsed="0.071466"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:17.287569" level="INFO">Typing password into text field 'id=password'.</msg>
+<msg time="2026-03-17T23:42:17.298290" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>id=password</arg>
+<arg>${PASSENGER_PASSWORD}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:42:17.287446" elapsed="0.023998"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:17.311641" level="INFO">Clicking element 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T23:42:17.311543" elapsed="0.023091"/>
+</kw>
+<kw name="Wait Until Location Does Not Contain" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>15s</arg>
+<doc>Waits until the current URL does not contains ``location``.</doc>
+<status status="PASS" start="2026-03-17T23:42:17.334741" elapsed="0.206679"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:42:17.541639" level="INFO">Passenger logged in successfully</msg>
+<arg>Passenger logged in successfully</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:42:17.541548" elapsed="0.000121"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:42:16.103568" elapsed="1.438157"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:42:17.542084" level="INFO">Go to homepage and check notification</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:42:17.542029" elapsed="0.000075"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T23:42:17.542146" elapsed="0.000071"/>
+</kw>
+<arg>Go to homepage and check notification</arg>
+<status status="PASS" start="2026-03-17T23:42:17.541885" elapsed="0.000358"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:17.542357" level="INFO">Opening url 'http://localhost:3001'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-17T23:42:17.542302" elapsed="1.235784"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-17T23:42:21.780104" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-17T23:42:18.778603" elapsed="3.001821"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:32.121248" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-8.png"&gt;&lt;img src="selenium-screenshot-8.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2026-03-17T23:42:32.121349" level="FAIL">Element 'id=chat-nav-unread-badge' did not appear in 10 seconds.</msg>
+<arg>id=chat-nav-unread-badge</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="FAIL" start="2026-03-17T23:42:21.781520" elapsed="10.340264">Element 'id=chat-nav-unread-badge' did not appear in 10 seconds.</status>
+</kw>
+<msg time="2026-03-17T23:42:32.121847" level="INFO">${has_badge} = False</msg>
+<var>${has_badge}</var>
+<arg>Wait Until Page Contains Element</arg>
+<arg>id=chat-nav-unread-badge</arg>
+<arg>timeout=10s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2026-03-17T23:42:21.781055" elapsed="10.340802"/>
+</kw>
+<if>
+<branch type="IF" condition="${has_badge}">
+<kw name="Log" owner="BuiltIn">
+<arg>Notification badge visible to passenger</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-03-17T23:42:32.122019" elapsed="0.000012"/>
+</kw>
+<status status="NOT RUN" start="2026-03-17T23:42:32.121939" elapsed="0.000105"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:42:32.122146" level="WARN">No in-app badge found. Browser push notification may have been sent</msg>
+<arg>No in-app badge found. Browser push notification may have been sent</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:42:32.122086" elapsed="0.000113"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T23:42:32.122271" level="INFO">Check browser notification permission is granted for this test</msg>
+<arg>Check browser notification permission is granted for this test</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T23:42:32.122238" elapsed="0.000047"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:42:32.122057" elapsed="0.000241"/>
+</branch>
+<status status="PASS" start="2026-03-17T23:42:32.121918" elapsed="0.000391"/>
+</if>
+<kw name="Close Browser And Capture" type="TEARDOWN">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2026-03-17T23:42:32.310686" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-9.png"&gt;&lt;img src="selenium-screenshot-9.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-03-17T23:42:32.122542" elapsed="0.188205"/>
+</kw>
+<arg>Capture Page Screenshot</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-17T23:42:32.122491" elapsed="0.188308"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-17T23:42:32.310874" elapsed="0.108598"/>
+</kw>
+<status status="PASS" start="2026-03-17T23:42:32.122404" elapsed="0.297131"/>
+</kw>
+<doc>หลังจากคนขับส่ง Nearby Alert → ผู้โดยสารเปิดแอปและเห็นการแจ้งเตือน
+หมายเหตุ: ต้องรันหลังจาก TC-ALERT-04 และ Browser notifications ต้องเปิดใช้งาน</doc>
+<tag>depends-on-tc04</tag>
+<tag>nearby-alert</tag>
+<tag>notification</tag>
+<tag>passenger</tag>
+<status status="PASS" start="2026-03-17T23:42:16.102605" elapsed="16.316981"/>
+</test>
+<doc>UAT Test Cases — ฟีเจอร์แจ้งเตือนใกล้ถึง (Driver Nearby Alert / Near-Arrival Notification)
+ครอบคลุมทุก flow: คนขับกดแจ้งเตือน, ผู้โดยสารรับการแจ้งเตือน, Driver Hub, ปุ่ม Enable/Disable</doc>
+<status status="PASS" start="2026-03-17T23:41:32.799924" elapsed="59.619948"/>
+</suite>
+<statistics>
+<total>
+<stat pass="6" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">depends-on-tc04</stat>
+<stat pass="5" fail="0" skip="0">driver</stat>
+<stat pass="3" fail="0" skip="0">driver-hub</stat>
+<stat pass="5" fail="0" skip="0">nearby-alert</stat>
+<stat pass="1" fail="0" skip="0">notification</stat>
+<stat pass="1" fail="0" skip="0">passenger</stat>
+<stat pass="2" fail="0" skip="0">positive</stat>
+<stat pass="1" fail="0" skip="0">post-refresh</stat>
+<stat pass="1" fail="0" skip="0">smoke</stat>
+<stat pass="2" fail="0" skip="0">ui</stat>
+</tag>
+<suite>
+<stat name="NearbyAlert" id="s1" pass="6" fail="0" skip="0">NearbyAlert</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2026-03-17T23:42:11.665585" level="WARN">No passengers available for nearby alert in Driver Hub (route may have no confirmed bookings today)</msg>
+<msg time="2026-03-17T23:42:32.122146" level="WARN">No in-app badge found. Browser push notification may have been sent</msg>
+</errors>
+</robot>

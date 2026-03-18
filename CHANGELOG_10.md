@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [2026-04-12] การปรับปรุงฟีเจอร์
+## [2026-03-12] การปรับปรุงฟีเจอร์
 
 ### [ระบบรายงานกิจกรรมของผู้ใช้]
 *Product Backlog Item No.10: As a driver,I want to send a message to a passenger without revealing too much personal information so that I can communicate with them in a saver manner.*

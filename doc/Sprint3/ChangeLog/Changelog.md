@@ -1,7 +1,6 @@
 # CHANGELOG
 
 ## [2026-03-12] การปรับปรุงฟีเจอร์
-
 ### [ระบบรายงานกิจกรรมของผู้ใช้]
 *Product Backlog Item No.7: As a driver, I want to add additional charges when a passenger want to bring more items with them or have a certain request.*
 
@@ -18,7 +17,6 @@
 - ปรับโครงสร้างโปรเจ็กต์ให้มีความเป็นระเบียบและอ่านได้ง่ายขึ้น (code, docs, img, test)
     
 ## [2026-03-12] การปรับปรุงฟีเจอร์
-
 ### [ระบบส่งข้อความภายในแอป]
 *Product Backlog Item No.10: As a driver,I want to send a message to a passenger without revealing too much personal information so that I can communicate with them in a saver manner.*
 
@@ -50,9 +48,9 @@
 - ใช้ Prisma ORM จัดการฐานข้อมูลอย่างเป็นระบบ
 - จัดระเบียบโฟลเดอร์เอกสารตาม Card/Sprint
 - แยก frontend และ backend ชัดเจน
-- ปรับโครงสร้างให้รองรับการพัฒนาแบบ Agile และการทำงานเป็นทีม  
+- ปรับโครงสร้างให้รองรับการพัฒนาแบบ Agile และการทำงานเป็นทีม
+    
 ## [2026-03-12] การปรับปรุงฟีเจอร์
-
 ### [ระบบแจ้งเตือนผู้โดยสารก่อนถึงจุดรับ]
 *Product Backlog Item No.12: As a passenger, I want to get a notification when the driver is about to pick me up so that I can get myself ready or respond to the driver.*
 
@@ -77,6 +75,8 @@
 - ทดสอบการรับคำขอจองและการกดส่งแจ้งเตือนจากฝั่ง Driver  
 - ตรวจสอบการแสดงผลแจ้งเตือนหลังจากส่งสำเร็จ  
 
+
+## [2026-03-12] การปรับปรุงฟีเจอร์
 ### [ระบบจัดการลบบัญชีผู้ใช้]
 *Product Backlog Item No.16: As a user, I want my account and information to be removed from the system when I am no longer want to be apart of this community.*
 

@@ -181,7 +181,7 @@
 
 6. กรณีที่ผู้ใช้มีการจองหรือมีเส้นทางที่กำลังดำเนินการอยู่ ระบบจะไม่อนุญาตให้ผู้ใช้นั้นทำการลบบัญชี
 
-![UserWithBooking](../../../img/img_pbi16/22BookingDeleteAcc.png)  
+![UserWithBooking](../../../img/22BookingDeleteAcc.png)  
 
 
 ### ข้อควรระวัง

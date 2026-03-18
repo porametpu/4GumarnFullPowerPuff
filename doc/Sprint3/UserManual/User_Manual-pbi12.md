@@ -8,7 +8,7 @@
 
 1. สร้างเส้นทางด้วยบัญชีผู้ขับขี่
 - เข้าสู่ระบบด้วยบัญชี Driver
-![login](/img/img-item12/l1.png)
+![login](/img/img_pbi12/l1.png)
 
 - สร้างเส้นทางใหม่ในระบบ
 ![Driver](/img_pbi12/d3.png)

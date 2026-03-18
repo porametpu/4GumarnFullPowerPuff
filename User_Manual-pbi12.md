@@ -8,31 +8,31 @@
 
 1. สร้างเส้นทางด้วยบัญชีผู้ขับขี่
 - เข้าสู่ระบบด้วยบัญชี Driver
-![login](../4GumarnFullPowerPuff/img_pbi12/l1.png)
+![login](../img_pbi12/l1.png)
 
 - สร้างเส้นทางใหม่ในระบบ
-![login](../4GumarnFullPowerPuff/img_pbi12/d3.png)
-![login](../4GumarnFullPowerPuff/img_pbi12/d2.png)
+![login](../img_pbi12/d3.png)
+![login](../img_pbi12/d2.png)
    
 2. จองเส้นทางด้วยบัญชีผู้โดยสาร
 - เข้าสู่ระบบด้วยบัญชี Passenger 
-![login](../4GumarnFullPowerPuff/img_pbi12/p1.png)
+![login](../img_pbi12/p1.png)
 
 - เลือกเส้นทางที่ต้องการจอง
-![login](../4GumarnFullPowerPuff/img_pbi12/p2.png)
+![login](../img_pbi12/p2.png)
 
 - เลือกจุดขึ้นลง
-![login](../4GumarnFullPowerPuff/img_pbi12/p3.png)
+![login](../img_pbi12/p3.png)
 
 - คำขอสำเร็จ
-![login](../4GumarnFullPowerPuff/img_pbi12/p5.png)
+![login](../img_pbi12/p5.png)
 
 3. ตรวจสอบตำแหน่งก่อนแจ้งเตือน
 - Driver รับคำขอจองเส้นทาง 
-![login](../4GumarnFullPowerPuff/img_pbi12/t2.png)
+![login](../img_pbi12/t2.png)
 - เปิดหน้า **Hub** ที่มุมขวาล่าง
 - กดปุ่ม **Refresh** เพื่ออัปเดตตำแหน่งล่าสุด หากผู้โดยสารอยู่ในระยะที่กำหนด ปุ่มแจ้งเตือนจะเปลี่ยนเป็น **สีเหลือง** 
-![login](../4GumarnFullPowerPuff/img_pbi12/t3.png)
+![login](../img_pbi12/t3.png)
 
 4. ส่งการแจ้งเตือน
 - กดปุ่ม **แจ้งเตือน** เพื่อส่งการแจ้งเตือนไปยังผู้โดยสาร

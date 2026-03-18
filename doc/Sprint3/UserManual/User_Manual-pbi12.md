@@ -11,33 +11,33 @@
 ![login](/img/img_pbi12/l1.png)
 
 - สร้างเส้นทางใหม่ในระบบ
-![Driver](/img_pbi12/d3.png)
-![Driver](/img_pbi12/d2.png)
+![Driver](/img/img_pbi12/d3.png)
+![Driver](/img/img_pbi12/d2.png)
    
 2. จองเส้นทางด้วยบัญชีผู้โดยสาร
 - เข้าสู่ระบบด้วยบัญชี Passenger 
-![Booking](/img_pbi12/p1.png)
+![Booking](/img/img_pbi12/p1.png)
 
 - เลือกเส้นทางที่ต้องการจอง
-![Find](/img_pbi12/p2.png)
+![Find](/img/img_pbi12/p2.png)
 
 - เลือกจุดขึ้นลง
-![Find](/img_pbi12/p3.png)
+![Find](/img/img_pbi12/p3.png)
 
 - คำขอสำเร็จ
-![Booking](/img_pbi12/p5.png)
+![Booking](/img/img_pbi12/p5.png)
 
 3. ตรวจสอบตำแหน่งก่อนแจ้งเตือน
 - Driver รับคำขอจองเส้นทาง 
-![Noti](/img_pbi12/t2.png)
+![Noti](/img/img_pbi12/t2.png)
 - เปิดหน้า **Hub** ที่มุมขวาล่าง
 - กดปุ่ม **Refresh** เพื่ออัปเดตตำแหน่งล่าสุด หากผู้โดยสารอยู่ในระยะที่กำหนด ปุ่มแจ้งเตือนจะเปลี่ยนเป็น **สีเหลือง** 
-![Nofi](/img_pbi12/t3.png)
+![Nofi](/img/img_pbi12/t3.png)
 
 4. ส่งการแจ้งเตือน
 - กดปุ่ม **แจ้งเตือน** เพื่อส่งการแจ้งเตือนไปยังผู้โดยสาร
 - เมื่อส่งสำเร็จ ผู้โดยสารจะได้รับการแจ้งเตือนบนหน้าจอของระบบ
-![Noti](/img_pbi12/g1.JPG)
+![Noti](/img/img_pbi12/g1.JPG)
 
 ### ข้อควรระวัง
 - จุดรับต้องอยู่ภายในระยะ 5 กิโลเมตร  

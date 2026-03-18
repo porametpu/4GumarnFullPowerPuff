@@ -50,7 +50,7 @@
 - แยก frontend และ backend ชัดเจน
 - ปรับโครงสร้างให้รองรับการพัฒนาแบบ Agile และการทำงานเป็นทีม
     
-## [2026-03-1ุ6] การปรับปรุงฟีเจอร์
+## [2026-03-16] การปรับปรุงฟีเจอร์
 ### [ระบบแจ้งเตือนผู้โดยสารก่อนถึงจุดรับ]
 *Product Backlog Item No.12: As a passenger, I want to get a notification when the driver is about to pick me up so that I can get myself ready or respond to the driver.*
 

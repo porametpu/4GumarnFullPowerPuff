@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.13.7 on darwin)" generated="2026-02-18T18:03:42.958468" rpa="false" schemaversion="5">
+<suite id="s1" name="APITesting" source="/Users/3mrch/ProjectPaiNamNae2/4GumarnFullPowerPuff/test/APITesting/APITesting.robot">
+<test id="s1-t1" name="TC-001 POST Request Delete user - Successfully sent request" line="22">
+<kw name="Create Session" owner="RequestsLibrary" type="SETUP">
+<msg time="2026-02-18T18:03:43.012086" level="INFO">Creating Session using : alias=api, url=http://localhost:3000, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>alias=api</arg>
+<arg>url=http://localhost:3000</arg>
+<arg>disable_warnings=1</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2026-02-18T18:03:43.011985" elapsed="0.000183"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-02-18T18:03:43.012360" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbWxyeGJnZnkwMDAzb2hmenNpeTNiYzhhIiwicm9sZSI6IlBBU1NFTkdFUiIsImlhdCI6MTc3MTQxMjU5NCwiZXhwIjoxNzcxNDE2MTk0fQ.TMyZBBOyPWORmP55w-...</msg>
+<var>${headers}</var>
+<arg>Authorization</arg>
+<arg>Bearer ${BEARER_TOKEN}</arg>
+<arg>Content-Type</arg>
+<arg>application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.012253" elapsed="0.000117"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-02-18T18:03:43.012505" level="INFO">${payload} = {'email': 'test555@test.com'}</msg>
+<var>${payload}</var>
+<arg>email=${VALID_EMAIL}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.012428" elapsed="0.000084"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-02-18T18:03:43.024256" level="INFO">POST Request : url=http://localhost:3000/api/users/delete-account 
+ path_url=/api/users/delete-account 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbWxyeGJnZnkwMDAzb2hmenNpeTNiYzhhIiwicm9sZSI6IlBBU1NFTkdFUiIsImlhdCI6MTc3MTQxMjU5NCwiZXhwIjoxNzcxNDE2MTk0fQ.TMyZBBOyPWORmP55w-nUoVWn_6XGO-uqUxjU0sXckmw', 'Content-Type': 'application/json', 'Content-Length': '29'} 
+ body=b'{"email": "test555@test.com"}' 
+ </msg>
+<msg time="2026-02-18T18:03:43.024300" level="INFO">POST Response : url=http://localhost:3000/api/users/delete-account 
+ status=202, reason=Accepted 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '226', 'ETag': 'W/"e2-5YBqUpd1maY+dGvPzXeMqyUnqDc"', 'Date': 'Wed, 18 Feb 2026 11:03:43 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"message":"คำขอการลบบัญชีสำเร็จ","detail":"บัญชีจะถูกลบอย่างถาวรหลังจาก 90 วัน","scheduledDate":"2026-05-19T11:03:43.020Z"} 
+ </msg>
+<msg time="2026-02-18T18:03:43.024347" level="INFO">${response} = &lt;Response [202]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${DELETE_ENDPOINT}</arg>
+<arg>json=${payload}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=202</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.012558" elapsed="0.011798"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-02-18T18:03:43.024644" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>202</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.024433" elapsed="0.000235"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${response.headers}[Content-Type]</arg>
+<arg>application/json</arg>
+<arg>ignore_case=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.024726" elapsed="0.000169"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-02-18T18:03:43.025092" level="INFO">${resp_json} = {'message': 'คำขอการลบบัญชีสำเร็จ', 'detail': 'บัญชีจะถูกลบอย่างถาวรหลังจาก 90 วัน', 'scheduledDate': '2026-05-19T11:03:43.020Z'}</msg>
+<var>${resp_json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.024944" elapsed="0.000157"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${resp_json}</arg>
+<arg>message</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.025145" elapsed="0.000043"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${resp_json}</arg>
+<arg>detail</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.025222" elapsed="0.000035"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${resp_json}[message]</arg>
+<arg>${EXPECTED_MESSAGE_SUCCESS}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.025298" elapsed="0.000054"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${resp_json}[detail]</arg>
+<arg>${EXPECTED_DETAIL_SUCCESS}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.025386" elapsed="0.000048"/>
+</kw>
+<kw name="Delete All Sessions" owner="RequestsLibrary" type="TEARDOWN">
+<msg time="2026-02-18T18:03:43.025517" level="INFO">Deleting All Sessions</msg>
+<doc>Removes all the session objects</doc>
+<status status="PASS" start="2026-02-18T18:03:43.025496" elapsed="0.000044"/>
+</kw>
+<doc>ทดสอบการส่งคำขอลบบัญชีด้วย email ที่ถูกต้อง ควรได้ 202 Accepted</doc>
+<tag>delete-account</tag>
+<tag>positive</tag>
+<tag>smoke</tag>
+<status status="PASS" start="2026-02-18T18:03:43.011385" elapsed="0.014174"/>
+</test>
+<test id="s1-t2" name="TC-002 POST Request Delete user with wrong email - Email not match" line="51">
+<kw name="Create Session" owner="RequestsLibrary" type="SETUP">
+<msg time="2026-02-18T18:03:43.026054" level="INFO">Creating Session using : alias=api, url=http://localhost:3000, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>alias=api</arg>
+<arg>url=http://localhost:3000</arg>
+<arg>disable_warnings=1</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2026-02-18T18:03:43.025992" elapsed="0.000252"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-02-18T18:03:43.026365" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbWxyeGJnZnkwMDAzb2hmenNpeTNiYzhhIiwicm9sZSI6IlBBU1NFTkdFUiIsImlhdCI6MTc3MTQxMjU5NCwiZXhwIjoxNzcxNDE2MTk0fQ.TMyZBBOyPWORmP55w-...</msg>
+<var>${headers}</var>
+<arg>Authorization</arg>
+<arg>Bearer ${BEARER_TOKEN}</arg>
+<arg>Content-Type</arg>
+<arg>application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.026297" elapsed="0.000115"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-02-18T18:03:43.026518" level="INFO">${payload} = {'email': 'not-match@example.com'}</msg>
+<var>${payload}</var>
+<arg>email=${INVALID_EMAIL}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.026456" elapsed="0.000070"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-02-18T18:03:43.032041" level="INFO">POST Request : url=http://localhost:3000/api/users/delete-account 
+ path_url=/api/users/delete-account 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbWxyeGJnZnkwMDAzb2hmenNpeTNiYzhhIiwicm9sZSI6IlBBU1NFTkdFUiIsImlhdCI6MTc3MTQxMjU5NCwiZXhwIjoxNzcxNDE2MTk0fQ.TMyZBBOyPWORmP55w-nUoVWn_6XGO-uqUxjU0sXckmw', 'Content-Type': 'application/json', 'Content-Length': '34'} 
+ body=b'{"email": "not-match@example.com"}' 
+ </msg>
+<msg time="2026-02-18T18:03:43.032068" level="INFO">POST Response : url=http://localhost:3000/api/users/delete-account 
+ status=400, reason=Bad Request 
+ headers={'Content-Security-Policy': "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests", 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Resource-Policy': 'same-origin', 'Origin-Agent-Cluster': '?1', 'Referrer-Policy': 'no-referrer', 'Strict-Transport-Security': 'max-age=15552000; includeSubDomains', 'X-Content-Type-Options': 'nosniff', 'X-DNS-Prefetch-Control': 'off', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-XSS-Protection': '0', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '80', 'ETag': 'W/"50-mbfadLfqO0l+KPgB2mPDK7RCR5A"', 'Date': 'Wed, 18 Feb 2026 11:03:43 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"message":"อีเมลไม่ตรงกับบัญชีนี้"} 
+ </msg>
+<msg time="2026-02-18T18:03:43.032130" level="INFO">${response} = &lt;Response [400]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${DELETE_ENDPOINT}</arg>
+<arg>json=${payload}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=400</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.026563" elapsed="0.005575"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-02-18T18:03:43.032336" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>400</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.032194" elapsed="0.000159"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${response.headers}[Content-Type]</arg>
+<arg>application/json</arg>
+<arg>ignore_case=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.032398" elapsed="0.000145"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-02-18T18:03:43.032722" level="INFO">${resp_json} = {'message': 'อีเมลไม่ตรงกับบัญชีนี้'}</msg>
+<var>${resp_json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.032589" elapsed="0.000141"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${resp_json}</arg>
+<arg>message</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.032772" elapsed="0.000040"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${resp_json}[message]</arg>
+<arg>${EXPECTED_MESSAGE_FAIL}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2026-02-18T18:03:43.032853" elapsed="0.000052"/>
+</kw>
+<kw name="Delete All Sessions" owner="RequestsLibrary" type="TEARDOWN">
+<msg time="2026-02-18T18:03:43.032997" level="INFO">Deleting All Sessions</msg>
+<doc>Removes all the session objects</doc>
+<status status="PASS" start="2026-02-18T18:03:43.032978" elapsed="0.000035"/>
+</kw>
+<doc>ทดสอบส่ง email ผิด ควรได้ 400 Bad Request และข้อความแจ้งเตือน</doc>
+<tag>delete-account</tag>
+<tag>negative</tag>
+<status status="PASS" start="2026-02-18T18:03:43.025637" elapsed="0.007396"/>
+</test>
+<status status="PASS" start="2026-02-18T18:03:42.959238" elapsed="0.073933"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="2" fail="0" skip="0">delete-account</stat>
+<stat pass="1" fail="0" skip="0">negative</stat>
+<stat pass="1" fail="0" skip="0">positive</stat>
+<stat pass="1" fail="0" skip="0">smoke</stat>
+</tag>
+<suite>
+<stat name="APITesting" id="s1" pass="2" fail="0" skip="0">APITesting</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

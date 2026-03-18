@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.13.7 on darwin)" generated="2026-03-04T18:24:35.428884" rpa="false" schemaversion="5">
+<suite id="s1" name="Cleanup" source="/Users/3mrch/Project/Project2/4GumarnFullPowerPuff/code/tests/robot/cleanup/cleanup.robot">
+<test id="s1-t1" name="Delete Account With Related Record" line="9">
+<kw name="Setup Cleanup Test Data" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:35.533310" level="INFO">${user_info} = {'userId': 'cmmby8zen0000yxleg4we1m06', 'email': 'test_cleanup_related@test.com'}</msg>
+<var>${user_info}</var>
+<arg>related_records</arg>
+<status status="PASS" start="2026-03-04T18:24:35.441276" elapsed="0.092100"/>
+</kw>
+<kw name="Run Cleanup Cron Job" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:35.605660" level="INFO">${deleted_count} = 1</msg>
+<var>${deleted_count}</var>
+<status status="PASS" start="2026-03-04T18:24:35.533615" elapsed="0.072098"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${deleted_count} &gt;= 1</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-04T18:24:35.605900" elapsed="0.000197"/>
+</kw>
+<kw name="Verify Cleanup State" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:35.672384" level="INFO">${is_deleted} = True</msg>
+<var>${is_deleted}</var>
+<arg>related_records</arg>
+<arg>${user_info['userId']}</arg>
+<status status="PASS" start="2026-03-04T18:24:35.606154" elapsed="0.066279"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${is_deleted}</arg>
+<arg>User should be deleted from DB</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-04T18:24:35.672619" elapsed="0.000147"/>
+</kw>
+<doc>ลบบัญชีที่มีข้อมูลอื่นๆเก็บอยู่ด้วย (Booking, Vehicle, Route, Notification)</doc>
+<status status="PASS" start="2026-03-04T18:24:35.440768" elapsed="0.232074"/>
+</test>
+<test id="s1-t2" name="Delete Many Account" line="20">
+<kw name="Setup Cleanup Test Data" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:35.742877" level="INFO">${user_ids} = ['cmmby8zkj00004xavp80mggyp', 'cmmby8zkl00014xav0cpydd2k', 'cmmby8zkl00024xavkg9v5mdt']</msg>
+<var>${user_ids}</var>
+<arg>many_accounts</arg>
+<status status="PASS" start="2026-03-04T18:24:35.673255" elapsed="0.069672"/>
+</kw>
+<kw name="Run Cleanup Cron Job" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:35.818967" level="INFO">${deleted_count} = 3</msg>
+<var>${deleted_count}</var>
+<status status="PASS" start="2026-03-04T18:24:35.743109" elapsed="0.075911"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${deleted_count} &gt;= 3</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-04T18:24:35.819251" elapsed="0.000236"/>
+</kw>
+<kw name="Verify Cleanup State" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:35.886494" level="INFO">${is_deleted} = True</msg>
+<var>${is_deleted}</var>
+<arg>many_accounts</arg>
+<arg>${user_ids}</arg>
+<status status="PASS" start="2026-03-04T18:24:35.819607" elapsed="0.066934"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${is_deleted}</arg>
+<arg>All batch users should be deleted</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-04T18:24:35.886720" elapsed="0.000129"/>
+</kw>
+<doc>ลบผู้ใช้หลายบัญชีพร้อมกัน (User1, User2, User3 : Deleted At &gt; 90 วัน, isActive=false)</doc>
+<status status="PASS" start="2026-03-04T18:24:35.672960" elapsed="0.213958"/>
+</test>
+<test id="s1-t3" name="No Account Delete" line="31">
+<kw name="Setup Cleanup Test Data" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:35.953333" level="INFO">${user_id} = cmmby8zqf0000txgxgi4ksduv</msg>
+<var>${user_id}</var>
+<arg>no_delete</arg>
+<status status="PASS" start="2026-03-04T18:24:35.887287" elapsed="0.066095"/>
+</kw>
+<kw name="Run Cleanup Cron Job" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:36.017069" level="INFO">${deleted_count} = 0</msg>
+<var>${deleted_count}</var>
+<status status="PASS" start="2026-03-04T18:24:35.953567" elapsed="0.063560"/>
+</kw>
+<kw name="Verify Cleanup State" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:36.085957" level="INFO">${is_present} = True</msg>
+<var>${is_present}</var>
+<arg>no_delete</arg>
+<arg>${user_id}</arg>
+<status status="PASS" start="2026-03-04T18:24:36.017321" elapsed="0.068688"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${is_present}</arg>
+<arg>User deleted less than 90 days ago should still exist</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-04T18:24:36.086469" elapsed="0.000284"/>
+</kw>
+<doc>ไม่มีผู้ใช้ที่ถึงกำหนดลบ (Deleted At &lt; 90 วัน)</doc>
+<status status="PASS" start="2026-03-04T18:24:35.887015" elapsed="0.199856"/>
+</test>
+<test id="s1-t4" name="Delete Account But isActive=true" line="43">
+<kw name="Setup Cleanup Test Data" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:36.160730" level="INFO">${user_id} = cmmby8zw70000ohxf9k4zq7q8</msg>
+<var>${user_id}</var>
+<arg>active_account</arg>
+<status status="PASS" start="2026-03-04T18:24:36.087373" elapsed="0.073402"/>
+</kw>
+<kw name="Run Cleanup Cron Job" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:36.228081" level="INFO">${deleted_count} = 0</msg>
+<var>${deleted_count}</var>
+<status status="PASS" start="2026-03-04T18:24:36.160962" elapsed="0.067170"/>
+</kw>
+<kw name="Verify Cleanup State" owner="CleanupLibrary">
+<msg time="2026-03-04T18:24:36.296444" level="INFO">${is_present} = True</msg>
+<var>${is_present}</var>
+<arg>active_account</arg>
+<arg>${user_id}</arg>
+<status status="PASS" start="2026-03-04T18:24:36.228321" elapsed="0.068183"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${is_present}</arg>
+<arg>Active user should still exist even if deletedAt is old</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-04T18:24:36.296692" elapsed="0.000128"/>
+</kw>
+<doc>ลบบัญชีผู้ใช้ที่มี Deleted At &gt; 90 วัน แต่ isActive=true (ควรถูกยกเว้น)</doc>
+<status status="PASS" start="2026-03-04T18:24:36.086972" elapsed="0.209917"/>
+</test>
+<doc>Test Suite for Account Cleanup Cron Job</doc>
+<status status="PASS" start="2026-03-04T18:24:35.429617" elapsed="0.867498"/>
+</suite>
+<statistics>
+<total>
+<stat pass="4" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Cleanup" id="s1" pass="4" fail="0" skip="0">Cleanup</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

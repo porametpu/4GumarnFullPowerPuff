@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.13.7 on darwin)" generated="2026-03-17T16:34:12.557790" rpa="false" schemaversion="5">
+<suite id="s1" name="DeleteUser" source="/Users/3mrch/Project/Project11/4GumarnFullPowerPuff/test/Sprint2/Item16/UAT-001/DeleteUser.robot">
+<test id="s1-t1" name="TC1 - Delete Account With Wrong Email" line="108">
+<kw name="Login And Open Delete Account Page">
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:12.645978" level="INFO">Open login page</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:12.645920" elapsed="0.000083"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:12.646050" elapsed="0.000059"/>
+</kw>
+<arg>Open login page</arg>
+<status status="PASS" start="2026-03-17T16:34:12.645679" elapsed="0.000465"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:12.646275" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/login'.</msg>
+<arg>${BASE_URL}/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-17T16:34:12.646189" elapsed="2.412229"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-17T16:34:15.058933" elapsed="0.641394"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:15.701405" level="INFO">Fill login form</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:15.700954" elapsed="0.000658"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:15.701818" elapsed="0.000594"/>
+</kw>
+<arg>Fill login form</arg>
+<status status="PASS" start="2026-03-17T16:34:15.700558" elapsed="0.001971"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=identifier</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T16:34:15.702606" elapsed="0.020260"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:15.723208" level="INFO">Typing text 'delete2@test.com' into text field 'id=identifier'.</msg>
+<arg>id=identifier</arg>
+<arg>${LOGIN_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:15.722990" elapsed="0.098096"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:15.821308" level="INFO">Typing password into text field 'id=password'.</msg>
+<msg time="2026-03-17T16:34:15.864885" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>id=password</arg>
+<arg>${LOGIN_PASSWORD}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:15.821184" elapsed="0.144401"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:15.966068" level="INFO">Submit login</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:15.965991" elapsed="0.000104"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:15.966149" elapsed="0.000389"/>
+</kw>
+<arg>Submit login</arg>
+<status status="PASS" start="2026-03-17T16:34:15.965806" elapsed="0.000773"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:15.966737" level="INFO">Clicking element 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:15.966640" elapsed="0.098647"/>
+</kw>
+<kw name="Wait Until Location Does Not Contain" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL does not contains ``location``.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.065386" elapsed="0.204659"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:16.270362" level="INFO">Open delete account page</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.270302" elapsed="0.000081"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.270422" elapsed="0.000068"/>
+</kw>
+<arg>Open delete account page</arg>
+<status status="PASS" start="2026-03-17T16:34:16.270170" elapsed="0.000345"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:16.270609" level="INFO">Opening url 'http://localhost:3001/profile/delete-account'</msg>
+<arg>${BASE_URL}/profile/delete-account</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.270556" elapsed="0.077646"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/profile/delete-account</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.348306" elapsed="0.007026"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${DELETE_EMAIL_INPUT}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.355446" elapsed="0.233822"/>
+</kw>
+<status status="PASS" start="2026-03-17T16:34:12.645545" elapsed="3.943810"/>
+</kw>
+<kw name="Submit Delete Account Email">
+<kw name="Get Location" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:16.591645" level="INFO">${url} = http://localhost:3001/profile/delete-account</msg>
+<var>${url}</var>
+<doc>Returns the current browser window URL.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.589777" elapsed="0.001893"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>URL NOW: ${url}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.591744" elapsed="0.000103"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${DELETE_EMAIL_INPUT}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.591906" elapsed="0.006254"/>
+</kw>
+<kw name="Clear Element Text" owner="SeleniumLibrary">
+<arg>${DELETE_EMAIL_INPUT}</arg>
+<doc>Clears the value of the text-input-element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.598359" elapsed="0.013610"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:16.612225" level="INFO">Typing text 'not-match@example.com' into text field 'xpath=//input[@placeholder='กรอกอีเมลของคุณเพื่อยืนยัน']'.</msg>
+<arg>${DELETE_EMAIL_INPUT}</arg>
+<arg>${email}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.612078" elapsed="0.025063"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:16.637397" level="INFO">Clicking element 'xpath=//button[normalize-space()='ลบบัญชีถาวร']'.</msg>
+<arg>${DELETE_BUTTON}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.637257" elapsed="0.028359"/>
+</kw>
+<kw name="Handle Alert" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:16.666108" level="INFO">HANDLE::&lt;class 'NoneType'&gt;::None</msg>
+<arg>accept</arg>
+<doc>Handles the current alert and returns its message.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.665865" elapsed="0.003066"/>
+</kw>
+<arg>${WRONG_EMAIL}</arg>
+<status status="PASS" start="2026-03-17T16:34:16.589549" elapsed="0.079578"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:16.669605" level="INFO">Verify error message for unmatched email</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.669535" elapsed="0.000114"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.669833" elapsed="0.000092"/>
+</kw>
+<arg>Verify error message for unmatched email</arg>
+<status status="PASS" start="2026-03-17T16:34:16.669372" elapsed="0.000580"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>อีเมลไม่ตรงกับบัญชีนี้</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.670056" elapsed="0.217205"/>
+</kw>
+<kw name="Close Browser And Capture" type="TEARDOWN">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:17.012964" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.887810" elapsed="0.125212"/>
+</kw>
+<arg>Capture Page Screenshot</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-17T16:34:16.887697" elapsed="0.125373"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-17T16:34:17.013133" elapsed="0.134801"/>
+</kw>
+<status status="PASS" start="2026-03-17T16:34:16.887520" elapsed="0.260481"/>
+</kw>
+<status status="PASS" start="2026-03-17T16:34:12.645260" elapsed="4.502797"/>
+</test>
+<test id="s1-t2" name="TC2 - Delete Account With Correct Email" line="114">
+<kw name="Login And Open Delete Account Page">
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:17.149284" level="INFO">Open login page</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:17.149229" elapsed="0.000076"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:17.149343" elapsed="0.000053"/>
+</kw>
+<arg>Open login page</arg>
+<status status="PASS" start="2026-03-17T16:34:17.149140" elapsed="0.000277"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:17.149545" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/login'.</msg>
+<arg>${BASE_URL}/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-17T16:34:17.149461" elapsed="0.948914"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.099267" elapsed="0.362484"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:18.462210" level="INFO">Fill login form</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.462143" elapsed="0.000090"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.462274" elapsed="0.000075"/>
+</kw>
+<arg>Fill login form</arg>
+<status status="PASS" start="2026-03-17T16:34:18.461948" elapsed="0.000424"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=identifier</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.462410" elapsed="0.008859"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:18.471494" level="INFO">Typing text 'delete2@test.com' into text field 'id=identifier'.</msg>
+<arg>id=identifier</arg>
+<arg>${LOGIN_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.471368" elapsed="0.077899"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:18.549578" level="INFO">Typing password into text field 'id=password'.</msg>
+<msg time="2026-03-17T16:34:18.559765" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>id=password</arg>
+<arg>${LOGIN_PASSWORD}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.549424" elapsed="0.023111"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:18.572789" level="INFO">Submit login</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.572742" elapsed="0.000068"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.572853" elapsed="0.000058"/>
+</kw>
+<arg>Submit login</arg>
+<status status="PASS" start="2026-03-17T16:34:18.572634" elapsed="0.000301"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:18.573058" level="INFO">Clicking element 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.572981" elapsed="0.020741"/>
+</kw>
+<kw name="Wait Until Location Does Not Contain" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL does not contains ``location``.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.593846" elapsed="0.205745"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:18.800156" level="INFO">Open delete account page</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.800071" elapsed="0.000109"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.800224" elapsed="0.000078"/>
+</kw>
+<arg>Open delete account page</arg>
+<status status="PASS" start="2026-03-17T16:34:18.799861" elapsed="0.000470"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:18.800444" level="INFO">Opening url 'http://localhost:3001/profile/delete-account'</msg>
+<arg>${BASE_URL}/profile/delete-account</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.800380" elapsed="0.072274"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/profile/delete-account</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.872759" elapsed="0.002970"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${DELETE_EMAIL_INPUT}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T16:34:18.875825" elapsed="0.224357"/>
+</kw>
+<status status="PASS" start="2026-03-17T16:34:17.149032" elapsed="1.951253"/>
+</kw>
+<kw name="Submit Delete Account Email">
+<kw name="Get Location" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:19.102360" level="INFO">${url} = http://localhost:3001/profile/delete-account</msg>
+<var>${url}</var>
+<doc>Returns the current browser window URL.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.100666" elapsed="0.001771"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>URL NOW: ${url}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.102499" elapsed="0.000089"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${DELETE_EMAIL_INPUT}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.102637" elapsed="0.008422"/>
+</kw>
+<kw name="Clear Element Text" owner="SeleniumLibrary">
+<arg>${DELETE_EMAIL_INPUT}</arg>
+<doc>Clears the value of the text-input-element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.111172" elapsed="0.012199"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:19.123635" level="INFO">Typing text 'delete2@test.com' into text field 'xpath=//input[@placeholder='กรอกอีเมลของคุณเพื่อยืนยัน']'.</msg>
+<arg>${DELETE_EMAIL_INPUT}</arg>
+<arg>${email}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.123480" elapsed="0.021995"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:19.145700" level="INFO">Clicking element 'xpath=//button[normalize-space()='ลบบัญชีถาวร']'.</msg>
+<arg>${DELETE_BUTTON}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.145577" elapsed="0.026613"/>
+</kw>
+<kw name="Handle Alert" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:19.172371" level="INFO">HANDLE::&lt;class 'NoneType'&gt;::None</msg>
+<arg>accept</arg>
+<doc>Handles the current alert and returns its message.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.172288" elapsed="0.005378"/>
+</kw>
+<arg>${LOGIN_EMAIL}</arg>
+<status status="PASS" start="2026-03-17T16:34:19.100470" elapsed="0.077260"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:19.178517" level="INFO">Verify success message</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.178406" elapsed="0.000140"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.178597" elapsed="0.000073"/>
+</kw>
+<arg>Verify success message</arg>
+<status status="PASS" start="2026-03-17T16:34:19.177983" elapsed="0.000804"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>คำขอการลบบัญชีสำเร็จ</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.178916" elapsed="0.219662"/>
+</kw>
+<kw name="Close Browser And Capture" type="TEARDOWN">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:19.528484" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-2.png"&gt;&lt;img src="selenium-screenshot-2.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.399128" elapsed="0.129424"/>
+</kw>
+<arg>Capture Page Screenshot</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.399022" elapsed="0.129581"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.528672" elapsed="0.100765"/>
+</kw>
+<status status="PASS" start="2026-03-17T16:34:19.398854" elapsed="0.230660"/>
+</kw>
+<doc>ใช้ test account เท่านั้น เพราะเคสนี้จะถูกทำเครื่องหมายลบบัญชีจริง</doc>
+<status status="PASS" start="2026-03-17T16:34:17.148479" elapsed="2.481105"/>
+</test>
+<test id="s1-t3" name="TC3 - Test After Deletion" line="121">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:19.630235" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/login'.</msg>
+<arg>${BASE_URL}/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-17T16:34:19.630113" elapsed="1.805266"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-17T16:34:21.436067" elapsed="0.946298"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=identifier</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T16:34:22.382696" elapsed="0.012159"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:22.395180" level="INFO">Typing text 'delete2@test.com' into text field 'id=identifier'.</msg>
+<arg>id=identifier</arg>
+<arg>${LOGIN_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:22.395013" elapsed="0.071840"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:22.467107" level="INFO">Typing password into text field 'id=password'.</msg>
+<msg time="2026-03-17T16:34:22.476908" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>id=password</arg>
+<arg>${LOGIN_PASSWORD}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:22.466979" elapsed="0.029386"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:22.496827" level="INFO">Clicking element 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:22.496660" elapsed="0.022043"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>เข้าสู่ระบบไม่สำเร็จ</arg>
+<arg>10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T16:34:22.518837" elapsed="0.218838"/>
+</kw>
+<kw name="Location Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:22.740357" level="INFO">Current location contains '/login'.</msg>
+<arg>/login</arg>
+<doc>Verifies that the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-17T16:34:22.737862" elapsed="0.002529"/>
+</kw>
+<kw name="Close Browser And Capture" type="TEARDOWN">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:22.940995" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-3.png"&gt;&lt;img src="selenium-screenshot-3.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-03-17T16:34:22.740904" elapsed="0.200155"/>
+</kw>
+<arg>Capture Page Screenshot</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-17T16:34:22.740789" elapsed="0.200318"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-17T16:34:22.941174" elapsed="0.114730"/>
+</kw>
+<status status="PASS" start="2026-03-17T16:34:22.740613" elapsed="0.315357"/>
+</kw>
+<doc>ต้องใช้ account ที่ถูกส่งคำขอลบบัญชีแล้ว</doc>
+<status status="PASS" start="2026-03-17T16:34:19.629771" elapsed="3.426261"/>
+</test>
+<test id="s1-t4" name="TC4 - User With Active Booking Cannot Delete Account" line="132">
+<kw name="Login And Open Delete Account Page with Booking">
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:23.057203" level="INFO">Open login page</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:23.057158" elapsed="0.000063"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:23.057255" elapsed="0.000049"/>
+</kw>
+<arg>Open login page</arg>
+<status status="PASS" start="2026-03-17T16:34:23.057077" elapsed="0.000252"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:23.057441" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/login'.</msg>
+<arg>${BASE_URL}/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-17T16:34:23.057368" elapsed="0.933678"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-17T16:34:23.991275" elapsed="0.372468"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:24.364595" level="INFO">Fill login form</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.364506" elapsed="0.000120"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.364697" elapsed="0.000150"/>
+</kw>
+<arg>Fill login form</arg>
+<status status="PASS" start="2026-03-17T16:34:24.364176" elapsed="0.000741"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=identifier</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.364983" elapsed="0.010526"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:24.375770" level="INFO">Typing text 'delete3@test.com' into text field 'id=identifier'.</msg>
+<arg>id=identifier</arg>
+<arg>${LOGIN_EMAIL_BOOKING}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.375623" elapsed="0.078626"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:24.454468" level="INFO">Typing password into text field 'id=password'.</msg>
+<msg time="2026-03-17T16:34:24.465828" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>id=password</arg>
+<arg>${LOGIN_PASSWORD_BOOKING}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.454344" elapsed="0.023304"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:24.477900" level="INFO">Submit login</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.477846" elapsed="0.000071"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.477950" elapsed="0.000060"/>
+</kw>
+<arg>Submit login</arg>
+<status status="PASS" start="2026-03-17T16:34:24.477742" elapsed="0.000292"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:24.478155" level="INFO">Clicking element 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.478080" elapsed="0.022731"/>
+</kw>
+<kw name="Wait Until Location Does Not Contain" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL does not contains ``location``.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.500916" elapsed="0.206039"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:24.707277" level="INFO">Navigate to delete account page</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.707216" elapsed="0.000082"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.707339" elapsed="0.000070"/>
+</kw>
+<arg>Navigate to delete account page</arg>
+<status status="PASS" start="2026-03-17T16:34:24.707077" elapsed="0.000358"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:24.707526" level="INFO">Opening url 'http://localhost:3001/profile/delete-account'</msg>
+<arg>${BASE_URL}/profile/delete-account</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.707470" elapsed="0.072074"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/profile/delete-account</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.779648" elapsed="0.003581"/>
+</kw>
+<arg>${LOGIN_EMAIL}</arg>
+<arg>${LOGIN_PASSWORD}</arg>
+<status status="PASS" start="2026-03-17T16:34:23.056928" elapsed="1.726368"/>
+</kw>
+<kw name="Step">
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-03-17T16:34:24.783732" level="INFO">Verify delete button is disabled due to active booking</msg>
+<arg>${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.783668" elapsed="0.000086"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>STEP: ${message}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.783794" elapsed="0.000057"/>
+</kw>
+<arg>Verify delete button is disabled due to active booking</arg>
+<status status="PASS" start="2026-03-17T16:34:24.783440" elapsed="0.000439"/>
+</kw>
+<kw name="Verify Delete Button Is Disabled">
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>${DELETE_BUTTON}</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-17T16:34:24.784014" elapsed="0.221042"/>
+</kw>
+<kw name="Get Element Attribute" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:25.014488" level="INFO">${is_disabled} = true</msg>
+<var>${is_disabled}</var>
+<arg>${DELETE_BUTTON}</arg>
+<arg>disabled</arg>
+<doc>Returns the value of ``attribute`` from the element ``locator``.</doc>
+<status status="PASS" start="2026-03-17T16:34:25.005183" elapsed="0.009334"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2026-03-17T16:34:25.014779" level="INFO">Length is 4.</msg>
+<arg>${is_disabled}</arg>
+<arg>msg=ปุ่มลบบัญชีควรถูก disabled เมื่อมีการจองที่ active</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2026-03-17T16:34:25.014628" elapsed="0.000177"/>
+</kw>
+<doc>ตรวจสอบว่าปุ่มลบบัญชีถูก disable เนื่องจากมีการจองที่ active</doc>
+<status status="PASS" start="2026-03-17T16:34:24.783943" elapsed="0.230904"/>
+</kw>
+<kw name="Close Browser And Capture" type="TEARDOWN">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2026-03-17T16:34:25.143744" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-4.png"&gt;&lt;img src="selenium-screenshot-4.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-03-17T16:34:25.015212" elapsed="0.128592"/>
+</kw>
+<arg>Capture Page Screenshot</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-03-17T16:34:25.015134" elapsed="0.128748"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-17T16:34:25.143943" elapsed="0.098251"/>
+</kw>
+<status status="PASS" start="2026-03-17T16:34:25.015003" elapsed="0.227269"/>
+</kw>
+<doc>ผู้ใช้ที่มีการจอง CONFIRMED อยู่ → ปุ่มลบบัญชีถูก disabled
+หรือหน้าแสดงข้อความแจ้งว่าไม่สามารถลบได้</doc>
+<tag>active-booking</tag>
+<tag>delete-account</tag>
+<tag>negative</tag>
+<status status="PASS" start="2026-03-17T16:34:23.056199" elapsed="2.186129"/>
+</test>
+<kw name="Print Report Paths" type="TEARDOWN">
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n===== Robot Report =====</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:25.242842" elapsed="0.000078"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Report: ${OUTPUT DIR}${/}report.html</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:25.242958" elapsed="0.000063"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Log: ${OUTPUT DIR}${/}log.html</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:25.243053" elapsed="0.000053"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Output: ${OUTPUT DIR}${/}output.xml</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-17T16:34:25.243138" elapsed="0.000050"/>
+</kw>
+<status status="PASS" start="2026-03-17T16:34:25.242753" elapsed="0.000455"/>
+</kw>
+<status status="PASS" start="2026-03-17T16:34:12.558656" elapsed="12.684567"/>
+</suite>
+<statistics>
+<total>
+<stat pass="4" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">active-booking</stat>
+<stat pass="1" fail="0" skip="0">delete-account</stat>
+<stat pass="1" fail="0" skip="0">negative</stat>
+</tag>
+<suite>
+<stat name="DeleteUser" id="s1" pass="4" fail="0" skip="0">DeleteUser</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
